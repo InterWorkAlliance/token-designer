@@ -42,7 +42,6 @@
 	},
 	"scripts": {
 		"compile": "node scripts/compile.js",
-		"vscode:prepublish": "npm run compile",
 		"watch": "node scripts/compile.js -w",
 		"package": "npm run setversion && vsce package",
 		"setversion": "gulp setversion"
