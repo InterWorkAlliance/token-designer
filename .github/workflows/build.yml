@@ -28,6 +28,8 @@ jobs:
         key: ${{ runner.os }}-build-cache-node-modules-${{ hashFiles('**/package-lock.json') }}
     - name: 🚀 Build
       run: npm run compile
+    - name: 🔢 Set version
+      run: npm run setversion
     - name: 📏 Prune
       run: npm prune --production # this removes all devDependencies so that they do not ship with the VSIX
     - name: 🎁 Package

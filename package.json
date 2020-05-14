@@ -43,7 +43,7 @@
 	"scripts": {
 		"compile": "node scripts/compile.js",
 		"watch": "node scripts/compile.js -w",
-		"package": "npm run setversion && vsce package",
+		"package": "vsce package",
 		"setversion": "gulp setversion"
 	},
 	"devDependencies": {
@@ -62,11 +62,11 @@
 		"ts-node": "^8.10.1",
 		"tslint": "^5.12.1",
 		"typescript": "^3.3.1",
-		"vsce": "^1.75.0",
 		"watchify": "^3.11.1"
 	},
 	"dependencies": {
 		"google-protobuf": "^3.11.4",
-		"grpc": "^1.24.2"
+		"grpc": "^1.24.2",
+		"vsce": "^1.75.0"
 	}
 }
