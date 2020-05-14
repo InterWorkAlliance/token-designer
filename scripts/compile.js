@@ -31,21 +31,21 @@ async function forAllFiles(folder, extension, f) {
 
 async function compileProtos() {
     const allProtos = [];
-    await forAllFiles('src/ttf', '.proto', f => allProtos.push(f));
+    await forAllFiles('src/ttf/protos', '.proto', f => allProtos.push(f));
     createIfNotExists('out/src/ttf');
     await run('node_modules/.bin/grpc_tools_node_protoc', 
         [ 
             `--js_out=import_style=commonjs,binary:./out/src/ttf`,
             `--grpc_out=./out/src/ttf`,
             `--plugin=protoc-gen-grpc=node_modules/.bin/grpc_tools_node_protoc_plugin`,
-            `--proto_path=./src/ttf`,
+            `--proto_path=./src/ttf/protos`,
             ...allProtos,
         ]);
     await run('node_modules/.bin/grpc_tools_node_protoc', 
         [ 
-            `--ts_out=./out/src/ttf`,
+            `--ts_out=./src/ttf`,
             `--plugin=protoc-gen-ts=node_modules/.bin/protoc-gen-ts`,
-            `--proto_path=./src/ttf`,
+            `--proto_path=./src/ttf/protos`,
             ...allProtos,
         ]);
 }
