@@ -29,6 +29,27 @@ async function forAllFiles(folder, extension, f) {
     }
 }
 
+async function compileProtos() {
+    const allProtos = [];
+    await forAllFiles('src/ttf', '.proto', f => allProtos.push(f));
+    createIfNotExists('out/src/ttf');
+    await run('node_modules/.bin/grpc_tools_node_protoc', 
+        [ 
+            `--js_out=import_style=commonjs,binary:./out/src/ttf`,
+            `--grpc_out=./out/src/ttf`,
+            `--plugin=protoc-gen-grpc=node_modules/.bin/grpc_tools_node_protoc_plugin`,
+            `--proto_path=./src/ttf`,
+            ...allProtos,
+        ]);
+    await run('node_modules/.bin/grpc_tools_node_protoc', 
+        [ 
+            `--ts_out=./out/src/ttf`,
+            `--plugin=protoc-gen-ts=node_modules/.bin/protoc-gen-ts`,
+            `--proto_path=./src/ttf`,
+            ...allProtos,
+        ]);
+}
+
 function createIfNotExists(folder) {
     if (!fs.existsSync(folder)){
         fs.mkdirSync(folder);
@@ -40,6 +61,9 @@ function createIfNotExists(folder) {
     const watchMode = (process.argv[2] || '').trim() === '-w';
 
     await run('npm', [ 'install' ]);
+    createIfNotExists('out');
+    createIfNotExists('out/src');
+    await compileProtos();
     await run('tsc', [ '-p',  './' ]);
     await forAllFiles('src/panels', '.scss', file => run('node-sass', [ file, '-o', 'out/panels' ]));
     createIfNotExists('out/panels');
