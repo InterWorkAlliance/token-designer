@@ -1,0 +1,22 @@
+name: Build
+
+on:
+  push:
+    branches: [ master ]
+  pull_request:
+    branches: [ master ]
+
+jobs:
+  buildlinux:
+    runs-on: ubuntu-18.04
+    steps:
+    - name: ⏳ Checkout
+      uses: actions/checkout@v2
+    - name: 💿 Setup NodeJS
+      uses: actions/setup-node@v1
+      with:
+        node-version: 12.x
+    - name: 🚀 Build
+      run: npm run compile
+    - name: 🎁 Package
+      run: npm run package
