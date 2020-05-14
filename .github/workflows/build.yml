@@ -29,6 +29,8 @@ jobs:
           ${{ runner.os }}-
     - name: 🚀 Build
       run: npm run compile
+    - name: 📏 Prune
+      run: npm prune --production # this removes all devDependencies so that they do not ship with the VSIX
     - name: 🎁 Package
       run: npm run package
     - name: 🌎 Publish
