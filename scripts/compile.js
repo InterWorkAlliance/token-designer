@@ -30,13 +30,14 @@ async function forAllFiles(folder, extension, f) {
 }
 
 async function compileProtos() {
+    await run('npm', [ 'rebuild', '--target=7.2.0', '--runtime=electron', '--dist-url=https://atom.io/download/electron' ]);
     const allProtos = [];
     await forAllFiles('src/ttf/protos', '.proto', f => allProtos.push(f));
-    createIfNotExists('out/src/ttf');
+    createIfNotExists('out/ttf');
     await run('node_modules/.bin/grpc_tools_node_protoc', 
         [ 
-            `--js_out=import_style=commonjs,binary:./out/src/ttf`,
-            `--grpc_out=./out/src/ttf`,
+            `--js_out=import_style=commonjs,binary:./out/ttf`,
+            `--grpc_out=./out/ttf`,
             `--plugin=protoc-gen-grpc=node_modules/.bin/grpc_tools_node_protoc_plugin`,
             `--proto_path=./src/ttf/protos`,
             ...allProtos,
@@ -62,7 +63,6 @@ function createIfNotExists(folder) {
 
     await run('npm', [ 'install' ]);
     createIfNotExists('out');
-    createIfNotExists('out/src');
     await compileProtos();
     await run('tsc', [ '-p',  './' ]);
     await forAllFiles('src/panels', '.scss', file => run('node-sass', [ file, '-o', 'out/panels' ]));
