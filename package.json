@@ -1,72 +1,149 @@
 {
-	"name": "visual-token-designer",
-	"publisher": "ngd-seattle",
-	"displayName": "Visual Token Designer",
-	"description": "VS Code extension that facilitates manipulation of artifacts in the Token Taxonomy Framework",
-	"version": "0.0.0",
-	"icon": "resources/icon.png",
-	"galleryBanner": {
-		"color": "#242424",
-		"theme": "dark"
-	},
-	"author": "Neo Global Development Seattle",
-	"engines": {
-		"vscode": "^1.45.0"
-	},
-	"categories": [
-		"Other"
-	],
-	"bugs": {
-		"url": "https://github.com/ngdseattle/visual-token-designer/issues"
-	},
-	"repository": {
-		"type": "git",
-		"url": "https://github.com/ngdseattle/visual-token-designer.git"
-	},
-	"keywords": [
-		"Neo",
-		"Blockchain",
-		"Token"
-	],
-	"activationEvents": [
-		"onCommand:extension.helloWorld"
-	],
-	"main": "./out/extension.js",
-	"contributes": {
-		"commands": [
-			{
-				"command": "extension.helloWorld",
-				"title": "Hello World"
-			}
-		]
-	},
-	"scripts": {
-		"compile": "node scripts/compile.js",
-		"watch": "node scripts/compile.js -w",
-		"package": "vsce package",
-		"setversion": "gulp setversion"
-	},
-	"devDependencies": {
-		"@types/glob": "^7.1.1",
-		"@types/google-protobuf": "^3.7.2",
-		"@types/gulp": "^4.0.6",
-		"@types/node": "^10.12.21",
-		"@types/vscode": "^1.45.0",
-		"browserify": "^16.5.1",
-		"glob": "^7.1.4",
-		"grpc-tools": "^1.8.1",
-		"grpc_tools_node_protoc_ts": "^2.5.11",
-		"gulp": "4.0.0",
-		"nerdbank-gitversioning": "^3.1.91",
-		"node-sass": "^4.14.1",
-		"ts-node": "^8.10.1",
-		"tslint": "^5.12.1",
-		"typescript": "^3.3.1",
-		"watchify": "^3.11.1"
-	},
-	"dependencies": {
-		"google-protobuf": "^3.11.4",
-		"grpc": "^1.24.2",
-		"vsce": "^1.75.0"
-	}
+    "name": "visual-token-designer",
+    "publisher": "ngd-seattle",
+    "displayName": "Visual Token Designer",
+    "description": "VS Code extension that facilitates manipulation of artifacts in the Token Taxonomy Framework",
+    "version": "0.0.0",
+    "icon": "resources/icon.png",
+    "galleryBanner": {
+        "color": "#242424",
+        "theme": "dark"
+    },
+    "author": "Neo Global Development Seattle",
+    "engines": {
+        "vscode": "^1.45.0"
+    },
+    "categories": [
+        "Other"
+    ],
+    "bugs": {
+        "url": "https://github.com/ngdseattle/visual-token-designer/issues"
+    },
+    "repository": {
+        "type": "git",
+        "url": "https://github.com/ngdseattle/visual-token-designer.git"
+    },
+    "keywords": [
+        "Neo",
+        "Blockchain",
+        "Token"
+    ],
+    "activationEvents": [
+        "onCommand:visual-token-designer.createTokenFormula",
+        "onCommand:visual-token-designer.openTokenFormula",
+        "onCommand:visual-token-designer.openTokenDefinition",
+        "onCommand:visual-token-designer.createTokenDefinition",
+        "onView:visual-token-designer.tokenFormulaExplorer",
+        "onView:visual-token-designer.tokenDefinitionExplorer"
+    ],
+    "main": "./out/extension.js",
+    "contributes": {
+        "viewsContainers": {
+            "activitybar": [
+                {
+                    "id": "visual-token-designer-mainView",
+                    "title": "Token Designer",
+                    "icon": "resources/token-designer/property-set.svg"
+                }
+            ]
+        },
+        "views": {
+            "visual-token-designer-mainView": [
+                {
+                    "id": "visual-token-designer.tokenFormulaExplorer",
+                    "name": "Token Formulae"
+                },
+                {
+                    "id": "visual-token-designer.tokenDefinitionExplorer",
+                    "name": "Token Definitions"
+                }
+            ]
+        },
+        "commands": [
+            {
+                "command": "visual-token-designer.createTokenFormula",
+                "title": "Create token formula",
+                "category": "Token Taxonomy Framework"
+            },
+            {
+                "command": "visual-token-designer.openTokenFormula",
+                "title": "Open token formula",
+                "category": "Token Taxonomy Framework"
+            },
+            {
+                "command": "visual-token-designer.createTokenDefinition",
+                "title": "Create token definition",
+                "category": "Token Taxonomy Framework"
+            },
+            {
+                "command": "visual-token-designer.openTokenDefinition",
+                "title": "Open token definition",
+                "category": "Token Taxonomy Framework"
+            },
+            {
+                "command": "visual-token-designer.refreshTokenTaxonomy",
+                "title": "Refresh Token Taxonomy",
+                "category": "Token Taxonomy Framework",
+                "icon": {
+                    "light": "resources/light/refresh.svg",
+                    "dark": "resources/dark/refresh.svg"
+                }
+            }
+        ],
+        "menus": {
+            "view/title": [
+                {
+                    "command": "visual-token-designer.refreshTokenTaxonomy",
+                    "when": "view == visual-token-designer.tokenFormulaExplorer",
+                    "group": "navigation"
+                },
+                {
+                    "command": "visual-token-designer.refreshTokenTaxonomy",
+                    "when": "view == visual-token-designer.tokenDefinitionExplorer",
+                    "group": "navigation"
+                },
+                {
+                    "command": "visual-token-designer.createTokenFormula",
+                    "when": "view == visual-token-designer.tokenFormulaExplorer"
+                }
+            ],
+            "view/item/context": [
+                {
+                    "command": "visual-token-designer.createTokenDefinition",
+                    "when": "view == visual-token-designer.tokenFormulaExplorer"
+                }
+            ]
+        }
+    },
+    "scripts": {
+        "compile": "node scripts/compile.js",
+        "watch": "node scripts/compile.js -w",
+        "package": "vsce package",
+        "setversion": "gulp setversion"
+    },
+    "devDependencies": {
+        "@types/glob": "^7.1.1",
+        "@types/google-protobuf": "^3.7.2",
+        "@types/gulp": "^4.0.6",
+        "@types/node": "^10.12.21",
+        "@types/uuid": "^7.0.3",
+        "@types/vscode": "^1.45.0",
+        "browserify": "^16.5.1",
+        "glob": "^7.1.4",
+        "grpc-tools": "^1.8.1",
+        "grpc_tools_node_protoc_ts": "^2.5.11",
+        "gulp": "4.0.0",
+        "nerdbank-gitversioning": "^3.1.91",
+        "node-sass": "^4.14.1",
+        "ts-node": "^8.10.1",
+        "tslint": "^5.12.1",
+        "typescript": "^3.3.1",
+        "watchify": "^3.11.1"
+    },
+    "dependencies": {
+        "google-protobuf": "^3.11.4",
+        "grpc": "^1.24.2",
+        "uuid": "^8.0.0",
+        "vsce": "^1.75.0"
+    }
 }

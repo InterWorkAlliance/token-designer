@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="Content-Security-Policy"
+        content="default-src 'none'; img-src vscode-resource:; script-src vscode-resource:; style-src vscode-resource:;">
+    <link rel="stylesheet" href="[CSS_HREF]">
+    <base href="[BASE_HREF]" />
+</head>
+
+<body>
+
+    <div class="designer">
+        <div class="leftPane">
+            <h1>Token Bases</h1>
+            <div class="toolbox" id="tokenBasesToolbox"></div>
+            <h1>Property Sets</h1>
+            <div class="toolbox" id="propertySetsToolbox"></div>
+        </div>
+        <div class="canvasPane">
+            <div id="canvas">
+                <div class="canvasContents">
+                    <div id="canvasTokenBase"></div>
+                    <div id="behaviorsArea"></div>
+                </div>
+                <div id="formula"></div>
+                <input id="nameInput" type="text" />
+                <textarea id="descriptionInput"></textarea>
+                <div id="inspector" draggable="true">
+                    <div id="inspectorTitle">Title</div>
+                    <div id="inspectorDescription">
+                    </div>
+                    <div id="propertiesHeading">
+                        <strong>Properties:</strong>
+                    </div>
+                    <table id="inspectorPropertiesTable">
+                    </table>
+                    <ul id="inspectorPropertiesList">
+                    </ul>
+                    <div id="inspectorHelp">
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="rightPane">
+            <h1>Behaviors</h1>
+            <div class="toolbox" id="behaviorsToolbox"></div>
+            <h1>Behavior Groups</h1>
+            <div class="toolbox" id="behaviorGroupsToolbox"></div>
+        </div>
+    </div>
+
+    <script src="[JAVASCRIPT_HREF]"></script>
+</body>
+
+</html>
