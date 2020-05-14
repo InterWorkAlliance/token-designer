@@ -3,11 +3,29 @@
 	"displayName": "Visual Token Designer",
 	"description": "VS Code extension that facilitates manipulation of artifacts in the Token Taxonomy Framework",
 	"version": "0.0.1",
+	"icon": "resources/icon.png",
+	"galleryBanner": {
+		"color": "#242424",
+		"theme": "dark"
+	},
+	"author": "Neo Global Development Seattle",
 	"engines": {
 		"vscode": "^1.45.0"
 	},
 	"categories": [
 		"Other"
+	],
+	"bugs": {
+		"url": "https://github.com/ngdseattle/visual-token-designer/issues"
+	},
+	"repository": {
+		"type": "git",
+		"url": "https://github.com/ngdseattle/visual-token-designer.git"
+	},
+	"keywords": [
+		"Neo",
+		"Blockchain",
+		"Token"
 	],
 	"activationEvents": [
 		"onCommand:extension.helloWorld"
@@ -22,21 +40,26 @@
 		]
 	},
 	"scripts": {
+		"compile": "node scripts/compile.js",
 		"vscode:prepublish": "npm run compile",
-		"compile": "tsc -p ./",
-		"watch": "tsc -watch -p ./",
-		"pretest": "npm run compile",
-		"test": "node ./out/test/runTest.js"
+		"watch": "node scripts/compile.js -w",
+		"package": "npm run setversion && vsce package",
+		"setversion": "gulp setversion"
 	},
 	"devDependencies": {
 		"@types/glob": "^7.1.1",
-		"@types/mocha": "^5.2.6",
+		"@types/gulp": "^4.0.6",
 		"@types/node": "^10.12.21",
 		"@types/vscode": "^1.45.0",
+		"browserify": "^16.5.1",
 		"glob": "^7.1.4",
-		"mocha": "^6.1.4",
-		"typescript": "^3.3.1",
+		"gulp": "4.0.0",
+		"nerdbank-gitversioning": "^3.1.91",
+		"node-sass": "^4.14.1",
+		"ts-node": "^8.10.1",
 		"tslint": "^5.12.1",
-		"vscode-test": "^1.2.0"
+		"typescript": "^3.3.1",
+		"vsce": "^1.75.0",
+		"watchify": "^3.11.1"
 	}
 }

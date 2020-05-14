@@ -6,7 +6,18 @@
 		{
 			"type": "npm",
 			"script": "watch",
-			"problemMatcher": "$tsc-watch",
+			// This problem matcher will cause vscode to block until the initial compilation is complete but then allow
+			// the watch task to continue running in the background.
+			"problemMatcher": [
+				{
+					"pattern": [ { "regexp": ".", "file": 1, "location": 2, "message": 3 } ],
+					"background": {
+						"activeOnStart": true,
+						"beginsPattern": "visual-token-designer can now be launched",
+						"endsPattern": "visual-token-designer watching for incremental changes",
+					}
+				}
+			],
 			"isBackground": true,
 			"presentation": {
 				"reveal": "never"
