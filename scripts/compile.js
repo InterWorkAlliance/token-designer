@@ -3,15 +3,10 @@ const fs = require('fs');
 const path = require('path');
 
 async function run(command, args) {
-    if (process.platform === 'win32') {
-        args.unshift(command);
-        args.unshift('/c');
-        command = 'cmd.exe';
-    }
     const argsAsString = args.join(' ');
     console.log('>', command, argsAsString);
     await new Promise((resolve, reject) => {
-        const child = childProcess.spawn(command, args);
+        const child = childProcess.spawn(command, args, { shell: true });
         child.stdout.on('data', output => output && output.toString() && console.info(' ', command, argsAsString, ':', output.toString().trim()));
         child.stderr.on('data', output => output && output.toString() && console.error('E', command, argsAsString, ':', output.toString().trim()));
         child.on('exit', code => (code == 0 ? resolve : reject)());
@@ -63,12 +58,13 @@ function createIfNotExists(folder) {
 
     await run('npm', [ 'install' ]);
     createIfNotExists('out');
-    await compileProtos();
-    await run('tsc', [ '-p',  './' ]);
-    await forAllFiles('src/panels', '.scss', file => run('node-sass', [ file, '-o', 'out/panels' ]));
     createIfNotExists('out/panels');
     createIfNotExists('out/panels/bundles');
-    await forAllFiles('out/panels', '.main.js', (file, basename) => run('browserify', [ file, '-o', 'out/panels/bundles/' + basename ]));
+    await compileProtos();
+    await run('tsc', [ '-p',  './' ]);
+    await run('tsc', [ '-p',  './src/panels' ]);
+    await forAllFiles('src/panels', '.scss', file => run('node-sass', [ file, '-o', 'out/panels' ]));
+    await forAllFiles('out/panels', '.main.js', (file, basename) => run('browserify', [ '-t [ babelify --presets [ @babel/preset-react ] ]', file, '-o out/panels/bundles/' + basename ]));
 
     if (watchMode) {
 
@@ -83,8 +79,9 @@ function createIfNotExists(folder) {
         
         const tasks = [];
         tasks.push(run('tsc', [ '-watch', '-p', './' ]));
+        tasks.push(run('tsc', [ '-watch', '-p', './src/panels' ]));
         await forAllFiles('src/panels', '.scss', file => tasks.push(run('node-sass', [ file, '-wo', 'out/panels' ])));
-        await forAllFiles('out/panels', '.main.js', (file, basename) => tasks.push(run('watchify', [ file, '-o', 'out/panels/bundles/' + basename ])));
+        await forAllFiles('out/panels', '.main.js', (file, basename) => tasks.push(run('watchify', [ '-t [ babelify --presets [ @babel/preset-react ] ]', file, '-o out/panels/bundles/' + basename ])));
         await Promise.all(tasks);
 
     }
