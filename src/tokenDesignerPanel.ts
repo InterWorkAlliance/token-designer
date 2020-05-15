@@ -47,33 +47,33 @@ export class TokenDesignerPanel {
 
     private disposed = false;
 
-    static async openNewFormula(ttfConnection: ttfClient.ServiceClient, ttfTaxonomy: TokenTaxonomy, extensionPath: string, disposables: vscode.Disposable[]) {
-        const panel = new TokenDesignerPanel(ttfConnection, ttfTaxonomy, extensionPath, disposables);
+    static async openNewFormula(ttfConnection: ttfClient.ServiceClient, ttfTaxonomy: TokenTaxonomy, extensionPath: string, disposables: vscode.Disposable[], panelReloadEvent: vscode.Event<void>) {
+        const panel = new TokenDesignerPanel(ttfConnection, ttfTaxonomy, extensionPath, disposables, panelReloadEvent);
         panel.newFormula();
         return panel;
     }
 
-    static async openExistingFormula(toolingSymbol: string, ttfConnection: ttfClient.ServiceClient, ttfTaxonomy: TokenTaxonomy, extensionPath: string, disposables: vscode.Disposable[]) {
-        const panel = new TokenDesignerPanel(ttfConnection, ttfTaxonomy, extensionPath, disposables);
+    static async openExistingFormula(toolingSymbol: string, ttfConnection: ttfClient.ServiceClient, ttfTaxonomy: TokenTaxonomy, extensionPath: string, disposables: vscode.Disposable[], panelReloadEvent: vscode.Event<void>) {
+        const panel = new TokenDesignerPanel(ttfConnection, ttfTaxonomy, extensionPath, disposables, panelReloadEvent);
         await panel.openFormula(toolingSymbol);
         return panel;
     }
 
-    static async openNewDefinition(formulaId: any, ttfConnection: ttfClient.ServiceClient, ttfTaxonomy: TokenTaxonomy, extensionPath: string, disposables: vscode.Disposable[]) {
+    static async openNewDefinition(formulaId: any, ttfConnection: ttfClient.ServiceClient, ttfTaxonomy: TokenTaxonomy, extensionPath: string, disposables: vscode.Disposable[], panelReloadEvent: vscode.Event<void>) {
         let definitionName = await vscode.window.showInputBox({ 
             ignoreFocusOut: true, 
             prompt: 'Choose a name for the definition',
             validateInput: _ => _ && _.length ? '' : 'The name cannot be empty',
         });
         if (definitionName) {
-            const panel = new TokenDesignerPanel(ttfConnection, ttfTaxonomy, extensionPath, disposables);
+            const panel = new TokenDesignerPanel(ttfConnection, ttfTaxonomy, extensionPath, disposables, panelReloadEvent);
             panel.newDefinition(formulaId, definitionName);
             return panel;
         }
     }
 
-    static async openExistingDefinition(artifactId: string, ttfConnection: ttfClient.ServiceClient, ttfTaxonomy: TokenTaxonomy, extensionPath: string, disposables: vscode.Disposable[]) {
-        const panel = new TokenDesignerPanel(ttfConnection, ttfTaxonomy, extensionPath, disposables);
+    static async openExistingDefinition(artifactId: string, ttfConnection: ttfClient.ServiceClient, ttfTaxonomy: TokenTaxonomy, extensionPath: string, disposables: vscode.Disposable[], panelReloadEvent: vscode.Event<void>) {
+        const panel = new TokenDesignerPanel(ttfConnection, ttfTaxonomy, extensionPath, disposables, panelReloadEvent);
         await panel.openDefinition(artifactId);
         return panel;
     }
@@ -82,7 +82,8 @@ export class TokenDesignerPanel {
         private readonly ttfConnection: ttfClient.ServiceClient, 
         private readonly ttfTaxonomy: TokenTaxonomy, 
         private readonly extensionPath: string, 
-        disposables: vscode.Disposable[]) {
+        disposables: vscode.Disposable[],
+        panelReloadEvent: vscode.Event<void>) {
     
         this.panel = vscode.window.createWebviewPanel('tokenDesigner', this.title, vscode.ViewColumn.Active, { enableScripts: true });
         this.panel.iconPath = this.iconPath;
@@ -92,6 +93,8 @@ export class TokenDesignerPanel {
 
         this.refreshTaxonomy();
         this.ttfTaxonomy.onRefresh(this.refreshTaxonomy, this);
+
+        panelReloadEvent(_ => this.panel.webview.html = this.getPanelHtml());
     }
 
     dispose() {
@@ -143,11 +146,11 @@ export class TokenDesignerPanel {
 
     private getPanelHtml() {
         const htmlFileContents = fs.readFileSync(
-            path.join(this.extensionPath, 'src', 'panels', 'tokenDesigner.html'), { encoding: 'utf8' });
+            path.join(this.extensionPath, 'src', 'panels', 'designer.html'), { encoding: 'utf8' });
         const javascriptHref: string = this.panel.webview.asWebviewUri(
-            vscode.Uri.file(path.join(this.extensionPath, 'out', 'panels', 'bundles', 'tokenDesigner.main.js'))) + '';
+            vscode.Uri.file(path.join(this.extensionPath, 'out', 'panels', 'bundles', 'designer.main.js'))) + '?' + Math.random();
         const cssHref: string = this.panel.webview.asWebviewUri(
-            vscode.Uri.file(path.join(this.extensionPath, 'out', 'panels', 'tokenDesigner.css'))) + '';
+            vscode.Uri.file(path.join(this.extensionPath, 'out', 'panels', 'designer.css'))) + '?' + Math.random();
         const baseHref: string = this.panel.webview.asWebviewUri(
             vscode.Uri.file(path.join(this.extensionPath, 'resources'))) + '/';
         return htmlFileContents

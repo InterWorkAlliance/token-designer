@@ -13,6 +13,9 @@
 			"args": [
 				"--extensionDevelopmentPath=${workspaceFolder}"
 			],
+			"env": {
+				"VSCODE_DEBUG_MODE": "true"
+			},
 			"outFiles": [
 				"${workspaceFolder}/out/**/*.js"
 			],
