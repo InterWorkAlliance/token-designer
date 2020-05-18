@@ -41,5 +41,12 @@ export default function App ({ postMessage }: Props) {
     postMessage({ e: tokenDesignerEvents.Init });
   }, []);
 
-  return <FormulaDesigner taxonomy={taxonomy} />;
+  if (formula) {
+    return <FormulaDesigner taxonomy={taxonomy} formula={formula} />;
+  } else if (definition) {
+    return <>TODO: Token definition editor</>;
+  } else {
+    return <>Loading&hellip;</>
+  }
+  
 }

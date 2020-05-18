@@ -1,13 +1,12 @@
 import React from 'react';
 
-import Canvas from './Canvas';
-
 type Props = {
   left: string,
   right: string,
+  children: any,
 };
 
-export default function CanvasPane ({ left, right }: Props) {
+export default function CanvasPane ({ left, right, children }: Props) {
   const style: React.CSSProperties = {
     position: 'fixed',
     top: 0,
@@ -17,7 +16,7 @@ export default function CanvasPane ({ left, right }: Props) {
   };
   return (
     <div style={style}>
-      <Canvas />
+      {children}
     </div>
   );
 }

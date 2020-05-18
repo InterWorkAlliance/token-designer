@@ -4,7 +4,7 @@ import ArtifactType from "./ArtifactType";
 
 type Props = {
   title: string;
-  type: ArtifactType;
+  type: ArtifactType | "unknown";
 };
 
 export default function ArtifactIcon({ title, type }: Props) {

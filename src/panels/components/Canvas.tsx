@@ -1,28 +1,45 @@
-import React from 'react';
+import React from "react";
+
+import { Base } from "../../ttf/core_pb";
+
+import ArtifactIcon from "./ArtifactIcon";
 
 type Props = {
-
+  tokenBase?: Base.AsObject;
 };
 
-export default function Canvas ({  }: Props) {
+export default function Canvas({ tokenBase }: Props) {
   const style: React.CSSProperties = {
-    border: 'var(--borderWidth) solid var(--vscode-panel-border)',
-    color: 'var(--vscode-editor-foreground)',
-    backgroundColor: 'var(--vscode-editor-background)',
-    position: 'absolute',
-    top: 'var(--padding)',
-    bottom: 'var(--padding)',
-    left: 'var(--padding)',
-    right: 'var(--padding)',
-    overflow: 'auto',
-    display: 'flex',
-    alignItems: 'center',
-    justifyContent: 'center',
+    border: "var(--borderWidth) solid var(--vscode-panel-border)",
+    color: "var(--vscode-editor-foreground)",
+    backgroundColor: "var(--vscode-editor-background)",
+    position: "absolute",
+    top: "var(--padding)",
+    bottom: "var(--padding)",
+    left: "var(--padding)",
+    right: "var(--padding)",
+    overflow: "auto",
+    display: "flex",
+    alignItems: "center",
+    justifyContent: "center",
+  };
+  const utlizedAreaStyle: React.CSSProperties = {
+    display: "inline-block",
+    marginTop: "10vh",
+    marginBottom: "10vh",
+    marginLeft: "10vw",
+    marginRight: "10vw",
   };
   return (
     <div style={style}>
-      <span style={{display: 'inline-block'}}>
-        Canvas
+      <span style={utlizedAreaStyle}>
+        <div>
+          <ArtifactIcon
+            title={tokenBase?.name || "Unknown"}
+            type={tokenBase ? "token-base" : "unknown"}
+          />
+        </div>
+        <div style={{ width: "var(--iconWidth)" }}>Column</div>
       </span>
     </div>
   );
