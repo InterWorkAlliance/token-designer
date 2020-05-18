@@ -1,5 +1,7 @@
 import React from 'react';
 
+import Canvas from './Canvas';
+
 type Props = {
   left: string,
   right: string,
@@ -14,6 +16,8 @@ export default function CanvasPane ({ left, right }: Props) {
     right,
   };
   return (
-    <div style={style}>Canvas</div>
+    <div style={style}>
+      <Canvas />
+    </div>
   );
 }
