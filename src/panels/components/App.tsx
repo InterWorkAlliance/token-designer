@@ -51,6 +51,27 @@ export default function App({ postMessage }: Props) {
     postMessage({ e: tokenDesignerEvents.Remove, id });
   };
 
+  const setDefinitionName = (name: string) => {
+    postMessage({ e: tokenDesignerEvents.SetDefinitionName, name });
+  };
+
+  const setDefinitionProperty = (
+    artifactId: string,
+    propertyName: string,
+    value: string
+  ) => {
+    postMessage({
+      e: tokenDesignerEvents.SetDefinitionProperty,
+      artifactId,
+      propertyName,
+      value,
+    });
+  };
+
+  const setFormulaDescription = (description: string) => {
+    postMessage({ e: tokenDesignerEvents.SetFormulaDescription, description });
+  };
+
   if (formula) {
     return (
       <FormulaDesigner
@@ -59,6 +80,7 @@ export default function App({ postMessage }: Props) {
         incompatabilities={incompatabilities}
         addArtifact={addArtifact}
         removeArtifact={removeArtifact}
+        setFormulaDescription={setFormulaDescription}
       />
     );
   } else if (definition) {

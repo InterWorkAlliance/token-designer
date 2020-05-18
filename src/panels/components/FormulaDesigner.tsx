@@ -16,6 +16,7 @@ type Props = {
   incompatabilities: any;
   addArtifact: (id: string) => void;
   removeArtifact: (id: string) => void;
+  setFormulaDescription: (description: string) => void;
 };
 
 export default function FormulaDesigner({
@@ -24,6 +25,7 @@ export default function FormulaDesigner({
   incompatabilities,
   addArtifact,
   removeArtifact,
+  setFormulaDescription,
 }: Props) {
   const [artifactBeingDraggedOn, setArtifactBeingDraggedOn] = useState<
     Artifact.AsObject | undefined
@@ -91,6 +93,8 @@ export default function FormulaDesigner({
         left={toolPaneWidth}
         right={toolPaneWidth}
         formula={formula.artifact?.artifactSymbol?.tooling}
+        formulaDescription={formula.artifact?.artifactDefinition?.businessDescription}
+        setFormulaDescription={setFormulaDescription}
       >
         <Canvas
           tokenBase={tokenBase}
