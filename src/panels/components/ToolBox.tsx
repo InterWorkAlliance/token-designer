@@ -33,7 +33,11 @@ export default function ToolBox({ title, tools, type }: Props) {
           .filter((_) => !!_.artifact)
           .map((_) => _.artifact as Artifact.AsObject)
           .map((artifact: Artifact.AsObject) => (
-            <ArtifactIcon title={artifact.name} type={type} />
+            <ArtifactIcon
+              key={artifact.name}
+              title={artifact.name}
+              type={type}
+            />
           ))}
       </div>
     </>
