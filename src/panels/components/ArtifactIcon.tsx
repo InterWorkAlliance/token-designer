@@ -7,10 +7,16 @@ import ArtifactType from "./ArtifactType";
 type Props = {
   artifact?: Artifact.AsObject;
   type: ArtifactType | "unknown";
+  error?: string;
   onDragStart?: (artifact: Artifact.AsObject) => void;
 };
 
-export default function ArtifactIcon({ artifact, type, onDragStart }: Props) {
+export default function ArtifactIcon({
+  artifact,
+  type,
+  error,
+  onDragStart,
+}: Props) {
   const style: React.CSSProperties = {
     cursor: "pointer",
     display: "inline-block",
@@ -23,6 +29,7 @@ export default function ArtifactIcon({ artifact, type, onDragStart }: Props) {
     width: "3.5em",
     margin: "var(--paddingSmall)",
     padding: "var(--paddingSmall)",
+    filter: error ? "grayscale(100%)" : undefined,
   };
   const titleStyle: React.CSSProperties = {
     whiteSpace: "nowrap",
@@ -30,6 +37,8 @@ export default function ArtifactIcon({ artifact, type, onDragStart }: Props) {
     textOverflow: "ellipsis",
     margin: "var(--paddingSmall)",
     padding: "var(--paddingSmall)",
+    color: error ? "var(--vscode-errorForeground)" : undefined,
+    fontWeight: error ? "bold" : undefined,
   };
   let imgSrc = "token-designer/unknown.svg";
   switch (type) {
@@ -46,7 +55,10 @@ export default function ArtifactIcon({ artifact, type, onDragStart }: Props) {
       imgSrc = "token-designer/behavior-group.svg";
       break;
   }
-  const title = artifact?.name || "Unknown";
+  let title = artifact?.name || "Unknown";
+  if (error) {
+    title += ` - ${error}`;
+  }
   const dispatchOnDragStart =
     artifact && onDragStart ? () => onDragStart(artifact) : undefined;
   return (

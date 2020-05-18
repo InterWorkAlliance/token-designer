@@ -13,6 +13,7 @@ import { TokenDesignerTaxonomy } from "../tokenDesignerTaxonomy";
 type Props = {
   taxonomy: TokenDesignerTaxonomy | null;
   formula: TemplateFormula.AsObject;
+  incompatabilities: any;
   addArtifact: (id: string) => void;
   removeArtifact: (id: string) => void;
 };
@@ -20,6 +21,7 @@ type Props = {
 export default function FormulaDesigner({
   taxonomy,
   formula,
+  incompatabilities,
   addArtifact,
   removeArtifact,
 }: Props) {
@@ -95,6 +97,7 @@ export default function FormulaDesigner({
           propertySets={propertySets}
           behaviorGroups={behaviorGroups}
           behaviors={behaviors}
+          incompatabilities={incompatabilities}
           artifactBeingDraggedOn={artifactBeingDraggedOn}
           artifactOnDragStart={setArtifactBeingDraggedOff}
           addArtifact={addArtifact}

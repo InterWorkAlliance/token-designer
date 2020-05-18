@@ -14,7 +14,7 @@ export default function App({ postMessage }: Props) {
   const [taxonomy, setTaxonomy] = useState(null);
   const [formula, setFormula] = useState<TemplateFormula.AsObject | null>(null);
   const [definition, setDefinition] = useState(null);
-  const [incompatabilities, setIncompatabilities] = useState(null);
+  const [incompatabilities, setIncompatabilities] = useState<any>({});
 
   const handleMessage = (message: any) => {
     if (message.taxonomy) {
@@ -56,6 +56,7 @@ export default function App({ postMessage }: Props) {
       <FormulaDesigner
         taxonomy={taxonomy}
         formula={formula}
+        incompatabilities={incompatabilities}
         addArtifact={addArtifact}
         removeArtifact={removeArtifact}
       />

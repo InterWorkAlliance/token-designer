@@ -9,6 +9,7 @@ type Props = {
   propertySets?: Artifact.AsObject[];
   behaviorGroups?: Artifact.AsObject[];
   behaviors?: Artifact.AsObject[];
+  incompatabilities: any;
   artifactBeingDraggedOn?: Artifact.AsObject;
   artifactOnDragStart?: (artifact: Artifact.AsObject) => void;
   addArtifact: (id: string) => void;
@@ -19,6 +20,7 @@ export default function Canvas({
   propertySets,
   behaviorGroups,
   behaviors,
+  incompatabilities,
   artifactBeingDraggedOn,
   artifactOnDragStart,
   addArtifact,
@@ -58,6 +60,11 @@ export default function Canvas({
       addArtifact(artifactBeingDraggedOn.artifactSymbol?.id);
     }
   };
+  const errorText = (id?: string) => {
+    if (id && incompatabilities[id]?.length) {
+      return "Incompatible with " + incompatabilities[id].join(", ");
+    }
+  };
   return (
     <div
       style={style}
@@ -72,6 +79,7 @@ export default function Canvas({
               artifact={tokenBase}
               type={tokenBase ? "token-base" : "unknown"}
               onDragStart={artifactOnDragStart}
+              error={errorText(tokenBase?.artifactSymbol?.id)}
             />
             {(propertySets || []).map((_) => (
               <ArtifactIcon
@@ -79,6 +87,7 @@ export default function Canvas({
                 artifact={_}
                 type="property-set"
                 onDragStart={artifactOnDragStart}
+                error={errorText(_.artifactSymbol?.id)}
               />
             ))}
           </div>
@@ -89,6 +98,7 @@ export default function Canvas({
                 artifact={_}
                 type="behavior-group"
                 onDragStart={artifactOnDragStart}
+                error={errorText(_.artifactSymbol?.id)}
               />
             ))}
             {(behaviors || []).map((_) => (
@@ -97,6 +107,7 @@ export default function Canvas({
                 artifact={_}
                 type="behavior"
                 onDragStart={artifactOnDragStart}
+                error={errorText(_.artifactSymbol?.id)}
               />
             ))}
           </div>
