@@ -1,15 +1,22 @@
 import React from "react";
 
-import { Base, PropertySet } from "../../ttf/core_pb";
+import { Base, PropertySet, BehaviorGroup, Behavior } from "../../ttf/core_pb";
 
 import ArtifactIcon from "./ArtifactIcon";
 
 type Props = {
   tokenBase?: Base.AsObject;
   propertySets?: PropertySet.AsObject[];
+  behaviorGroups?: BehaviorGroup.AsObject[];
+  behaviors?: Behavior.AsObject[];
 };
 
-export default function Canvas({ tokenBase, propertySets }: Props) {
+export default function Canvas({
+  tokenBase,
+  propertySets,
+  behaviorGroups,
+  behaviors,
+}: Props) {
   const style: React.CSSProperties = {
     border: "var(--borderWidth) solid var(--vscode-panel-border)",
     color: "var(--vscode-editor-foreground)",
@@ -47,7 +54,22 @@ export default function Canvas({ tokenBase, propertySets }: Props) {
             />
           ))}
         </div>
-        <div style={{ width: "var(--iconWidth)" }}>Column</div>
+        <div style={{ width: "var(--iconWidth)" }}>
+          {(behaviorGroups || []).map((_) => (
+            <ArtifactIcon
+              key={_.artifact?.artifactSymbol?.id}
+              title={_.artifact?.name || "Unknown"}
+              type="behavior-group"
+            />
+          ))}
+          {(behaviors || []).map((_) => (
+            <ArtifactIcon
+              key={_.artifact?.artifactSymbol?.id}
+              title={_.artifact?.name || "Unknown"}
+              type="behavior"
+            />
+          ))}
+        </div>
       </span>
     </div>
   );

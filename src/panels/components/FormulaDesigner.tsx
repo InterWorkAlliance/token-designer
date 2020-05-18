@@ -1,6 +1,12 @@
 import React from "react";
 
-import { Base, TemplateFormula, PropertySet } from "../../ttf/core_pb";
+import {
+  Base,
+  TemplateFormula,
+  PropertySet,
+  BehaviorGroup,
+  Behavior,
+} from "../../ttf/core_pb";
 
 import Canvas from "./Canvas";
 import CanvasPane from "./CanvasPane";
@@ -28,6 +34,22 @@ export default function FormulaDesigner({ taxonomy, formula }: Props) {
     )
     .filter((_) => !!_) as PropertySet.AsObject[];
 
+  const behaviorGroups = formula.behaviorGroupsList
+    .map((_) => _.behaviorGroup?.id)
+    .map((id) =>
+      taxonomy?.behaviorGroups.find(
+        (_) => _.artifact?.artifactSymbol?.id === id
+      )
+    )
+    .filter((_) => !!_) as BehaviorGroup.AsObject[];
+
+  const behaviors = formula.behaviorsList
+    .map((_) => _.behavior?.id)
+    .map((id) =>
+      taxonomy?.behaviors.find((_) => _.artifact?.artifactSymbol?.id === id)
+    )
+    .filter((_) => !!_) as Behavior.AsObject[];
+
   return (
     <>
       <ToolPane position="left" width={toolPaneWidth}>
@@ -43,7 +65,12 @@ export default function FormulaDesigner({ taxonomy, formula }: Props) {
         />
       </ToolPane>
       <CanvasPane left={toolPaneWidth} right={toolPaneWidth}>
-        <Canvas tokenBase={tokenBase} propertySets={propertySets} />
+        <Canvas
+          tokenBase={tokenBase}
+          propertySets={propertySets}
+          behaviorGroups={behaviorGroups}
+          behaviors={behaviors}
+        />
       </CanvasPane>
       <ToolPane position="right" width={toolPaneWidth}>
         <ToolBox
