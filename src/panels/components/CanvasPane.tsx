@@ -5,7 +5,7 @@ type Props = {
   right: string,
 };
 
-export default function ({ left, right }: Props) {
+export default function CanvasPane ({ left, right }: Props) {
   const style: React.CSSProperties = {
     position: 'fixed',
     top: 0,

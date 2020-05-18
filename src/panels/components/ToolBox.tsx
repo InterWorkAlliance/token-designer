@@ -1,30 +1,40 @@
-import React from 'react';
+import React from "react";
 
-import ToolBoxTitle from './ToolBoxTitle';
+import { Base, PropertySet, Behavior, BehaviorGroup } from "../../ttf/core_pb";
+import { Artifact } from "../../ttf/artifact_pb";
 
-import { Base, PropertySet, Behavior, BehaviorGroup } from '../../ttf/core_pb';
+import ArtifactIcon from "./ArtifactIcon";
+import ArtifactType from "./ArtifactType";
+import ToolBoxTitle from "./ToolBoxTitle";
 
 type Props = {
-  title: string,
-  artifacts: (Base.AsObject | PropertySet.AsObject | Behavior.AsObject | BehaviorGroup.AsObject)[],
+  title: string;
+  tools: (
+    | Base.AsObject
+    | PropertySet.AsObject
+    | Behavior.AsObject
+    | BehaviorGroup.AsObject
+  )[];
+  type: ArtifactType;
 };
 
-export default function ({ title, artifacts }: Props) {
+export default function ToolBox({ title, tools, type }: Props) {
   const itemsAreaStyle: React.CSSProperties = {
-    maxHeight: '45vh',
-    overflowY: 'auto',
-    margin: 'var(--padding)',
-    padding: 'var(--padding)',
+    maxHeight: "45vh",
+    overflowY: "auto",
+    margin: "var(--padding)",
+    padding: "var(--padding)",
   };
   return (
     <>
       <ToolBoxTitle title={title} />
       <div style={itemsAreaStyle}>
-        {
-          artifacts.map(artifact => (
-            <span>{artifact.artifact?.name}</span>
-          ))
-        }
+        {tools
+          .filter((_) => !!_.artifact)
+          .map((_) => _.artifact as Artifact.AsObject)
+          .map((artifact: Artifact.AsObject) => (
+            <ArtifactIcon title={artifact.name} type={type} />
+          ))}
       </div>
     </>
   );

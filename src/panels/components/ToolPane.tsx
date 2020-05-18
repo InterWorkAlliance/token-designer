@@ -6,7 +6,7 @@ type Props = {
   children: any,
 };
 
-export default function ({ position, width, children }: Props) {
+export default function ToolPane ({ position, width, children }: Props) {
   const style: React.CSSProperties = {
     position: 'fixed',
     top: 0,

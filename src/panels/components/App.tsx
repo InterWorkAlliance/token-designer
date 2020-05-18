@@ -8,7 +8,7 @@ type Props = {
   postMessage: (message: any) => void;
 };
 
-export default function ({ postMessage }: Props) {
+export default function App ({ postMessage }: Props) {
   const [taxonomy, setTaxonomy] = useState(null);
   const [formula, setFormula] = useState(null);
   const [definition, setDefinition] = useState(null);

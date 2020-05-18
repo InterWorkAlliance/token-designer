@@ -4,7 +4,7 @@ type Props = {
   title: string;
 };
 
-export default function ({ title }: Props) {
+export default function ToolBoxTitle ({ title }: Props) {
   const style: React.CSSProperties = {
     backgroundColor: 'var(--vscode-sideBarSectionHeader-background)',
     color: 'var(--vscode-sideBarTitle-foreground)',
