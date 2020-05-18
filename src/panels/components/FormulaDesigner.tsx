@@ -64,7 +64,7 @@ export default function FormulaDesigner({ taxonomy, formula }: Props) {
           tools={taxonomy?.propertySets || []}
         />
       </ToolPane>
-      <CanvasPane left={toolPaneWidth} right={toolPaneWidth}>
+      <CanvasPane left={toolPaneWidth} right={toolPaneWidth} formula={"TODO"}>
         <Canvas
           tokenBase={tokenBase}
           propertySets={propertySets}

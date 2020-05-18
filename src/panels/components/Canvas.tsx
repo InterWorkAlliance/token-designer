@@ -69,6 +69,21 @@ export default function Canvas({
               type="behavior"
             />
           ))}
+
+{(behaviors || []).map((_) => (
+            <ArtifactIcon
+              key={_.artifact?.artifactSymbol?.id}
+              title={_.artifact?.name || "Unknown"}
+              type="behavior"
+            />
+          ))}{(behaviors || []).map((_) => (
+            <ArtifactIcon
+              key={_.artifact?.artifactSymbol?.id}
+              title={_.artifact?.name || "Unknown"}
+              type="behavior"
+            />
+          ))}
+
         </div>
       </span>
     </div>
