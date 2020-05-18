@@ -13,9 +13,16 @@ import { TokenDesignerTaxonomy } from "../tokenDesignerTaxonomy";
 type Props = {
   taxonomy: TokenDesignerTaxonomy | null;
   formula: TemplateFormula.AsObject;
+  addArtifact: (id: string) => void;
+  removeArtifact: (id: string) => void;
 };
 
-export default function FormulaDesigner({ taxonomy, formula }: Props) {
+export default function FormulaDesigner({
+  taxonomy,
+  formula,
+  addArtifact,
+  removeArtifact,
+}: Props) {
   const [artifactBeingDraggedOn, setArtifactBeingDraggedOn] = useState<
     Artifact.AsObject | undefined
   >(undefined);
@@ -62,6 +69,7 @@ export default function FormulaDesigner({ taxonomy, formula }: Props) {
         position="left"
         width={toolPaneWidth}
         artifactBeingDraggedOff={artifactBeingDraggedOff}
+        removeArtifact={removeArtifact}
       >
         <ToolBox
           title="Token Bases"
@@ -89,6 +97,7 @@ export default function FormulaDesigner({ taxonomy, formula }: Props) {
           behaviors={behaviors}
           artifactBeingDraggedOn={artifactBeingDraggedOn}
           artifactOnDragStart={setArtifactBeingDraggedOff}
+          addArtifact={addArtifact}
         />
       </CanvasPane>
 
@@ -96,6 +105,7 @@ export default function FormulaDesigner({ taxonomy, formula }: Props) {
         position="right"
         width={toolPaneWidth}
         artifactBeingDraggedOff={artifactBeingDraggedOff}
+        removeArtifact={removeArtifact}
       >
         <ToolBox
           title="Behaviors"

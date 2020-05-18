@@ -6,14 +6,16 @@ type Props = {
   position: "left" | "right";
   width: string;
   artifactBeingDraggedOff?: Artifact.AsObject;
+  removeArtifact: (id: string) => void;
   children: any;
 };
 
 export default function ToolPane({
   position,
   width,
-  children,
   artifactBeingDraggedOff,
+  removeArtifact,
+  children,
 }: Props) {
   const [dropTargetActive, setDropTargetActive] = useState(false);
   const style: React.CSSProperties = {
@@ -45,7 +47,9 @@ export default function ToolPane({
   };
   const onDrop = (ev: React.DragEvent<HTMLDivElement>) => {
     setDropTargetActive(false);
-    // TODO...
+    if (artifactBeingDraggedOff?.artifactSymbol?.id) {
+      removeArtifact(artifactBeingDraggedOff.artifactSymbol.id);
+    }
   };
   return (
     <div

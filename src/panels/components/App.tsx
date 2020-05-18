@@ -10,7 +10,7 @@ type Props = {
   postMessage: (message: any) => void;
 };
 
-export default function App ({ postMessage }: Props) {
+export default function App({ postMessage }: Props) {
   const [taxonomy, setTaxonomy] = useState(null);
   const [formula, setFormula] = useState<TemplateFormula.AsObject | null>(null);
   const [definition, setDefinition] = useState(null);
@@ -43,12 +43,26 @@ export default function App ({ postMessage }: Props) {
     postMessage({ e: tokenDesignerEvents.Init });
   }, []);
 
+  const addArtifact = (id: string) => {
+    postMessage({ e: tokenDesignerEvents.Add, id });
+  };
+
+  const removeArtifact = (id: string) => {
+    postMessage({ e: tokenDesignerEvents.Remove, id });
+  };
+
   if (formula) {
-    return <FormulaDesigner taxonomy={taxonomy} formula={formula} />;
+    return (
+      <FormulaDesigner
+        taxonomy={taxonomy}
+        formula={formula}
+        addArtifact={addArtifact}
+        removeArtifact={removeArtifact}
+      />
+    );
   } else if (definition) {
     return <>TODO: Token definition editor</>;
   } else {
     return <>Loading&hellip;</>;
   }
-  
 }

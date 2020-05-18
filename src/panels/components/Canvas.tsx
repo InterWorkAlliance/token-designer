@@ -11,6 +11,7 @@ type Props = {
   behaviors?: Artifact.AsObject[];
   artifactBeingDraggedOn?: Artifact.AsObject;
   artifactOnDragStart?: (artifact: Artifact.AsObject) => void;
+  addArtifact: (id: string) => void;
 };
 
 export default function Canvas({
@@ -20,6 +21,7 @@ export default function Canvas({
   behaviors,
   artifactBeingDraggedOn,
   artifactOnDragStart,
+  addArtifact,
 }: Props) {
   const [dropTargetActive, setDropTargetActive] = useState(false);
   const style: React.CSSProperties = {
@@ -34,16 +36,14 @@ export default function Canvas({
     left: "var(--padding)",
     right: "var(--padding)",
     overflow: "auto",
-    display: "flex",
-    alignItems: "center",
-    justifyContent: "center",
+    textAlign: "center",
   };
   const utlizedAreaStyle: React.CSSProperties = {
-    display: "inline-block",
-    marginTop: "10vh",
-    marginBottom: "10vh",
-    marginLeft: "10vw",
-    marginRight: "10vw",
+    display: "flex",
+    justifyContent: "center",
+    alignItems: "center",
+    minHeight: "100%",
+    padding: "calc(5 * var(--padding))",
   };
   const onDragOver = (ev: React.DragEvent<HTMLDivElement>) => {
     ev.preventDefault();
@@ -54,7 +54,9 @@ export default function Canvas({
   };
   const onDrop = (ev: React.DragEvent<HTMLDivElement>) => {
     setDropTargetActive(false);
-    // TODO...
+    if (artifactBeingDraggedOn?.artifactSymbol?.id) {
+      addArtifact(artifactBeingDraggedOn.artifactSymbol?.id);
+    }
   };
   return (
     <div
@@ -64,39 +66,41 @@ export default function Canvas({
       onDrop={onDrop}
     >
       <span style={utlizedAreaStyle}>
-        <div>
-          <ArtifactIcon
-            artifact={tokenBase}
-            type={tokenBase ? "token-base" : "unknown"}
-            onDragStart={artifactOnDragStart}
-          />
-          {(propertySets || []).map((_) => (
+        <span style={{ display: "inline-block" }}>
+          <div style={{ whiteSpace: "nowrap" }}>
             <ArtifactIcon
-              key={_.artifactSymbol?.id}
-              artifact={_}
-              type="property-set"
+              artifact={tokenBase}
+              type={tokenBase ? "token-base" : "unknown"}
               onDragStart={artifactOnDragStart}
             />
-          ))}
-        </div>
-        <div style={{ width: "var(--iconWidth)" }}>
-          {(behaviorGroups || []).map((_) => (
-            <ArtifactIcon
-              key={_.artifactSymbol?.id}
-              artifact={_}
-              type="behavior-group"
-              onDragStart={artifactOnDragStart}
-            />
-          ))}
-          {(behaviors || []).map((_) => (
-            <ArtifactIcon
-              key={_.artifactSymbol?.id}
-              artifact={_}
-              type="behavior"
-              onDragStart={artifactOnDragStart}
-            />
-          ))}
-        </div>
+            {(propertySets || []).map((_) => (
+              <ArtifactIcon
+                key={_.artifactSymbol?.id}
+                artifact={_}
+                type="property-set"
+                onDragStart={artifactOnDragStart}
+              />
+            ))}
+          </div>
+          <div style={{ width: "var(--iconWidth)" }}>
+            {(behaviorGroups || []).map((_) => (
+              <ArtifactIcon
+                key={_.artifactSymbol?.id}
+                artifact={_}
+                type="behavior-group"
+                onDragStart={artifactOnDragStart}
+              />
+            ))}
+            {(behaviors || []).map((_) => (
+              <ArtifactIcon
+                key={_.artifactSymbol?.id}
+                artifact={_}
+                type="behavior"
+                onDragStart={artifactOnDragStart}
+              />
+            ))}
+          </div>
+        </span>
       </span>
     </div>
   );
