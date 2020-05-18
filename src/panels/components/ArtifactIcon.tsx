@@ -7,9 +7,10 @@ import ArtifactType from "./ArtifactType";
 type Props = {
   artifact?: Artifact.AsObject;
   type: ArtifactType | "unknown";
+  onDragStart?: (artifact: Artifact.AsObject) => void;
 };
 
-export default function ArtifactIcon({ artifact, type }: Props) {
+export default function ArtifactIcon({ artifact, type, onDragStart }: Props) {
   const style: React.CSSProperties = {
     cursor: "pointer",
     display: "inline-block",
@@ -46,9 +47,16 @@ export default function ArtifactIcon({ artifact, type }: Props) {
       break;
   }
   const title = artifact?.name || "Unknown";
+  const dispatchOnDragStart =
+    artifact && onDragStart ? () => onDragStart(artifact) : undefined;
   return (
-    <span style={style} title={title}>
-      <img src={imgSrc} style={imgStyle} />
+    <span
+      style={style}
+      title={title}
+      draggable={!!onDragStart}
+      onDragStart={dispatchOnDragStart}
+    >
+      <img src={imgSrc} style={imgStyle} draggable={false} />
       <div style={titleStyle}>{title}</div>
     </span>
   );

@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 
 import { TemplateFormula } from "../../ttf/core_pb";
 import { Artifact } from "../../ttf/artifact_pb";
@@ -16,6 +16,14 @@ type Props = {
 };
 
 export default function FormulaDesigner({ taxonomy, formula }: Props) {
+  const [artifactBeingDraggedOn, setArtifactBeingDraggedOn] = useState<
+    Artifact.AsObject | undefined
+  >(undefined);
+
+  const [artifactBeingDraggedOff, setArtifactBeingDraggedOff] = useState<
+    Artifact.AsObject | undefined
+  >(undefined);
+
   const toolPaneWidth = "25vw";
 
   const tokenBase = taxonomy?.baseTokenTypes.find(
@@ -27,7 +35,7 @@ export default function FormulaDesigner({ taxonomy, formula }: Props) {
     .map((id) =>
       taxonomy?.propertySets.find((_) => _.artifact?.artifactSymbol?.id === id)
     )
-    .map (_ => _?.artifact)
+    .map((_) => _?.artifact)
     .filter((_) => !!_) as Artifact.AsObject[];
 
   const behaviorGroups = formula.behaviorGroupsList
@@ -37,7 +45,7 @@ export default function FormulaDesigner({ taxonomy, formula }: Props) {
         (_) => _.artifact?.artifactSymbol?.id === id
       )
     )
-    .map (_ => _?.artifact)
+    .map((_) => _?.artifact)
     .filter((_) => !!_) as Artifact.AsObject[];
 
   const behaviors = formula.behaviorsList
@@ -45,23 +53,30 @@ export default function FormulaDesigner({ taxonomy, formula }: Props) {
     .map((id) =>
       taxonomy?.behaviors.find((_) => _.artifact?.artifactSymbol?.id === id)
     )
-    .map (_ => _?.artifact)
+    .map((_) => _?.artifact)
     .filter((_) => !!_) as Artifact.AsObject[];
 
   return (
     <>
-      <ToolPane position="left" width={toolPaneWidth}>
+      <ToolPane
+        position="left"
+        width={toolPaneWidth}
+        artifactBeingDraggedOff={artifactBeingDraggedOff}
+      >
         <ToolBox
           title="Token Bases"
           type="token-base"
           tools={(taxonomy?.baseTokenTypes || []).map((_) => _.artifact)}
+          artifactOnDragStart={setArtifactBeingDraggedOn}
         />
         <ToolBox
           title="Property Sets"
           type="property-set"
           tools={(taxonomy?.propertySets || []).map((_) => _.artifact)}
+          artifactOnDragStart={setArtifactBeingDraggedOn}
         />
       </ToolPane>
+
       <CanvasPane
         left={toolPaneWidth}
         right={toolPaneWidth}
@@ -72,18 +87,27 @@ export default function FormulaDesigner({ taxonomy, formula }: Props) {
           propertySets={propertySets}
           behaviorGroups={behaviorGroups}
           behaviors={behaviors}
+          artifactBeingDraggedOn={artifactBeingDraggedOn}
+          artifactOnDragStart={setArtifactBeingDraggedOff}
         />
       </CanvasPane>
-      <ToolPane position="right" width={toolPaneWidth}>
+
+      <ToolPane
+        position="right"
+        width={toolPaneWidth}
+        artifactBeingDraggedOff={artifactBeingDraggedOff}
+      >
         <ToolBox
           title="Behaviors"
           type="behavior"
           tools={(taxonomy?.behaviors || []).map((_) => _.artifact)}
+          artifactOnDragStart={setArtifactBeingDraggedOn}
         />
         <ToolBox
           title="Behavior Groups"
           type="behavior-group"
           tools={(taxonomy?.behaviorGroups || []).map((_) => _.artifact)}
+          artifactOnDragStart={setArtifactBeingDraggedOn}
         />
       </ToolPane>
     </>

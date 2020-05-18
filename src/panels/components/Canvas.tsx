@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 
 import { Artifact } from "../../ttf/artifact_pb";
 
@@ -9,6 +9,8 @@ type Props = {
   propertySets?: Artifact.AsObject[];
   behaviorGroups?: Artifact.AsObject[];
   behaviors?: Artifact.AsObject[];
+  artifactBeingDraggedOn?: Artifact.AsObject;
+  artifactOnDragStart?: (artifact: Artifact.AsObject) => void;
 };
 
 export default function Canvas({
@@ -16,11 +18,16 @@ export default function Canvas({
   propertySets,
   behaviorGroups,
   behaviors,
+  artifactBeingDraggedOn,
+  artifactOnDragStart,
 }: Props) {
+  const [dropTargetActive, setDropTargetActive] = useState(false);
   const style: React.CSSProperties = {
     border: "var(--borderWidth) solid var(--vscode-panel-border)",
     color: "var(--vscode-editor-foreground)",
-    backgroundColor: "var(--vscode-editor-background)",
+    backgroundColor: dropTargetActive
+      ? "var(--vscode-panel-dropBackground)"
+      : "var(--vscode-editor-background)",
     position: "absolute",
     top: "var(--padding)",
     bottom: "var(--padding)",
@@ -38,19 +45,37 @@ export default function Canvas({
     marginLeft: "10vw",
     marginRight: "10vw",
   };
+  const onDragOver = (ev: React.DragEvent<HTMLDivElement>) => {
+    ev.preventDefault();
+    setDropTargetActive(!!artifactBeingDraggedOn);
+  };
+  const onDragLeave = (ev: React.DragEvent<HTMLDivElement>) => {
+    setDropTargetActive(false);
+  };
+  const onDrop = (ev: React.DragEvent<HTMLDivElement>) => {
+    setDropTargetActive(false);
+    // TODO...
+  };
   return (
-    <div style={style}>
+    <div
+      style={style}
+      onDragOver={onDragOver}
+      onDragLeave={onDragLeave}
+      onDrop={onDrop}
+    >
       <span style={utlizedAreaStyle}>
         <div>
           <ArtifactIcon
             artifact={tokenBase}
             type={tokenBase ? "token-base" : "unknown"}
+            onDragStart={artifactOnDragStart}
           />
           {(propertySets || []).map((_) => (
             <ArtifactIcon
               key={_.artifactSymbol?.id}
               artifact={_}
               type="property-set"
+              onDragStart={artifactOnDragStart}
             />
           ))}
         </div>
@@ -60,6 +85,7 @@ export default function Canvas({
               key={_.artifactSymbol?.id}
               artifact={_}
               type="behavior-group"
+              onDragStart={artifactOnDragStart}
             />
           ))}
           {(behaviors || []).map((_) => (
@@ -67,6 +93,7 @@ export default function Canvas({
               key={_.artifactSymbol?.id}
               artifact={_}
               type="behavior"
+              onDragStart={artifactOnDragStart}
             />
           ))}
         </div>

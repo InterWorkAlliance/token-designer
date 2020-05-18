@@ -10,9 +10,15 @@ type Props = {
   title: string;
   tools: (Artifact.AsObject | undefined)[];
   type: ArtifactType;
+  artifactOnDragStart?: (artifact: Artifact.AsObject) => void;
 };
 
-export default function ToolBox({ title, tools, type }: Props) {
+export default function ToolBox({
+  title,
+  tools,
+  type,
+  artifactOnDragStart,
+}: Props) {
   const itemsAreaStyle: React.CSSProperties = {
     maxHeight: "45vh",
     overflowY: "auto",
@@ -30,6 +36,7 @@ export default function ToolBox({ title, tools, type }: Props) {
                 key={artifact.name}
                 artifact={artifact}
                 type={type}
+                onDragStart={artifactOnDragStart}
               />
             )
         )}
