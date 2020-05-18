@@ -1,5 +1,7 @@
 import React, { useEffect, useState } from "react";
 
+import { TemplateFormula } from "../../ttf/core_pb";
+
 import FormulaDesigner from "./FormulaDesigner";
 
 import { tokenDesignerEvents } from "../tokenDesignerEvents";
@@ -10,7 +12,7 @@ type Props = {
 
 export default function App ({ postMessage }: Props) {
   const [taxonomy, setTaxonomy] = useState(null);
-  const [formula, setFormula] = useState(null);
+  const [formula, setFormula] = useState<TemplateFormula.AsObject | null>(null);
   const [definition, setDefinition] = useState(null);
   const [incompatabilities, setIncompatabilities] = useState(null);
 
@@ -46,7 +48,7 @@ export default function App ({ postMessage }: Props) {
   } else if (definition) {
     return <>TODO: Token definition editor</>;
   } else {
-    return <>Loading&hellip;</>
+    return <>Loading&hellip;</>;
   }
   
 }

@@ -1,14 +1,15 @@
 import React from "react";
 
-import { Base } from "../../ttf/core_pb";
+import { Base, PropertySet } from "../../ttf/core_pb";
 
 import ArtifactIcon from "./ArtifactIcon";
 
 type Props = {
   tokenBase?: Base.AsObject;
+  propertySets?: PropertySet.AsObject[];
 };
 
-export default function Canvas({ tokenBase }: Props) {
+export default function Canvas({ tokenBase, propertySets }: Props) {
   const style: React.CSSProperties = {
     border: "var(--borderWidth) solid var(--vscode-panel-border)",
     color: "var(--vscode-editor-foreground)",
@@ -38,6 +39,13 @@ export default function Canvas({ tokenBase }: Props) {
             title={tokenBase?.name || "Unknown"}
             type={tokenBase ? "token-base" : "unknown"}
           />
+          {(propertySets || []).map((_) => (
+            <ArtifactIcon
+              key={_.artifact?.artifactSymbol?.id}
+              title={_.artifact?.name || "Unknown"}
+              type="property-set"
+            />
+          ))}
         </div>
         <div style={{ width: "var(--iconWidth)" }}>Column</div>
       </span>
