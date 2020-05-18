@@ -15,9 +15,15 @@ export default function Canvas ({  }: Props) {
     left: 'var(--padding)',
     right: 'var(--padding)',
     overflow: 'auto',
-    textAlign: 'center',
+    display: 'flex',
+    alignItems: 'center',
+    justifyContent: 'center',
   };
   return (
-    <div style={style}>Canvas</div>
+    <div style={style}>
+      <span style={{display: 'inline-block'}}>
+        Canvas
+      </span>
+    </div>
   );
 }
