@@ -1,32 +1,34 @@
 import React from "react";
 
+import { Artifact } from "../../ttf/artifact_pb";
+
 import ArtifactType from "./ArtifactType";
 
 type Props = {
-  title: string;
+  artifact?: Artifact.AsObject;
   type: ArtifactType | "unknown";
 };
 
-export default function ArtifactIcon({ title, type }: Props) {
+export default function ArtifactIcon({ artifact, type }: Props) {
   const style: React.CSSProperties = {
-    cursor: 'pointer',
-    display: 'inline-block',
-    width: 'var(--iconWidth)',
-    textAlign: 'center',
-    margin: 'var(--paddingSmall)',
-    padding: 'var(--paddingSmall)',
+    cursor: "pointer",
+    display: "inline-block",
+    width: "var(--iconWidth)",
+    textAlign: "center",
+    margin: "var(--paddingSmall)",
+    padding: "var(--paddingSmall)",
   };
   const imgStyle: React.CSSProperties = {
-    width: '3.5em',
-    margin: 'var(--paddingSmall)',
-    padding: 'var(--paddingSmall)',
+    width: "3.5em",
+    margin: "var(--paddingSmall)",
+    padding: "var(--paddingSmall)",
   };
   const titleStyle: React.CSSProperties = {
-    whiteSpace: 'nowrap',
-    overflow: 'hidden',
-    textOverflow: 'ellipsis',
-    margin: 'var(--paddingSmall)',
-    padding: 'var(--paddingSmall)',
+    whiteSpace: "nowrap",
+    overflow: "hidden",
+    textOverflow: "ellipsis",
+    margin: "var(--paddingSmall)",
+    padding: "var(--paddingSmall)",
   };
   let imgSrc = "token-designer/unknown.svg";
   switch (type) {
@@ -43,6 +45,7 @@ export default function ArtifactIcon({ title, type }: Props) {
       imgSrc = "token-designer/behavior-group.svg";
       break;
   }
+  const title = artifact?.name || "Unknown";
   return (
     <span style={style} title={title}>
       <img src={imgSrc} style={imgStyle} />

@@ -1,6 +1,5 @@
 import React from "react";
 
-import { Base, PropertySet, Behavior, BehaviorGroup } from "../../ttf/core_pb";
 import { Artifact } from "../../ttf/artifact_pb";
 
 import ArtifactIcon from "./ArtifactIcon";
@@ -9,12 +8,7 @@ import ToolBoxTitle from "./ToolBoxTitle";
 
 type Props = {
   title: string;
-  tools: (
-    | Base.AsObject
-    | PropertySet.AsObject
-    | Behavior.AsObject
-    | BehaviorGroup.AsObject
-  )[];
+  tools: (Artifact.AsObject | undefined)[];
   type: ArtifactType;
 };
 
@@ -29,16 +23,16 @@ export default function ToolBox({ title, tools, type }: Props) {
     <>
       <ToolBoxTitle title={title} />
       <div style={itemsAreaStyle}>
-        {tools
-          .filter((_) => !!_.artifact)
-          .map((_) => _.artifact as Artifact.AsObject)
-          .map((artifact: Artifact.AsObject) => (
-            <ArtifactIcon
-              key={artifact.name}
-              title={artifact.name}
-              type={type}
-            />
-          ))}
+        {tools.map(
+          (artifact) =>
+            artifact && (
+              <ArtifactIcon
+                key={artifact.name}
+                artifact={artifact}
+                type={type}
+              />
+            )
+        )}
       </div>
     </>
   );

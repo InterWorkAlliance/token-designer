@@ -1,14 +1,14 @@
 import React from "react";
 
-import { Base, PropertySet, BehaviorGroup, Behavior } from "../../ttf/core_pb";
+import { Artifact } from "../../ttf/artifact_pb";
 
 import ArtifactIcon from "./ArtifactIcon";
 
 type Props = {
-  tokenBase?: Base.AsObject;
-  propertySets?: PropertySet.AsObject[];
-  behaviorGroups?: BehaviorGroup.AsObject[];
-  behaviors?: Behavior.AsObject[];
+  tokenBase?: Artifact.AsObject;
+  propertySets?: Artifact.AsObject[];
+  behaviorGroups?: Artifact.AsObject[];
+  behaviors?: Artifact.AsObject[];
 };
 
 export default function Canvas({
@@ -43,13 +43,13 @@ export default function Canvas({
       <span style={utlizedAreaStyle}>
         <div>
           <ArtifactIcon
-            title={tokenBase?.name || "Unknown"}
+            artifact={tokenBase}
             type={tokenBase ? "token-base" : "unknown"}
           />
           {(propertySets || []).map((_) => (
             <ArtifactIcon
-              key={_.artifact?.artifactSymbol?.id}
-              title={_.artifact?.name || "Unknown"}
+              key={_.artifactSymbol?.id}
+              artifact={_}
               type="property-set"
             />
           ))}
@@ -57,15 +57,15 @@ export default function Canvas({
         <div style={{ width: "var(--iconWidth)" }}>
           {(behaviorGroups || []).map((_) => (
             <ArtifactIcon
-              key={_.artifact?.artifactSymbol?.id}
-              title={_.artifact?.name || "Unknown"}
+              key={_.artifactSymbol?.id}
+              artifact={_}
               type="behavior-group"
             />
           ))}
           {(behaviors || []).map((_) => (
             <ArtifactIcon
-              key={_.artifact?.artifactSymbol?.id}
-              title={_.artifact?.name || "Unknown"}
+              key={_.artifactSymbol?.id}
+              artifact={_}
               type="behavior"
             />
           ))}

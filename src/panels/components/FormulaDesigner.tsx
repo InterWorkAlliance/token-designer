@@ -1,12 +1,7 @@
 import React from "react";
 
-import {
-  Base,
-  TemplateFormula,
-  PropertySet,
-  BehaviorGroup,
-  Behavior,
-} from "../../ttf/core_pb";
+import { TemplateFormula } from "../../ttf/core_pb";
+import { Artifact } from "../../ttf/artifact_pb";
 
 import Canvas from "./Canvas";
 import CanvasPane from "./CanvasPane";
@@ -25,14 +20,15 @@ export default function FormulaDesigner({ taxonomy, formula }: Props) {
 
   const tokenBase = taxonomy?.baseTokenTypes.find(
     (_) => _.artifact?.artifactSymbol?.id === formula.tokenBase?.base?.id
-  )?.artifact as Base.AsObject | undefined;
+  )?.artifact;
 
   const propertySets = formula.propertySetsList
     .map((_) => _.propertySet?.id)
     .map((id) =>
       taxonomy?.propertySets.find((_) => _.artifact?.artifactSymbol?.id === id)
     )
-    .filter((_) => !!_) as PropertySet.AsObject[];
+    .map (_ => _?.artifact)
+    .filter((_) => !!_) as Artifact.AsObject[];
 
   const behaviorGroups = formula.behaviorGroupsList
     .map((_) => _.behaviorGroup?.id)
@@ -41,14 +37,16 @@ export default function FormulaDesigner({ taxonomy, formula }: Props) {
         (_) => _.artifact?.artifactSymbol?.id === id
       )
     )
-    .filter((_) => !!_) as BehaviorGroup.AsObject[];
+    .map (_ => _?.artifact)
+    .filter((_) => !!_) as Artifact.AsObject[];
 
   const behaviors = formula.behaviorsList
     .map((_) => _.behavior?.id)
     .map((id) =>
       taxonomy?.behaviors.find((_) => _.artifact?.artifactSymbol?.id === id)
     )
-    .filter((_) => !!_) as Behavior.AsObject[];
+    .map (_ => _?.artifact)
+    .filter((_) => !!_) as Artifact.AsObject[];
 
   return (
     <>
@@ -56,12 +54,12 @@ export default function FormulaDesigner({ taxonomy, formula }: Props) {
         <ToolBox
           title="Token Bases"
           type="token-base"
-          tools={taxonomy?.baseTokenTypes || []}
+          tools={(taxonomy?.baseTokenTypes || []).map((_) => _.artifact)}
         />
         <ToolBox
           title="Property Sets"
           type="property-set"
-          tools={taxonomy?.propertySets || []}
+          tools={(taxonomy?.propertySets || []).map((_) => _.artifact)}
         />
       </ToolPane>
       <CanvasPane
@@ -80,12 +78,12 @@ export default function FormulaDesigner({ taxonomy, formula }: Props) {
         <ToolBox
           title="Behaviors"
           type="behavior"
-          tools={taxonomy?.behaviors || []}
+          tools={(taxonomy?.behaviors || []).map((_) => _.artifact)}
         />
         <ToolBox
           title="Behavior Groups"
           type="behavior-group"
-          tools={taxonomy?.behaviorGroups || []}
+          tools={(taxonomy?.behaviorGroups || []).map((_) => _.artifact)}
         />
       </ToolPane>
     </>
