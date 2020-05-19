@@ -1,7 +1,8 @@
 import React, { useEffect, useState } from "react";
 
-import { TemplateFormula } from "../../ttf/core_pb";
+import { TemplateFormula, TemplateDefinition } from "../../ttf/core_pb";
 
+import DefinitionDesigner from "./DefinitionDesigner";
 import FormulaDesigner from "./FormulaDesigner";
 
 import { tokenDesignerEvents } from "../tokenDesignerEvents";
@@ -13,7 +14,7 @@ type Props = {
 export default function App({ postMessage }: Props) {
   const [taxonomy, setTaxonomy] = useState(null);
   const [formula, setFormula] = useState<TemplateFormula.AsObject | null>(null);
-  const [definition, setDefinition] = useState(null);
+  const [definition, setDefinition] = useState<TemplateDefinition.AsObject | null>(null);
   const [incompatabilities, setIncompatabilities] = useState<any>({});
 
   const handleMessage = (message: any) => {
@@ -84,7 +85,15 @@ export default function App({ postMessage }: Props) {
       />
     );
   } else if (definition) {
-    return <>TODO: Token definition editor</>;
+    return (
+      <DefinitionDesigner
+        taxonomy={taxonomy}
+        definition={definition}
+        incompatabilities={incompatabilities}
+        setDefinitionName={setDefinitionName}
+        setDefinitionProperty={setDefinitionProperty}
+      />
+    );
   } else {
     return <>Loading&hellip;</>;
   }

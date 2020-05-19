@@ -12,7 +12,7 @@ type Props = {
   incompatabilities: any;
   artifactBeingDraggedOn?: Artifact.AsObject;
   artifactOnDragStart?: (artifact: Artifact.AsObject) => void;
-  addArtifact: (id: string) => void;
+  addArtifact?: (id: string) => void;
 };
 
 export default function Canvas({
@@ -56,7 +56,7 @@ export default function Canvas({
   };
   const onDrop = (ev: React.DragEvent<HTMLDivElement>) => {
     setDropTargetActive(false);
-    if (artifactBeingDraggedOn?.artifactSymbol?.id) {
+    if (addArtifact && artifactBeingDraggedOn?.artifactSymbol?.id) {
       addArtifact(artifactBeingDraggedOn.artifactSymbol?.id);
     }
   };
