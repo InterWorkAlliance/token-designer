@@ -6,7 +6,9 @@ type Props = {
   children: any;
   formula?: string;
   formulaDescription?: string;
+  definitionName?: string;
   setFormulaDescription?: (description: string) => void;
+  setDefinitionName?: (name: string) => void;
 };
 
 export default function CanvasPane({
@@ -15,7 +17,9 @@ export default function CanvasPane({
   formula,
   children,
   formulaDescription,
+  definitionName,
   setFormulaDescription,
+  setDefinitionName,
 }: Props) {
   const style: React.CSSProperties = {
     position: "fixed",
@@ -39,9 +43,29 @@ export default function CanvasPane({
     height: "3em",
     fontSize: "1.25em",
   };
+  const definitionNameStyle: React.CSSProperties = {
+    position: "absolute",
+    top: "calc(2*var(--padding))",
+    left: "calc(2*var(--padding))",
+    width: "50%",
+    border: "var(--borderWidth) solid var(--vscode-editor-background)",
+    fontSize: "2em",
+  };
   return (
     <div style={style}>
       {children}
+      {definitionName && (
+        <input
+          type="text"
+          style={definitionNameStyle}
+          defaultValue={definitionName}
+          onBlur={
+            setDefinitionName
+              ? (ev) => setDefinitionName(ev.target.value)
+              : undefined
+          }
+        />
+      )}
       {formulaDescription && (
         <textarea
           style={formulaDescriptionStyle}

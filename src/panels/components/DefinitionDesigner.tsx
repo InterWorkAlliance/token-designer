@@ -59,7 +59,12 @@ export default function DefinitionDesigner({
     .filter((_) => !!_) as Artifact.AsObject[];
 
   return (
-    <CanvasPane left="0" right="0">
+    <CanvasPane
+      left="0"
+      right="0"
+      definitionName={definition.artifact?.name}
+      setDefinitionName={setDefinitionName}
+    >
       <Canvas
         tokenBase={tokenBase}
         propertySets={propertySets}
