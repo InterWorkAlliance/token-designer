@@ -8,13 +8,17 @@ type Props = {
   artifact?: Artifact.AsObject;
   type: ArtifactType | "unknown";
   error?: string;
-  onDragStart?: (artifact: Artifact.AsObject) => void;
+  selected?: boolean;
+  onClick?: (artifact?: Artifact.AsObject) => void;
+  onDragStart?: (artifact?: Artifact.AsObject) => void;
 };
 
 export default function ArtifactIcon({
   artifact,
   type,
   error,
+  selected,
+  onClick,
   onDragStart,
 }: Props) {
   const style: React.CSSProperties = {
@@ -24,21 +28,35 @@ export default function ArtifactIcon({
     textAlign: "center",
     margin: "var(--paddingSmall)",
     padding: "var(--paddingSmall)",
+    zIndex: selected ? 2 : 1,
+    maxHeight: "var(--iconWidth)",
+    height: "var(--iconWidth)",
   };
   const imgStyle: React.CSSProperties = {
     width: "3.5em",
     margin: "var(--paddingSmall)",
     padding: "var(--paddingSmall)",
     filter: error ? "grayscale(100%)" : undefined,
+    border: selected
+      ? "var(--borderWidth) solid var(--vscode-editor-selectionBackground)"
+      : undefined,
   };
   const titleStyle: React.CSSProperties = {
-    whiteSpace: "nowrap",
-    overflow: "hidden",
-    textOverflow: "ellipsis",
+    whiteSpace: selected ? "break-spaces" : "nowrap",
+    wordBreak: selected ? "break-word" : undefined,
+    overflow: selected ? "visible" : "hidden",
+    textOverflow: selected ? "" : "ellipsis",
     margin: "var(--paddingSmall)",
     padding: "var(--paddingSmall)",
-    color: error ? "var(--vscode-errorForeground)" : undefined,
-    fontWeight: error ? "bold" : undefined,
+    color: error
+      ? "var(--vscode-errorForeground)"
+      : selected
+      ? "var(--vscode-editor-selectionForeground)"
+      : undefined,
+    backgroundColor: selected
+      ? "var(--vscode-editor-selectionBackground)"
+      : undefined,
+    fontWeight: error || selected ? "bold" : undefined,
   };
   let imgSrc = "token-designer/unknown.svg";
   switch (type) {
@@ -55,17 +73,26 @@ export default function ArtifactIcon({
       imgSrc = "token-designer/behavior-group.svg";
       break;
   }
-  let title = artifact?.name || "Unknown";
+  const title = artifact?.name || "Unknown";
+  let tooltip = title;
   if (error) {
-    title += ` - ${error}`;
+    tooltip += ` - ${error}`;
   }
-  const dispatchOnDragStart =
-    artifact && onDragStart ? () => onDragStart(artifact) : undefined;
+  const dispatchOnDragStart = onDragStart
+    ? () => onDragStart(artifact)
+    : undefined;
+  const dispatchOnClick = onClick
+    ? (ev: React.MouseEvent) => {
+        onClick(artifact);
+        ev.stopPropagation();
+      }
+    : undefined;
   return (
     <span
       style={style}
-      title={title}
+      title={tooltip}
       draggable={!!onDragStart}
+      onClick={dispatchOnClick}
       onDragStart={dispatchOnDragStart}
     >
       <img src={imgSrc} style={imgStyle} draggable={false} />
