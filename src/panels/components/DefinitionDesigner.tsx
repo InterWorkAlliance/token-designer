@@ -64,6 +64,55 @@ export default function DefinitionDesigner({
     .map((_) => _?.artifact)
     .filter((_) => !!_) as Artifact.AsObject[];
 
+  const getArtifactByTooling: (
+    tooling?: string
+  ) => Artifact.AsObject | undefined = (tooling?: string) => {
+    let result: Artifact.AsObject | undefined = taxonomy?.baseTokenTypes.find(
+      (_) => _.artifact?.artifactSymbol?.tooling === tooling
+    )?.artifact;
+    if (!result) {
+      result = taxonomy?.propertySets.find(
+        (_) => _.artifact?.artifactSymbol?.tooling === tooling
+      )?.artifact;
+      if (!result) {
+        result = taxonomy?.behaviors.find(
+          (_) => _.artifact?.artifactSymbol?.tooling === tooling
+        )?.artifact;
+        if (!result) {
+          result = taxonomy?.behaviorGroups.find(
+            (_) => _.artifact?.artifactSymbol?.tooling === tooling
+          )?.artifact;
+        }
+      }
+    }
+    return result;
+  };
+
+  const getArtifactById: (
+    id: string,
+    tooling?: string
+  ) => Artifact.AsObject | undefined = (id: string, tooling?: string) => {
+    let result: Artifact.AsObject | undefined = taxonomy?.baseTokenTypes.find(
+      (_) => _.artifact?.artifactSymbol?.id === id
+    )?.artifact;
+    if (!result) {
+      result = taxonomy?.propertySets.find(
+        (_) => _.artifact?.artifactSymbol?.id === id
+      )?.artifact;
+      if (!result) {
+        result = taxonomy?.behaviors.find(
+          (_) => _.artifact?.artifactSymbol?.id === id
+        )?.artifact;
+        if (!result) {
+          result = taxonomy?.behaviorGroups.find(
+            (_) => _.artifact?.artifactSymbol?.id === id
+          )?.artifact;
+        }
+      }
+    }
+    return result || getArtifactByTooling(tooling);
+  };
+
   return (
     <>
       <CanvasPane
@@ -83,7 +132,12 @@ export default function DefinitionDesigner({
         />
       </CanvasPane>
       <ToolPane position="right" width="25vw">
-        {selectedArtifact && <ArtifactInspector artifact={selectedArtifact} />}
+        {selectedArtifact && (
+          <ArtifactInspector
+            artifact={selectedArtifact}
+            getArtifactById={getArtifactById}
+          />
+        )}
       </ToolPane>
     </>
   );
