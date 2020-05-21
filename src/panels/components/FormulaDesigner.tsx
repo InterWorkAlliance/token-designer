@@ -72,8 +72,8 @@ export default function FormulaDesigner({
       <ToolPane
         position="left"
         width={toolPaneWidth}
-        artifactBeingDraggedOff={artifactBeingDraggedOff}
-        removeArtifact={removeArtifact}
+        artifactBeingDragged={artifactBeingDraggedOff}
+        onDropArtifact={removeArtifact}
       >
         <ToolBox
           title="Token Bases"
@@ -111,8 +111,8 @@ export default function FormulaDesigner({
       <ToolPane
         position="right"
         width={toolPaneWidth}
-        artifactBeingDraggedOff={artifactBeingDraggedOff}
-        removeArtifact={removeArtifact}
+        artifactBeingDragged={artifactBeingDraggedOff}
+        onDropArtifact={removeArtifact}
       >
         <ToolBox
           title="Behaviors"

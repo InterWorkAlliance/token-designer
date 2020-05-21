@@ -5,16 +5,16 @@ import { Artifact } from "../../ttf/artifact_pb";
 type Props = {
   position: "left" | "right";
   width: string;
-  artifactBeingDraggedOff?: Artifact.AsObject;
-  removeArtifact: (id: string) => void;
+  artifactBeingDragged?: Artifact.AsObject;
+  onDropArtifact?: (id: string) => void;
   children: any;
 };
 
 export default function ToolPane({
   position,
   width,
-  artifactBeingDraggedOff,
-  removeArtifact,
+  artifactBeingDragged,
+  onDropArtifact,
   children,
 }: Props) {
   const [dropTargetActive, setDropTargetActive] = useState(false);
@@ -39,16 +39,22 @@ export default function ToolPane({
     overflow: "auto",
   };
   const onDragOver = (ev: React.DragEvent<HTMLDivElement>) => {
-    ev.preventDefault();
-    setDropTargetActive(!!artifactBeingDraggedOff);
+    if (onDropArtifact) {
+      ev.preventDefault();
+      setDropTargetActive(!!artifactBeingDragged);
+    }
   };
   const onDragLeave = (ev: React.DragEvent<HTMLDivElement>) => {
-    setDropTargetActive(false);
+    if (onDropArtifact) {
+      setDropTargetActive(false);
+    }
   };
   const onDrop = (ev: React.DragEvent<HTMLDivElement>) => {
-    setDropTargetActive(false);
-    if (artifactBeingDraggedOff?.artifactSymbol?.id) {
-      removeArtifact(artifactBeingDraggedOff.artifactSymbol.id);
+    if (onDropArtifact) {
+      setDropTargetActive(false);
+      if (artifactBeingDragged?.artifactSymbol?.id) {
+        onDropArtifact(artifactBeingDragged.artifactSymbol.id);
+      }
     }
   };
   return (

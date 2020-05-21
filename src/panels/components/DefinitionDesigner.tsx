@@ -3,8 +3,10 @@ import React, { useState } from "react";
 import { TemplateDefinition } from "../../ttf/core_pb";
 import { Artifact } from "../../ttf/artifact_pb";
 
+import ArtifactInspector from "./ArtifactInspector";
 import Canvas from "./Canvas";
 import CanvasPane from "./CanvasPane";
+import ToolPane from "./ToolPane";
 
 import { TokenDesignerTaxonomy } from "../tokenDesignerTaxonomy";
 
@@ -27,6 +29,10 @@ export default function DefinitionDesigner({
   setDefinitionName,
   setDefinitionProperty,
 }: Props) {
+  const [selectedArtifact, setSelectedArtifact] = useState<
+    Artifact.AsObject | undefined
+  >(undefined);
+
   const tokenBase = taxonomy?.baseTokenTypes.find(
     (_) =>
       _.artifact?.artifactSymbol?.id === definition.tokenBase?.reference?.id
@@ -59,19 +65,26 @@ export default function DefinitionDesigner({
     .filter((_) => !!_) as Artifact.AsObject[];
 
   return (
-    <CanvasPane
-      left="0"
-      right="0"
-      definitionName={definition.artifact?.name}
-      setDefinitionName={setDefinitionName}
-    >
-      <Canvas
-        tokenBase={tokenBase}
-        propertySets={propertySets}
-        behaviorGroups={behaviorGroups}
-        behaviors={behaviors}
-        incompatabilities={incompatabilities}
-      />
-    </CanvasPane>
+    <>
+      <CanvasPane
+        left="0"
+        right="25vw"
+        definitionName={definition.artifact?.name}
+        setDefinitionName={setDefinitionName}
+      >
+        <Canvas
+          tokenBase={tokenBase}
+          propertySets={propertySets}
+          behaviorGroups={behaviorGroups}
+          behaviors={behaviors}
+          incompatabilities={incompatabilities}
+          selectedArtifact={selectedArtifact}
+          setSelectedArtifact={setSelectedArtifact}
+        />
+      </CanvasPane>
+      <ToolPane position="right" width="25vw">
+        {selectedArtifact && <ArtifactInspector artifact={selectedArtifact} />}
+      </ToolPane>
+    </>
   );
 }

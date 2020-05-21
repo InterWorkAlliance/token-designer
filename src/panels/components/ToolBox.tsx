@@ -10,7 +10,7 @@ type Props = {
   title: string;
   tools: (Artifact.AsObject | undefined)[];
   type: ArtifactType;
-  artifactOnDragStart?: (artifact: Artifact.AsObject) => void;
+  artifactOnDragStart: (artifact?: Artifact.AsObject) => void;
 };
 
 export default function ToolBox({
