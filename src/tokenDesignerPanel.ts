@@ -1,7 +1,6 @@
 import * as fs from "fs";
 import * as path from "path";
 import * as ttfArtifact from "./ttf/artifact_pb";
-import * as ttfClient from "./ttf/service_grpc_pb";
 import * as ttfCore from "./ttf/core_pb";
 import * as uuid from "uuid";
 import * as vscode from "vscode";
@@ -10,6 +9,7 @@ import * as protobufAny from "google-protobuf/google/protobuf/any_pb";
 import { TokenTaxonomy } from "./tokenTaxonomy";
 import { tokenDesignerEvents } from "./panels/tokenDesignerEvents";
 import { TokenDesignerTaxonomy } from "./panels/tokenDesignerTaxonomy";
+import { ITtfInterface } from "./ttfInterface";
 
 const JavascriptHrefPlaceholder: string = "[JAVASCRIPT_HREF]";
 const CssHrefPlaceholder: string = "[CSS_HREF]";
@@ -67,7 +67,7 @@ export class TokenDesignerPanel {
   private disposed = false;
 
   static async openNewFormula(
-    ttfConnection: ttfClient.ServiceClient,
+    ttfConnection: ITtfInterface,
     ttfTaxonomy: TokenTaxonomy,
     extensionPath: string,
     disposables: vscode.Disposable[],
@@ -86,7 +86,7 @@ export class TokenDesignerPanel {
 
   static async openExistingFormula(
     toolingSymbol: string,
-    ttfConnection: ttfClient.ServiceClient,
+    ttfConnection: ITtfInterface,
     ttfTaxonomy: TokenTaxonomy,
     extensionPath: string,
     disposables: vscode.Disposable[],
@@ -105,7 +105,7 @@ export class TokenDesignerPanel {
 
   static async openNewDefinition(
     formulaId: any,
-    ttfConnection: ttfClient.ServiceClient,
+    ttfConnection: ITtfInterface,
     ttfTaxonomy: TokenTaxonomy,
     extensionPath: string,
     disposables: vscode.Disposable[],
@@ -131,7 +131,7 @@ export class TokenDesignerPanel {
 
   static async openExistingDefinition(
     artifactId: string,
-    ttfConnection: ttfClient.ServiceClient,
+    ttfConnection: ITtfInterface,
     ttfTaxonomy: TokenTaxonomy,
     extensionPath: string,
     disposables: vscode.Disposable[],
@@ -149,7 +149,7 @@ export class TokenDesignerPanel {
   }
 
   private constructor(
-    private readonly ttfConnection: ttfClient.ServiceClient,
+    private readonly ttfConnection: ITtfInterface,
     private readonly ttfTaxonomy: TokenTaxonomy,
     private readonly extensionPath: string,
     disposables: vscode.Disposable[],
