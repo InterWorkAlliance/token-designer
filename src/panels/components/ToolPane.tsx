@@ -1,11 +1,11 @@
 import React, { useState } from "react";
 
-import { Artifact } from "../../ttf/artifact_pb";
+import { IArtifactAsObject } from "../../ttfInterface";
 
 type Props = {
   position: "left" | "right";
   width: string;
-  artifactBeingDragged?: Artifact.AsObject;
+  artifactBeingDragged?: IArtifactAsObject;
   onDropArtifact?: (id: string) => void;
   children: any;
 };

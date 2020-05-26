@@ -3,6 +3,7 @@ import * as ttfClient from './ttf/service_grpc_pb';
 import * as vscode from 'vscode';
 
 import { HotReloadWatcher } from './hotReloadWatcher';
+import { IServiceClient } from './ttfInterface';
 import { TokenDefinitionExplorer } from './tokenDefinitionExplorer';
 import { TokenDesignerPanel } from './tokenDesignerPanel';
 import { TokenFormulaExplorer } from './tokenFormulaExplorer';
@@ -17,8 +18,15 @@ export function activate(context: vscode.ExtensionContext) {
         panelReloadEvent = hotReloadWatcher.reload;
     }
     
-	const ttfConnection = new ttfClient.ServiceClient('127.0.0.1:8086', grpc.credentials.createInsecure());
+    const grpcMode = false;
 
+    let ttfConnection: IServiceClient;
+    if (grpcMode) {
+        ttfConnection = new ttfClient.ServiceClient('127.0.0.1:8086', grpc.credentials.createInsecure());
+    } else {
+        ttfConnection = new TtfFileSystemClient();
+    }
+	
     const ttfTaxonomy = new TokenTaxonomy(ttfConnection);
 
 	const tokenFormulaExplorer = new TokenFormulaExplorer(context.extensionPath, ttfTaxonomy);

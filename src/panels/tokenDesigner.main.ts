@@ -2,8 +2,6 @@ import { htmlHelpers } from "./htmlHelpers";
 import { tokenDesignerEvents } from "./tokenDesignerEvents";
 import { TokenDesignerTaxonomy } from "./tokenDesignerTaxonomy";
 
-import * as ttfCore from '../ttf/core_pb';
-
 type toolboxArtifact = 
     ttfCore.Base.AsObject | 
     ttfCore.PropertySet.AsObject | 

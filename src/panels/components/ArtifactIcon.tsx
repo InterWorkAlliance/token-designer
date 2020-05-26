@@ -1,16 +1,16 @@
 import React from "react";
 
-import { Artifact } from "../../ttf/artifact_pb";
-
 import ArtifactType from "./ArtifactType";
 
+import { IArtifactAsObject } from "../../ttfInterface";
+
 type Props = {
-  artifact?: Artifact.AsObject;
+  artifact?: IArtifactAsObject;
   type: ArtifactType | "unknown";
   error?: string;
   selected?: boolean;
-  onClick?: (artifact?: Artifact.AsObject) => void;
-  onDragStart?: (artifact?: Artifact.AsObject) => void;
+  onClick?: (artifact?: IArtifactAsObject) => void;
+  onDragStart?: (artifact?: IArtifactAsObject) => void;
 };
 
 export default function ArtifactIcon({

@@ -1,6 +1,4 @@
 import * as path from 'path';
-import * as ttfArtifact from './ttf/artifact_pb';
-import * as ttfTaxonomy from './ttf/taxonomy_pb';
 import * as vscode from 'vscode';
 
 import { TokenTaxonomy } from './tokenTaxonomy';

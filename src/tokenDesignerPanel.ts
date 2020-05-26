@@ -1,15 +1,19 @@
 import * as fs from "fs";
 import * as path from "path";
-import * as ttfArtifact from "./ttf/artifact_pb";
-import * as ttfClient from "./ttf/service_grpc_pb";
-import * as ttfCore from "./ttf/core_pb";
 import * as uuid from "uuid";
 import * as vscode from "vscode";
 import * as protobufAny from "google-protobuf/google/protobuf/any_pb";
+import * as ttfArtifact from "./ttf/artifact_pb";
+import * as ttfCore from "./ttf/core_pb";
 
 import { TokenTaxonomy } from "./tokenTaxonomy";
 import { tokenDesignerEvents } from "./panels/tokenDesignerEvents";
 import { TokenDesignerTaxonomy } from "./panels/tokenDesignerTaxonomy";
+import {
+  ITemplateDefinition,
+  ITemplateFormula,
+  IServiceClient,
+} from "./ttfInterface";
 
 const JavascriptHrefPlaceholder: string = "[JAVASCRIPT_HREF]";
 const CssHrefPlaceholder: string = "[CSS_HREF]";
@@ -58,16 +62,16 @@ export class TokenDesignerPanel {
 
   private taxonomyObjects: TokenDesignerTaxonomy | null = null;
 
-  private definition: ttfCore.TemplateDefinition | null = null;
+  private definition: ITemplateDefinition | null = null;
 
-  private formula: ttfCore.TemplateFormula | null = null;
+  private formula: ITemplateFormula | null = null;
 
   private incompatabilities: any = {};
 
   private disposed = false;
 
   static async openNewFormula(
-    ttfConnection: ttfClient.ServiceClient,
+    ttfConnection: IServiceClient,
     ttfTaxonomy: TokenTaxonomy,
     extensionPath: string,
     disposables: vscode.Disposable[],
@@ -86,7 +90,7 @@ export class TokenDesignerPanel {
 
   static async openExistingFormula(
     toolingSymbol: string,
-    ttfConnection: ttfClient.ServiceClient,
+    ttfConnection: IServiceClient,
     ttfTaxonomy: TokenTaxonomy,
     extensionPath: string,
     disposables: vscode.Disposable[],
@@ -105,7 +109,7 @@ export class TokenDesignerPanel {
 
   static async openNewDefinition(
     formulaId: any,
-    ttfConnection: ttfClient.ServiceClient,
+    ttfConnection: IServiceClient,
     ttfTaxonomy: TokenTaxonomy,
     extensionPath: string,
     disposables: vscode.Disposable[],
@@ -131,7 +135,7 @@ export class TokenDesignerPanel {
 
   static async openExistingDefinition(
     artifactId: string,
-    ttfConnection: ttfClient.ServiceClient,
+    ttfConnection: IServiceClient,
     ttfTaxonomy: TokenTaxonomy,
     extensionPath: string,
     disposables: vscode.Disposable[],
@@ -149,7 +153,7 @@ export class TokenDesignerPanel {
   }
 
   private constructor(
-    private readonly ttfConnection: ttfClient.ServiceClient,
+    private readonly ttfConnection: IServiceClient,
     private readonly ttfTaxonomy: TokenTaxonomy,
     private readonly extensionPath: string,
     disposables: vscode.Disposable[],
@@ -308,7 +312,7 @@ export class TokenDesignerPanel {
     const newTemplateDefinition = new ttfArtifact.NewTemplateDefinition();
     newTemplateDefinition.setTemplateFormulaId(formulaId);
     newTemplateDefinition.setTokenName(name);
-    const result: ttfCore.TemplateDefinition = await new Promise(
+    const result: ITemplateDefinition = await new Promise(
       (resolve, reject) =>
         this.ttfConnection.createTemplateDefinition(
           newTemplateDefinition,

@@ -1,6 +1,6 @@
 import React from "react";
 
-import { Artifact } from "../../ttf/artifact_pb";
+import { IArtifactAsObject } from "../../ttfInterface";
 
 type Props = {
   id?: string;
@@ -8,7 +8,7 @@ type Props = {
   getArtifactById: (
     id: string,
     tooling?: string
-  ) => Artifact.AsObject | undefined;
+  ) => IArtifactAsObject | undefined;
 };
 
 export default function ArtifactReference({

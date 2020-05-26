@@ -1,11 +1,14 @@
 import React, { useEffect, useState } from "react";
 
-import { TemplateFormula, TemplateDefinition } from "../../ttf/core_pb";
-
 import DefinitionDesigner from "./DefinitionDesigner";
 import FormulaDesigner from "./FormulaDesigner";
 
 import { tokenDesignerEvents } from "../tokenDesignerEvents";
+
+import {
+  ITemplateDefinitionAsObject,
+  ITemplateFormulaAsObject,
+} from "../../ttfInterface";
 
 type Props = {
   postMessage: (message: any) => void;
@@ -13,8 +16,11 @@ type Props = {
 
 export default function App({ postMessage }: Props) {
   const [taxonomy, setTaxonomy] = useState(null);
-  const [formula, setFormula] = useState<TemplateFormula.AsObject | null>(null);
-  const [definition, setDefinition] = useState<TemplateDefinition.AsObject | null>(null);
+  const [formula, setFormula] = useState<ITemplateFormulaAsObject | null>(null);
+  const [
+    definition,
+    setDefinition,
+  ] = useState<ITemplateDefinitionAsObject | null>(null);
   const [incompatabilities, setIncompatabilities] = useState<any>({});
 
   const handleMessage = (message: any) => {

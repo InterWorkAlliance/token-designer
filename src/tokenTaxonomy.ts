@@ -1,7 +1,8 @@
 import * as vscode from 'vscode';
 
-import * as ttfClient from './ttf/service_grpc_pb';
 import * as ttfTaxonomy from './ttf/taxonomy_pb';
+
+import { ITaxonomy, IServiceClient } from './ttfInterface';
 
 export class TokenTaxonomy {
 
@@ -9,13 +10,13 @@ export class TokenTaxonomy {
 
     public readonly onRefresh: vscode.Event<void> = this.onRefreshEmitter.event;
 
-    private latestTaxonomy: ttfTaxonomy.Taxonomy | null = null;
+    private latestTaxonomy: ITaxonomy | null = null;
 
-    get taxonomy(): ttfTaxonomy.Taxonomy | null {
+    get taxonomy(): ITaxonomy | null {
         return this.latestTaxonomy;
     }
 
-    constructor(private readonly ttfConnection: ttfClient.ServiceClient) {
+    constructor(private readonly ttfConnection: IServiceClient) {
         this.refresh();
     }
 

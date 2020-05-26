@@ -1,16 +1,16 @@
 import React from "react";
 
-import { Artifact } from "../../ttf/artifact_pb";
-
 import ArtifactReference from "./ArtifactReference";
 import ToolBoxTitle from "./ToolBoxTitle";
 
+import { IArtifactAsObject } from "../../ttfInterface";
+
 type Props = {
-  artifact: Artifact.AsObject;
+  artifact: IArtifactAsObject;
   getArtifactById: (
     id: string,
     tooling?: string
-  ) => Artifact.AsObject | undefined;
+  ) => IArtifactAsObject | undefined;
 };
 
 export default function ArtifactInspector({
@@ -156,9 +156,7 @@ export default function ArtifactInspector({
           </div>
         )}
       </div>
-      <div style={propertiesAreaStyle}>
-        TODO: Show properties
-      </div>
+      <div style={propertiesAreaStyle}>TODO: Show properties</div>
     </>
   );
 }

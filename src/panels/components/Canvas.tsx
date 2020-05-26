@@ -1,19 +1,19 @@
 import React, { useState } from "react";
 
-import { Artifact } from "../../ttf/artifact_pb";
-
 import ArtifactIcon from "./ArtifactIcon";
 
+import { IArtifactAsObject } from "../../ttfInterface";
+
 type Props = {
-  tokenBase?: Artifact.AsObject;
-  propertySets?: Artifact.AsObject[];
-  behaviorGroups?: Artifact.AsObject[];
-  behaviors?: Artifact.AsObject[];
+  tokenBase?: IArtifactAsObject;
+  propertySets?: IArtifactAsObject[];
+  behaviorGroups?: IArtifactAsObject[];
+  behaviors?: IArtifactAsObject[];
   incompatabilities: any;
-  selectedArtifact?: Artifact.AsObject;
-  artifactBeingDraggedOn?: Artifact.AsObject;
-  artifactOnDragStart?: (artifact?: Artifact.AsObject) => void;
-  setSelectedArtifact?: (artifact?: Artifact.AsObject) => void;
+  selectedArtifact?: IArtifactAsObject;
+  artifactBeingDraggedOn?: IArtifactAsObject;
+  artifactOnDragStart?: (artifact?: IArtifactAsObject) => void;
+  setSelectedArtifact?: (artifact?: IArtifactAsObject) => void;
   addArtifact?: (id: string) => void;
 };
 

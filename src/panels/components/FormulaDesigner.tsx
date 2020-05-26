@@ -1,18 +1,19 @@
 import React, { useState } from "react";
 
-import { TemplateFormula } from "../../ttf/core_pb";
-import { Artifact } from "../../ttf/artifact_pb";
-
 import Canvas from "./Canvas";
 import CanvasPane from "./CanvasPane";
 import ToolPane from "./ToolPane";
 import ToolBox from "./ToolBox";
 
+import {
+  IArtifactAsObject,
+  ITemplateFormulaAsObject,
+} from "../../ttfInterface";
 import { TokenDesignerTaxonomy } from "../tokenDesignerTaxonomy";
 
 type Props = {
   taxonomy: TokenDesignerTaxonomy | null;
-  formula: TemplateFormula.AsObject;
+  formula: ITemplateFormulaAsObject;
   incompatabilities: any;
   addArtifact: (id: string) => void;
   removeArtifact: (id: string) => void;
@@ -28,11 +29,11 @@ export default function FormulaDesigner({
   setFormulaDescription,
 }: Props) {
   const [artifactBeingDraggedOn, setArtifactBeingDraggedOn] = useState<
-    Artifact.AsObject | undefined
+    IArtifactAsObject | undefined
   >(undefined);
 
   const [artifactBeingDraggedOff, setArtifactBeingDraggedOff] = useState<
-    Artifact.AsObject | undefined
+    IArtifactAsObject | undefined
   >(undefined);
 
   const toolPaneWidth = "25vw";
@@ -47,7 +48,7 @@ export default function FormulaDesigner({
       taxonomy?.propertySets.find((_) => _.artifact?.artifactSymbol?.id === id)
     )
     .map((_) => _?.artifact)
-    .filter((_) => !!_) as Artifact.AsObject[];
+    .filter((_) => !!_) as IArtifactAsObject[];
 
   const behaviorGroups = formula.behaviorGroupsList
     .map((_) => _.behaviorGroup?.id)
@@ -57,7 +58,7 @@ export default function FormulaDesigner({
       )
     )
     .map((_) => _?.artifact)
-    .filter((_) => !!_) as Artifact.AsObject[];
+    .filter((_) => !!_) as IArtifactAsObject[];
 
   const behaviors = formula.behaviorsList
     .map((_) => _.behavior?.id)
@@ -65,7 +66,7 @@ export default function FormulaDesigner({
       taxonomy?.behaviors.find((_) => _.artifact?.artifactSymbol?.id === id)
     )
     .map((_) => _?.artifact)
-    .filter((_) => !!_) as Artifact.AsObject[];
+    .filter((_) => !!_) as IArtifactAsObject[];
 
   return (
     <>
@@ -93,7 +94,9 @@ export default function FormulaDesigner({
         left={toolPaneWidth}
         right={toolPaneWidth}
         formula={formula.artifact?.artifactSymbol?.tooling}
-        formulaDescription={formula.artifact?.artifactDefinition?.businessDescription}
+        formulaDescription={
+          formula.artifact?.artifactDefinition?.businessDescription
+        }
         setFormulaDescription={setFormulaDescription}
       >
         <Canvas

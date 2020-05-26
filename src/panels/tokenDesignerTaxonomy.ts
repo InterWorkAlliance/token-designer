@@ -1,8 +1,13 @@
-import * as ttfCore from '../ttf/core_pb';
+import {
+  IBaseAsObject,
+  IBehaviorAsObject,
+  IBehaviorGroupAsObject,
+  IPropertySetAsObject,
+} from "../ttfInterface";
 
 export interface TokenDesignerTaxonomy {
-    baseTokenTypes: ttfCore.Base.AsObject[];
-    propertySets: ttfCore.PropertySet.AsObject[];
-    behaviors: ttfCore.Behavior.AsObject[];
-    behaviorGroups: ttfCore.BehaviorGroup.AsObject[];
+  baseTokenTypes: IBaseAsObject[];
+  propertySets: IPropertySetAsObject[];
+  behaviors: IBehaviorAsObject[];
+  behaviorGroups: IBehaviorGroupAsObject[];
 }

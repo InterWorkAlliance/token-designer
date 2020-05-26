@@ -1,18 +1,19 @@
 import React, { useState } from "react";
 
-import { TemplateDefinition } from "../../ttf/core_pb";
-import { Artifact } from "../../ttf/artifact_pb";
-
 import ArtifactInspector from "./ArtifactInspector";
 import Canvas from "./Canvas";
 import CanvasPane from "./CanvasPane";
 import ToolPane from "./ToolPane";
 
 import { TokenDesignerTaxonomy } from "../tokenDesignerTaxonomy";
+import {
+  ITemplateDefinitionAsObject,
+  IArtifactAsObject,
+} from "../../ttfInterface";
 
 type Props = {
   taxonomy: TokenDesignerTaxonomy | null;
-  definition: TemplateDefinition.AsObject;
+  definition: ITemplateDefinitionAsObject;
   incompatabilities: any;
   setDefinitionName: (name: string) => void;
   setDefinitionProperty: (
@@ -30,7 +31,7 @@ export default function DefinitionDesigner({
   setDefinitionProperty,
 }: Props) {
   const [selectedArtifact, setSelectedArtifact] = useState<
-    Artifact.AsObject | undefined
+    IArtifactAsObject | undefined
   >(undefined);
 
   const tokenBase = taxonomy?.baseTokenTypes.find(
@@ -44,7 +45,7 @@ export default function DefinitionDesigner({
       taxonomy?.propertySets.find((_) => _.artifact?.artifactSymbol?.id === id)
     )
     .map((_) => _?.artifact)
-    .filter((_) => !!_) as Artifact.AsObject[];
+    .filter((_) => !!_) as IArtifactAsObject[];
 
   const behaviorGroups = definition.behaviorGroupsList
     .map((_) => _.reference?.id)
@@ -54,7 +55,7 @@ export default function DefinitionDesigner({
       )
     )
     .map((_) => _?.artifact)
-    .filter((_) => !!_) as Artifact.AsObject[];
+    .filter((_) => !!_) as IArtifactAsObject[];
 
   const behaviors = definition.behaviorsList
     .map((_) => _.reference?.id)
@@ -62,12 +63,12 @@ export default function DefinitionDesigner({
       taxonomy?.behaviors.find((_) => _.artifact?.artifactSymbol?.id === id)
     )
     .map((_) => _?.artifact)
-    .filter((_) => !!_) as Artifact.AsObject[];
+    .filter((_) => !!_) as IArtifactAsObject[];
 
   const getArtifactByTooling: (
     tooling?: string
-  ) => Artifact.AsObject | undefined = (tooling?: string) => {
-    let result: Artifact.AsObject | undefined = taxonomy?.baseTokenTypes.find(
+  ) => IArtifactAsObject | undefined = (tooling?: string) => {
+    let result: IArtifactAsObject | undefined = taxonomy?.baseTokenTypes.find(
       (_) => _.artifact?.artifactSymbol?.tooling === tooling
     )?.artifact;
     if (!result) {
@@ -91,8 +92,8 @@ export default function DefinitionDesigner({
   const getArtifactById: (
     id: string,
     tooling?: string
-  ) => Artifact.AsObject | undefined = (id: string, tooling?: string) => {
-    let result: Artifact.AsObject | undefined = taxonomy?.baseTokenTypes.find(
+  ) => IArtifactAsObject | undefined = (id: string, tooling?: string) => {
+    let result: IArtifactAsObject | undefined = taxonomy?.baseTokenTypes.find(
       (_) => _.artifact?.artifactSymbol?.id === id
     )?.artifact;
     if (!result) {
