@@ -1,4 +1,4 @@
-#!/usr/bin/env bash
+#!/usr/bin/bash
 
 # Inspiration: 
 # https://gist.github.com/lelegard/6a428f67ee08e86d0c2f1af3f4a633d0
