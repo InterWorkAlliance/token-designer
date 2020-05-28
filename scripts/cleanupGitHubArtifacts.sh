@@ -32,6 +32,7 @@ while [[ -n "$URL" ]]; do
 
     # Number of artifacts on this page:
     COUNT=$(( $(jq <<<$JSON -r '.artifacts | length') ))
+    printf "Read page of size %d\n" $COUNT
 
     # Loop on all artifacts on this page.
     for ((i=0; $i < $COUNT; i++)); do
@@ -39,6 +40,7 @@ while [[ -n "$URL" ]]; do
         # Get name of artifact and count instances of this name.
         name=$(jq <<<$JSON -r ".artifacts[$i].name?")
         ARTCOUNT[$name]=$(( $(( ${ARTCOUNT[$name]} )) + 1))
+        printf "Considering '%s' #%d, %'d bytes\n" $name ${ARTCOUNT[$name]} $size
 
         # Check if we must delete this one.
         if [[ ${ARTCOUNT[$name]} -gt $KEEP ]]; then
