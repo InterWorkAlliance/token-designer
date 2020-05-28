@@ -35,7 +35,7 @@ jobs:
     - name: 🗑 Artifact cleanup
       env:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-      run: scripts/cleanupGitHubArtifacts.sh
+      run: ./scripts/cleanupGitHubArtifacts.sh
     - name: 🌎 Publish
       uses: actions/upload-artifact@v2
       with:
