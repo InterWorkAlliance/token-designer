@@ -1,4 +1,4 @@
-#!/usr/bin/bash
+#!/bin/bash
 
 # Inspiration: 
 # https://gist.github.com/lelegard/6a428f67ee08e86d0c2f1af3f4a633d0
@@ -20,6 +20,7 @@ declare -A ARTCOUNT
 
 # Process all artifacts on this repository, loop on returned "pages".
 URL=$REPO/actions/artifacts
+echo "Cleaning artifacts in $URL"
 while [[ -n "$URL" ]]; do
 
     # Get current page, get response headers in a temporary file.
