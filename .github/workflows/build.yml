@@ -33,9 +33,10 @@ jobs:
     - name: 🎁 Package
       run: npm run package
     - name: 🗑 Artifact cleanup
-      env:
-        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-      run: ./scripts/cleanupGitHubArtifacts.sh
+      uses: kolpav/purge-artifacts-action@v1
+      with:
+        token: ${{ secrets.GITHUB_TOKEN }}
+        expire-in: 24 hours
     - name: 🌎 Publish
       uses: actions/upload-artifact@v2
       with:
