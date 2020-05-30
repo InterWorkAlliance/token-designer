@@ -1,19 +1,20 @@
 import React, { useState } from "react";
 
-import { Artifact } from "../../ttf/artifact_pb";
+import { Base, PropertySet, BehaviorGroup, Behavior } from "../../ttf/core_pb";
 
+import AnyArtifact from "./AnyArtifact";
 import ArtifactIcon from "./ArtifactIcon";
 
 type Props = {
-  tokenBase?: Artifact.AsObject;
-  propertySets?: Artifact.AsObject[];
-  behaviorGroups?: Artifact.AsObject[];
-  behaviors?: Artifact.AsObject[];
+  tokenBase?: Base.AsObject;
+  propertySets?: PropertySet.AsObject[];
+  behaviorGroups?: BehaviorGroup.AsObject[];
+  behaviors?: Behavior.AsObject[];
   incompatabilities: any;
-  selectedArtifact?: Artifact.AsObject;
-  artifactBeingDraggedOn?: Artifact.AsObject;
-  artifactOnDragStart?: (artifact?: Artifact.AsObject) => void;
-  setSelectedArtifact?: (artifact?: Artifact.AsObject) => void;
+  selectedArtifact?: AnyArtifact;
+  artifactBeingDraggedOn?: AnyArtifact;
+  artifactOnDragStart?: (artifact?: AnyArtifact) => void;
+  setSelectedArtifact?: (artifact?: AnyArtifact) => void;
   addArtifact?: (id: string) => void;
 };
 
@@ -60,8 +61,8 @@ export default function Canvas({
   };
   const onDrop = (ev: React.DragEvent<HTMLDivElement>) => {
     setDropTargetActive(false);
-    if (addArtifact && artifactBeingDraggedOn?.artifactSymbol?.id) {
-      addArtifact(artifactBeingDraggedOn.artifactSymbol?.id);
+    if (addArtifact && artifactBeingDraggedOn?.artifact?.artifactSymbol?.id) {
+      addArtifact(artifactBeingDraggedOn?.artifact?.artifactSymbol?.id);
       if (setSelectedArtifact) {
         setSelectedArtifact(artifactBeingDraggedOn);
       }
@@ -87,52 +88,55 @@ export default function Canvas({
               artifact={tokenBase}
               type={tokenBase ? "token-base" : "unknown"}
               selected={
-                selectedArtifact?.artifactSymbol?.id ===
-                tokenBase?.artifactSymbol?.id
+                selectedArtifact?.artifact?.artifactSymbol?.id ===
+                tokenBase?.artifact?.artifactSymbol?.id
               }
               onClick={setSelectedArtifact}
               onDragStart={artifactOnDragStart}
-              error={errorText(tokenBase?.artifactSymbol?.id)}
+              error={errorText(tokenBase?.artifact?.artifactSymbol?.id)}
             />
             {(propertySets || []).map((_) => (
               <ArtifactIcon
-                key={_.artifactSymbol?.id}
+                key={_.artifact?.artifactSymbol?.id}
                 artifact={_}
                 type="property-set"
                 selected={
-                  selectedArtifact?.artifactSymbol?.id === _.artifactSymbol?.id
+                  selectedArtifact?.artifact?.artifactSymbol?.id ===
+                  _.artifact?.artifactSymbol?.id
                 }
                 onClick={setSelectedArtifact}
                 onDragStart={artifactOnDragStart}
-                error={errorText(_.artifactSymbol?.id)}
+                error={errorText(_.artifact?.artifactSymbol?.id)}
               />
             ))}
           </div>
           <div style={{ width: "var(--iconWidth)" }}>
             {(behaviorGroups || []).map((_) => (
               <ArtifactIcon
-                key={_.artifactSymbol?.id}
+                key={_.artifact?.artifactSymbol?.id}
                 artifact={_}
                 type="behavior-group"
                 selected={
-                  selectedArtifact?.artifactSymbol?.id === _.artifactSymbol?.id
+                  selectedArtifact?.artifact?.artifactSymbol?.id ===
+                  _.artifact?.artifactSymbol?.id
                 }
                 onClick={setSelectedArtifact}
                 onDragStart={artifactOnDragStart}
-                error={errorText(_.artifactSymbol?.id)}
+                error={errorText(_.artifact?.artifactSymbol?.id)}
               />
             ))}
             {(behaviors || []).map((_) => (
               <ArtifactIcon
-                key={_.artifactSymbol?.id}
+                key={_.artifact?.artifactSymbol?.id}
                 artifact={_}
                 type="behavior"
                 selected={
-                  selectedArtifact?.artifactSymbol?.id === _.artifactSymbol?.id
+                  selectedArtifact?.artifact?.artifactSymbol?.id ===
+                  _.artifact?.artifactSymbol?.id
                 }
                 onClick={setSelectedArtifact}
                 onDragStart={artifactOnDragStart}
-                error={errorText(_.artifactSymbol?.id)}
+                error={errorText(_.artifact?.artifactSymbol?.id)}
               />
             ))}
           </div>

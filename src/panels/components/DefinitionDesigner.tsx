@@ -1,8 +1,14 @@
 import React, { useState } from "react";
 
-import { TemplateDefinition } from "../../ttf/core_pb";
+import {
+  TemplateDefinition,
+  PropertySet,
+  BehaviorGroup,
+  Behavior,
+} from "../../ttf/core_pb";
 import { Artifact } from "../../ttf/artifact_pb";
 
+import AnyArtifact from "./AnyArtifact";
 import ArtifactInspector from "./ArtifactInspector";
 import Canvas from "./Canvas";
 import CanvasPane from "./CanvasPane";
@@ -30,21 +36,20 @@ export default function DefinitionDesigner({
   setDefinitionProperty,
 }: Props) {
   const [selectedArtifact, setSelectedArtifact] = useState<
-    Artifact.AsObject | undefined
+    AnyArtifact | undefined
   >(undefined);
 
   const tokenBase = taxonomy?.baseTokenTypes.find(
     (_) =>
       _.artifact?.artifactSymbol?.id === definition.tokenBase?.reference?.id
-  )?.artifact;
+  );
 
   const propertySets = definition.propertySetsList
     .map((_) => _.reference?.id)
     .map((id) =>
       taxonomy?.propertySets.find((_) => _.artifact?.artifactSymbol?.id === id)
     )
-    .map((_) => _?.artifact)
-    .filter((_) => !!_) as Artifact.AsObject[];
+    .filter((_) => !!_) as PropertySet.AsObject[];
 
   const behaviorGroups = definition.behaviorGroupsList
     .map((_) => _.reference?.id)
@@ -53,16 +58,14 @@ export default function DefinitionDesigner({
         (_) => _.artifact?.artifactSymbol?.id === id
       )
     )
-    .map((_) => _?.artifact)
-    .filter((_) => !!_) as Artifact.AsObject[];
+    .filter((_) => !!_) as BehaviorGroup.AsObject[];
 
   const behaviors = definition.behaviorsList
     .map((_) => _.reference?.id)
     .map((id) =>
       taxonomy?.behaviors.find((_) => _.artifact?.artifactSymbol?.id === id)
     )
-    .map((_) => _?.artifact)
-    .filter((_) => !!_) as Artifact.AsObject[];
+    .filter((_) => !!_) as Behavior.AsObject[];
 
   const getArtifactByTooling: (
     tooling?: string
@@ -132,12 +135,11 @@ export default function DefinitionDesigner({
         />
       </CanvasPane>
       <ToolPane position="right" width="25vw">
-        {selectedArtifact && (
-          <ArtifactInspector
-            artifact={selectedArtifact}
-            getArtifactById={getArtifactById}
-          />
-        )}
+        <ArtifactInspector
+          definition={definition}
+          artifact={selectedArtifact || definition}
+          getArtifactById={getArtifactById}
+        />
       </ToolPane>
     </>
   );

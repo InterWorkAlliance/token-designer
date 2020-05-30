@@ -1,16 +1,15 @@
 import React from "react";
 
-import { Artifact } from "../../ttf/artifact_pb";
-
+import AnyArtifact from "./AnyArtifact";
 import ArtifactType from "./ArtifactType";
 
 type Props = {
-  artifact?: Artifact.AsObject;
+  artifact?: AnyArtifact;
   type: ArtifactType | "unknown";
   error?: string;
   selected?: boolean;
-  onClick?: (artifact?: Artifact.AsObject) => void;
-  onDragStart?: (artifact?: Artifact.AsObject) => void;
+  onClick?: (artifact?: AnyArtifact) => void;
+  onDragStart?: (artifact?: AnyArtifact) => void;
 };
 
 export default function ArtifactIcon({
@@ -73,7 +72,7 @@ export default function ArtifactIcon({
       imgSrc = "token-designer/behavior-group.svg";
       break;
   }
-  const title = artifact?.name || "Unknown";
+  const title = artifact?.artifact?.name || "Unknown";
   let tooltip = title;
   if (error) {
     tooltip += ` - ${error}`;

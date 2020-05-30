@@ -1,16 +1,15 @@
 import React from "react";
 
-import { Artifact } from "../../ttf/artifact_pb";
-
+import AnyArtifact from "./AnyArtifact";
 import ArtifactIcon from "./ArtifactIcon";
 import ArtifactType from "./ArtifactType";
 import ToolBoxTitle from "./ToolBoxTitle";
 
 type Props = {
   title: string;
-  tools: (Artifact.AsObject | undefined)[];
+  tools: (AnyArtifact | undefined)[];
   type: ArtifactType;
-  artifactOnDragStart: (artifact?: Artifact.AsObject) => void;
+  artifactOnDragStart: (artifact?: AnyArtifact) => void;
 };
 
 export default function ToolBox({
@@ -33,7 +32,7 @@ export default function ToolBox({
           (artifact) =>
             artifact && (
               <ArtifactIcon
-                key={artifact.name}
+                key={artifact.artifact?.name}
                 artifact={artifact}
                 type={type}
                 onDragStart={artifactOnDragStart}

@@ -1,11 +1,11 @@
 import React, { useState } from "react";
 
-import { Artifact } from "../../ttf/artifact_pb";
+import AnyArtifact from "./AnyArtifact";
 
 type Props = {
   position: "left" | "right";
   width: string;
-  artifactBeingDragged?: Artifact.AsObject;
+  artifactBeingDragged?: AnyArtifact;
   onDropArtifact?: (id: string) => void;
   children: any;
 };
@@ -52,8 +52,8 @@ export default function ToolPane({
   const onDrop = (ev: React.DragEvent<HTMLDivElement>) => {
     if (onDropArtifact) {
       setDropTargetActive(false);
-      if (artifactBeingDragged?.artifactSymbol?.id) {
-        onDropArtifact(artifactBeingDragged.artifactSymbol.id);
+      if (artifactBeingDragged?.artifact?.artifactSymbol?.id) {
+        onDropArtifact(artifactBeingDragged.artifact.artifactSymbol.id);
       }
     }
   };
