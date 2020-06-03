@@ -11,6 +11,8 @@ import { TokenTaxonomy } from "./tokenTaxonomy";
 import { TtfFileSystemConnection } from "./ttfFileSystemConnection";
 import { ITtfInterface } from "./ttfInterface";
 
+const StatusBarPrefix = "$(debug-disconnect) TTF: ";
+
 export async function activate(context: vscode.ExtensionContext) {
   let panelReloadEvent: vscode.Event<void> = new vscode.EventEmitter<void>()
     .event;
@@ -20,15 +22,8 @@ export async function activate(context: vscode.ExtensionContext) {
     panelReloadEvent = hotReloadWatcher.reload;
   }
 
-  const grpcMode = true;
-  let ttfConnection: ITtfInterface;
-  if (grpcMode) {
-    ttfConnection = new ttfClient.ServiceClient(
-      "127.0.0.1:8086",
-      grpc.credentials.createInsecure()
-    );
-  } else {
-    ttfConnection = await TtfFileSystemConnection.create(
+  const newSandboxConnection = async () =>
+    await TtfFileSystemConnection.create(
       path.join(
         context.extensionPath,
         "resources",
@@ -36,9 +31,10 @@ export async function activate(context: vscode.ExtensionContext) {
         "ttf_taxonomy.bin"
       )
     );
-  }
 
-  const ttfTaxonomy = new TokenTaxonomy(ttfConnection);
+  let currentEnvironment = "Sandbox";
+  let ttfConnection: ITtfInterface = await newSandboxConnection();
+  let ttfTaxonomy = new TokenTaxonomy(ttfConnection);
 
   const tokenFormulaExplorer = new TokenFormulaExplorer(
     context.extensionPath,
@@ -53,7 +49,33 @@ export async function activate(context: vscode.ExtensionContext) {
   const changeEnvironmentCommand = vscode.commands.registerCommand(
     "visual-token-designer.changeEnvironment",
     async (commandContext) => {
-      // TODO
+      const newServer = await vscode.window.showInputBox({
+        prompt:
+          "Specifiy the address of the Token Taxonomy Framework GRPC server " +
+          "to connect to (e.g. 127.0.0.1:8086). Leave blank to use the sandbox " +
+          "(changes made in the sandbox are not persisted).",
+        placeHolder: "Enter a hostname (leave blank for sandbox)",
+        validateInput: (input) =>
+          !input || input.match(/^[-a-z0-9.]+:[0-9]+$/i)
+            ? null
+            : "Please enter a valid hostname and port number (e.g. 127.0.0.1:8086). " +
+              "Leave blank to use the sandbox.",
+      });
+      if (newServer) {
+        ttfConnection = new ttfClient.ServiceClient(
+          newServer,
+          grpc.credentials.createInsecure()
+        );
+        currentEnvironment = newServer;
+      } else {
+        ttfConnection = await newSandboxConnection();
+        currentEnvironment = "Sandbox";
+      }
+      ttfTaxonomy = new TokenTaxonomy(ttfConnection);
+      tokenFormulaExplorer.setTaxonomy(ttfTaxonomy);
+      tokenDefinitionExplorer.setTaxonomy(ttfTaxonomy);
+      statusBarItem.text = StatusBarPrefix + currentEnvironment;
+      statusBarItem.show();
     }
   );
 
@@ -62,6 +84,7 @@ export async function activate(context: vscode.ExtensionContext) {
     async (commandContext) => {
       const panel = await TokenDesignerPanel.openNewFormula(
         ttfConnection,
+        currentEnvironment,
         ttfTaxonomy,
         context.extensionPath,
         context.subscriptions,
@@ -76,6 +99,7 @@ export async function activate(context: vscode.ExtensionContext) {
       const panel = await TokenDesignerPanel.openExistingFormula(
         commandContext,
         ttfConnection,
+        currentEnvironment,
         ttfTaxonomy,
         context.extensionPath,
         context.subscriptions,
@@ -90,6 +114,7 @@ export async function activate(context: vscode.ExtensionContext) {
       const panel = await TokenDesignerPanel.openNewDefinition(
         commandContext?.id || "",
         ttfConnection,
+        currentEnvironment,
         ttfTaxonomy,
         context.extensionPath,
         context.subscriptions,
@@ -104,6 +129,7 @@ export async function activate(context: vscode.ExtensionContext) {
       const panel = await TokenDesignerPanel.openExistingDefinition(
         commandContext,
         ttfConnection,
+        currentEnvironment,
         ttfTaxonomy,
         context.extensionPath,
         context.subscriptions,
@@ -129,6 +155,13 @@ export async function activate(context: vscode.ExtensionContext) {
     tokenDefinitionExplorer
   );
 
+  const statusBarItem = vscode.window.createStatusBarItem(
+    vscode.StatusBarAlignment.Left
+  );
+  statusBarItem.command = "visual-token-designer.changeEnvironment";
+  statusBarItem.text = StatusBarPrefix + currentEnvironment;
+  statusBarItem.show();
+
   context.subscriptions.push(changeEnvironmentCommand);
   context.subscriptions.push(createTokenFormulaCommand);
   context.subscriptions.push(openTokenFormulaCommand);
@@ -137,6 +170,7 @@ export async function activate(context: vscode.ExtensionContext) {
   context.subscriptions.push(refreshTokenTaxonomyCommand);
   context.subscriptions.push(tokenFormulaExplorerProvider);
   context.subscriptions.push(tokenDefinitionExplorerProvider);
+  context.subscriptions.push(statusBarItem);
 }
 
 export function deactivate() {}

@@ -17,18 +17,21 @@ const BaseHrefPlaceholder: string = "[BASE_HREF]";
 
 export class TokenDesignerPanel {
   get title() {
+    const suffix = " (" + this.environment + ")";
     if (this.formula) {
       return (
         (this.formula.getArtifact()?.getName() || "New formula") +
-        " - Token Formula"
+        " - Token Formula" +
+        suffix
       );
     } else if (this.definition) {
       return (
         (this.definition.getArtifact()?.getName() || "New definition") +
-        " - Token Definition"
+        " - Token Definition" +
+        suffix
       );
     } else {
-      return "Token Designer";
+      return "Token Designer" + suffix;
     }
   }
 
@@ -68,6 +71,7 @@ export class TokenDesignerPanel {
 
   static async openNewFormula(
     ttfConnection: ITtfInterface,
+    environment: string,
     ttfTaxonomy: TokenTaxonomy,
     extensionPath: string,
     disposables: vscode.Disposable[],
@@ -75,6 +79,7 @@ export class TokenDesignerPanel {
   ) {
     const panel = new TokenDesignerPanel(
       ttfConnection,
+      environment,
       ttfTaxonomy,
       extensionPath,
       disposables,
@@ -87,6 +92,7 @@ export class TokenDesignerPanel {
   static async openExistingFormula(
     toolingSymbol: string,
     ttfConnection: ITtfInterface,
+    environment: string,
     ttfTaxonomy: TokenTaxonomy,
     extensionPath: string,
     disposables: vscode.Disposable[],
@@ -94,6 +100,7 @@ export class TokenDesignerPanel {
   ) {
     const panel = new TokenDesignerPanel(
       ttfConnection,
+      environment,
       ttfTaxonomy,
       extensionPath,
       disposables,
@@ -106,6 +113,7 @@ export class TokenDesignerPanel {
   static async openNewDefinition(
     formulaId: any,
     ttfConnection: ITtfInterface,
+    environment: string,
     ttfTaxonomy: TokenTaxonomy,
     extensionPath: string,
     disposables: vscode.Disposable[],
@@ -119,6 +127,7 @@ export class TokenDesignerPanel {
     if (definitionName) {
       const panel = new TokenDesignerPanel(
         ttfConnection,
+        environment,
         ttfTaxonomy,
         extensionPath,
         disposables,
@@ -132,6 +141,7 @@ export class TokenDesignerPanel {
   static async openExistingDefinition(
     artifactId: string,
     ttfConnection: ITtfInterface,
+    environment: string,
     ttfTaxonomy: TokenTaxonomy,
     extensionPath: string,
     disposables: vscode.Disposable[],
@@ -139,6 +149,7 @@ export class TokenDesignerPanel {
   ) {
     const panel = new TokenDesignerPanel(
       ttfConnection,
+      environment,
       ttfTaxonomy,
       extensionPath,
       disposables,
@@ -150,6 +161,7 @@ export class TokenDesignerPanel {
 
   private constructor(
     private readonly ttfConnection: ITtfInterface,
+    private readonly environment: string,
     private readonly ttfTaxonomy: TokenTaxonomy,
     private readonly extensionPath: string,
     disposables: vscode.Disposable[],
