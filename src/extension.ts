@@ -50,6 +50,13 @@ export async function activate(context: vscode.ExtensionContext) {
     ttfTaxonomy
   );
 
+  const changeEnvironmentCommand = vscode.commands.registerCommand(
+    "visual-token-designer.changeEnvironment",
+    async (commandContext) => {
+      // TODO
+    }
+  );
+
   const createTokenFormulaCommand = vscode.commands.registerCommand(
     "visual-token-designer.createTokenFormula",
     async (commandContext) => {
@@ -122,6 +129,7 @@ export async function activate(context: vscode.ExtensionContext) {
     tokenDefinitionExplorer
   );
 
+  context.subscriptions.push(changeEnvironmentCommand);
   context.subscriptions.push(createTokenFormulaCommand);
   context.subscriptions.push(openTokenFormulaCommand);
   context.subscriptions.push(createTokenDefinitionCommand);

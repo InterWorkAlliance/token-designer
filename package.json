@@ -29,6 +29,7 @@
     "Token"
   ],
   "activationEvents": [
+    "onCommand:visual-token-designer.changeEnvironment",
     "onCommand:visual-token-designer.createTokenFormula",
     "onCommand:visual-token-designer.openTokenFormula",
     "onCommand:visual-token-designer.openTokenDefinition",
@@ -88,6 +89,11 @@
           "light": "resources/light/refresh.svg",
           "dark": "resources/dark/refresh.svg"
         }
+      },
+      {
+        "command": "visual-token-designer.changeEnvironment",
+        "title": "Change environment",
+        "category": "Token Taxonomy Framework"
       }
     ],
     "menus": {
