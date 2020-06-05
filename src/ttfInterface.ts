@@ -47,10 +47,12 @@ export interface ITtfInterface {
 
   getBehaviorArtifact(
     request: ttfArtifact.ArtifactSymbol,
-    callback: (
-      error: ITtfError | null,
-      response: ttfCore.Behavior
-    ) => void
+    callback: (error: ITtfError | null, response: ttfCore.Behavior) => void
+  ): any;
+
+  getBehaviorGroupArtifact(
+    request: ttfArtifact.ArtifactSymbol,
+    callback: (error: ITtfError | null, response: ttfCore.BehaviorGroup) => void
   ): any;
 
   updateArtifact(

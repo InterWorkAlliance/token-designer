@@ -38,6 +38,12 @@ export class LeafIdentifier {
         command: "visual-token-designer.openBehavior",
         arguments: [this.id],
       };
+    } else if (this.type === "behavior-group") {
+      result.command = {
+        title: "Open behavior group",
+        command: "visual-token-designer.openBehaviorGroup",
+        arguments: [this.id],
+      };
     }
     return result;
   }

@@ -4,6 +4,7 @@ import * as ttfClient from "./ttf/service_grpc_pb";
 import * as vscode from "vscode";
 
 import { BehaviorPanel } from "./behaviorPanel";
+import { BehaviorGroupPanel } from "./behaviorGroupPanel";
 import { DefinitionPanel } from "./definitionPanel";
 import { FormulaPanel } from "./formulaPanel";
 import { HotReloadWatcher } from "./hotReloadWatcher";
@@ -162,6 +163,21 @@ export async function activate(context: vscode.ExtensionContext) {
     }
   );
 
+  const openBehaviorGroupCommand = vscode.commands.registerCommand(
+    "visual-token-designer.openBehaviorGroup",
+    async (commandContext) => {
+      const panel = await BehaviorGroupPanel.openExistingBehaviorGroup(
+        commandContext,
+        ttfConnection,
+        currentEnvironment,
+        ttfTaxonomy,
+        context.extensionPath,
+        context.subscriptions,
+        panelReloadEvent
+      );
+    }
+  );
+
   const refreshTokenTaxonomyCommand = vscode.commands.registerCommand(
     "visual-token-designer.refreshTokenTaxonomy",
     async (commandContext) => {
@@ -197,6 +213,7 @@ export async function activate(context: vscode.ExtensionContext) {
   context.subscriptions.push(createTokenDefinitionCommand);
   context.subscriptions.push(openTokenDefinitionCommand);
   context.subscriptions.push(openBehaviorCommand);
+  context.subscriptions.push(openBehaviorGroupCommand);
   context.subscriptions.push(refreshTokenTaxonomyCommand);
   context.subscriptions.push(tokenArtifactExplorerProvider);
   context.subscriptions.push(tokenFormulaExplorerProvider);
