@@ -116,11 +116,13 @@ export default function DefinitionDesigner({
     return result || getArtifactByTooling(tooling);
   };
 
+  const rightPaneWidth = "35vw";
+
   return (
     <>
       <CanvasPane
         left="0"
-        right="25vw"
+        right={rightPaneWidth}
         definitionName={definition.artifact?.name}
         setDefinitionName={setDefinitionName}
       >
@@ -134,7 +136,7 @@ export default function DefinitionDesigner({
           setSelectedArtifact={setSelectedArtifact}
         />
       </CanvasPane>
-      <ToolPane position="right" width="25vw">
+      <ToolPane position="right" width={rightPaneWidth}>
         <ArtifactInspector
           definition={definition}
           artifact={selectedArtifact || definition}
