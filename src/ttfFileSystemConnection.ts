@@ -334,6 +334,30 @@ export class TtfFileSystemConnection implements ITtfInterface {
     );
   }
 
+  getPropertySetArtifact(
+    request: ttfArtifact.ArtifactSymbol,
+    callback: (error: ITtfError | null, response: ttfCore.PropertySet) => void
+  ) {
+    this.getArtifact(
+      request,
+      this.taxonomy.getPropertySetsMap(),
+      new ttfCore.PropertySet(),
+      callback
+    );
+  }
+
+  getBaseArtifact(
+    request: ttfArtifact.ArtifactSymbol,
+    callback: (error: ITtfError | null, response: ttfCore.Base) => void
+  ) {
+    this.getArtifact(
+      request,
+      this.taxonomy.getBaseTokenTypesMap(),
+      new ttfCore.Base(),
+      callback
+    );
+  }
+
   updateArtifact(
     request: ttfArtifact.UpdateArtifactRequest,
     callback: (error: ITtfError | null, response: any) => void

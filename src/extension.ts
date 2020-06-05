@@ -9,7 +9,9 @@ import { DefinitionPanel } from "./definitionPanel";
 import { FormulaPanel } from "./formulaPanel";
 import { HotReloadWatcher } from "./hotReloadWatcher";
 import { ITtfInterface } from "./ttfInterface";
+import { PropertySetPanel } from "./propertySetPanel";
 import { TokenArtifactExplorer } from "./tokenArtifactExplorer";
+import { TokenBasePanel } from "./tokenBasePanel";
 import { TokenDefinitionExplorer } from "./tokenDefinitionExplorer";
 import { TokenFormulaExplorer } from "./tokenFormulaExplorer";
 import { TokenTaxonomy } from "./tokenTaxonomy";
@@ -178,6 +180,36 @@ export async function activate(context: vscode.ExtensionContext) {
     }
   );
 
+  const openPropertySetCommand = vscode.commands.registerCommand(
+    "visual-token-designer.openPropertySet",
+    async (commandContext) => {
+      const panel = await PropertySetPanel.openExistingPropertySet(
+        commandContext,
+        ttfConnection,
+        currentEnvironment,
+        ttfTaxonomy,
+        context.extensionPath,
+        context.subscriptions,
+        panelReloadEvent
+      );
+    }
+  );
+
+  const openTokenBaseCommand = vscode.commands.registerCommand(
+    "visual-token-designer.openTokenBase",
+    async (commandContext) => {
+      const panel = await TokenBasePanel.openExistingTokenBase(
+        commandContext,
+        ttfConnection,
+        currentEnvironment,
+        ttfTaxonomy,
+        context.extensionPath,
+        context.subscriptions,
+        panelReloadEvent
+      );
+    }
+  );
+
   const refreshTokenTaxonomyCommand = vscode.commands.registerCommand(
     "visual-token-designer.refreshTokenTaxonomy",
     async (commandContext) => {
@@ -214,6 +246,8 @@ export async function activate(context: vscode.ExtensionContext) {
   context.subscriptions.push(openTokenDefinitionCommand);
   context.subscriptions.push(openBehaviorCommand);
   context.subscriptions.push(openBehaviorGroupCommand);
+  context.subscriptions.push(openPropertySetCommand);
+  context.subscriptions.push(openTokenBaseCommand);
   context.subscriptions.push(refreshTokenTaxonomyCommand);
   context.subscriptions.push(tokenArtifactExplorerProvider);
   context.subscriptions.push(tokenFormulaExplorerProvider);

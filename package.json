@@ -95,6 +95,16 @@
         "category": "Token Taxonomy Framework"
       },
       {
+        "command": "visual-token-designer.openPropertySet",
+        "title": "Open property set",
+        "category": "Token Taxonomy Framework"
+      },
+      {
+        "command": "visual-token-designer.openTokenBase",
+        "title": "Open token base",
+        "category": "Token Taxonomy Framework"
+      },
+      {
         "command": "visual-token-designer.refreshTokenTaxonomy",
         "title": "Refresh Token Taxonomy",
         "category": "Token Taxonomy Framework",
@@ -156,6 +166,14 @@
         },
         {
           "command": "visual-token-designer.openBehaviorGroup",
+          "when": "false"
+        },
+        {
+          "command": "visual-token-designer.openPropertySet",
+          "when": "false"
+        },
+        {
+          "command": "visual-token-designer.openTokenBase",
           "when": "false"
         }
       ]

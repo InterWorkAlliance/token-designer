@@ -44,6 +44,18 @@ export class LeafIdentifier {
         command: "visual-token-designer.openBehaviorGroup",
         arguments: [this.id],
       };
+    } else if (this.type === "property-set") {
+      result.command = {
+        title: "Open property set",
+        command: "visual-token-designer.openPropertySet",
+        arguments: [this.id],
+      };
+    } else if (this.type === "token-base") {
+      result.command = {
+        title: "Open token base",
+        command: "visual-token-designer.openTokenBase",
+        arguments: [this.id],
+      };
     }
     return result;
   }
