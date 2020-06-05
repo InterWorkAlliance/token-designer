@@ -1,4 +1,4 @@
-import React from "react";
+import React, { Fragment } from "react";
 
 import { Artifact } from "../../ttf/artifact_pb";
 import { TemplateDefinition, Property, Invocation } from "../../ttf/core_pb";
@@ -64,7 +64,7 @@ function Properties({ tree }: { tree: PropertyTree }) {
                   </div>
                   <ul style={paddingTop}>
                     {_.invocations.map((i) => (
-                      <li><b>{i.name}</b><br /><em>{i.description}</em></li>
+                      <li key={i.id}><b>{i.name}</b><br /><em>{i.description}</em></li>
                     ))}
                   </ul>
                 </>
@@ -110,7 +110,7 @@ export default function PropertyInspector({
   return (
     <>
       {properties.map((tree) => (
-        <>
+        <Fragment key={tree.path}>
           <div>
             <b>
               <ArtifactReference
@@ -121,7 +121,7 @@ export default function PropertyInspector({
             </b>
           </div>
           <Properties tree={tree} />
-        </>
+        </Fragment>
       ))}
     </>
   );
