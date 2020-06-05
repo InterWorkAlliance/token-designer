@@ -37,7 +37,7 @@ function Properties({ tree }: { tree: PropertyTree }) {
   return (
     <ul>
       {tree.properties.map((_) => (
-        <li style={paddingTop}>
+        <li style={paddingTop} key={_.name}>
           {_.name && (
             <>
               <div>
