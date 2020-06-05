@@ -4,6 +4,7 @@ import * as ttfClient from "./ttf/service_grpc_pb";
 import * as vscode from "vscode";
 
 import { HotReloadWatcher } from "./hotReloadWatcher";
+import { TokenArtifactExplorer } from "./tokenArtifactExplorer";
 import { TokenDefinitionExplorer } from "./tokenDefinitionExplorer";
 import { TokenDesignerPanel } from "./tokenDesignerPanel";
 import { TokenFormulaExplorer } from "./tokenFormulaExplorer";
@@ -35,6 +36,11 @@ export async function activate(context: vscode.ExtensionContext) {
   let currentEnvironment = "Sandbox";
   let ttfConnection: ITtfInterface = await newSandboxConnection();
   let ttfTaxonomy = new TokenTaxonomy(ttfConnection);
+
+  const tokenArtifactExplorer = new TokenArtifactExplorer(
+    context.extensionPath,
+    ttfTaxonomy
+  );
 
   const tokenFormulaExplorer = new TokenFormulaExplorer(
     context.extensionPath,
@@ -72,6 +78,7 @@ export async function activate(context: vscode.ExtensionContext) {
         currentEnvironment = "Sandbox";
       }
       ttfTaxonomy = new TokenTaxonomy(ttfConnection);
+      tokenArtifactExplorer.setTaxonomy(ttfTaxonomy);
       tokenFormulaExplorer.setTaxonomy(ttfTaxonomy);
       tokenDefinitionExplorer.setTaxonomy(ttfTaxonomy);
       statusBarItem.text = StatusBarPrefix + currentEnvironment;
@@ -145,6 +152,11 @@ export async function activate(context: vscode.ExtensionContext) {
     }
   );
 
+  const tokenArtifactExplorerProvider = vscode.window.registerTreeDataProvider(
+    "visual-token-designer.tokenArtifactExplorer",
+    tokenArtifactExplorer
+  );
+
   const tokenFormulaExplorerProvider = vscode.window.registerTreeDataProvider(
     "visual-token-designer.tokenFormulaExplorer",
     tokenFormulaExplorer
@@ -168,6 +180,7 @@ export async function activate(context: vscode.ExtensionContext) {
   context.subscriptions.push(createTokenDefinitionCommand);
   context.subscriptions.push(openTokenDefinitionCommand);
   context.subscriptions.push(refreshTokenTaxonomyCommand);
+  context.subscriptions.push(tokenArtifactExplorerProvider);
   context.subscriptions.push(tokenFormulaExplorerProvider);
   context.subscriptions.push(tokenDefinitionExplorerProvider);
   context.subscriptions.push(statusBarItem);

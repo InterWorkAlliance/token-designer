@@ -51,6 +51,10 @@
     "views": {
       "visual-token-designer-mainView": [
         {
+          "id": "visual-token-designer.tokenArtifactExplorer",
+          "name": "Token Artifacts"
+        },
+        {
           "id": "visual-token-designer.tokenFormulaExplorer",
           "name": "Token Formulae"
         },
@@ -98,6 +102,11 @@
     ],
     "menus": {
       "view/title": [
+        {
+          "command": "visual-token-designer.refreshTokenTaxonomy",
+          "when": "view == visual-token-designer.tokenArtifactExplorer",
+          "group": "navigation"
+        },
         {
           "command": "visual-token-designer.refreshTokenTaxonomy",
           "when": "view == visual-token-designer.tokenFormulaExplorer",
