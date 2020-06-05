@@ -309,6 +309,26 @@ export class TtfFileSystemConnection implements ITtfInterface {
     }
   }
 
+  getBehaviorArtifact(
+    request: ttfArtifact.ArtifactSymbol,
+    callback: (error: ITtfError | null, response: ttfCore.Behavior) => void
+  ) {
+    let success = false;
+    const id = request.getId();
+    this.taxonomy.getBehaviorsMap().forEach((behavior) => {
+      if (
+        !success &&
+        behavior.getArtifact()?.getArtifactSymbol()?.getId() === id
+      ) {
+        success = true;
+        callback(null, behavior.clone());
+      }
+    });
+    if (!success) {
+      callback(`Behavior not found: ${id}`, new ttfCore.Behavior());
+    }
+  }
+
   updateArtifact(
     request: ttfArtifact.UpdateArtifactRequest,
     callback: (error: ITtfError | null, response: any) => void

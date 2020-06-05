@@ -33,6 +33,7 @@
     "onCommand:visual-token-designer.createTokenFormula",
     "onCommand:visual-token-designer.openTokenFormula",
     "onCommand:visual-token-designer.openTokenDefinition",
+    "onCommand:visual-token-designer.openBehavior",
     "onCommand:visual-token-designer.createTokenDefinition",
     "onView:visual-token-designer.tokenFormulaExplorer",
     "onView:visual-token-designer.tokenDefinitionExplorer"
@@ -83,6 +84,11 @@
       {
         "command": "visual-token-designer.openTokenDefinition",
         "title": "Open token definition",
+        "category": "Token Taxonomy Framework"
+      },
+      {
+        "command": "visual-token-designer.openBehavior",
+        "title": "Open behavior",
         "category": "Token Taxonomy Framework"
       },
       {
@@ -139,6 +145,10 @@
         },
         {
           "command": "visual-token-designer.openTokenDefinition",
+          "when": "false"
+        },
+        {
+          "command": "visual-token-designer.openBehavior",
           "when": "false"
         }
       ]

@@ -32,6 +32,13 @@ export class LeafIdentifier {
       )
     );
     result.description = this.description;
+    if (this.type === "behavior") {
+      result.command = {
+        title: "Open behavior",
+        command: "visual-token-designer.openBehavior",
+        arguments: [this.id],
+      };
+    }
     return result;
   }
 

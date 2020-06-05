@@ -5,13 +5,14 @@ import { TemplateDefinition } from "../../ttf/core_pb";
 import DefinitionDesigner from "./DefinitionDesigner";
 
 import { definitionPanelEvents } from "../definitionPanelEvents";
+import { TaxonomyAsObjects } from "../taxonomyAsObjects";
 
 type Props = {
   postMessage: (message: any) => void;
 };
 
 export default function DefinitionPanel({ postMessage }: Props) {
-  const [taxonomy, setTaxonomy] = useState(null);
+  const [taxonomy, setTaxonomy] = useState<TaxonomyAsObjects | null>(null);
   const [
     definition,
     setDefinition,
@@ -37,7 +38,7 @@ export default function DefinitionPanel({ postMessage }: Props) {
     postMessage({ e: definitionPanelEvents.SetDefinitionName, name });
   };
 
-  if (definition) {
+  if (taxonomy && definition) {
     return (
       <DefinitionDesigner
         taxonomy={taxonomy}

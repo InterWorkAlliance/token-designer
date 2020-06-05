@@ -45,6 +45,14 @@ export interface ITtfInterface {
     ) => void
   ): any;
 
+  getBehaviorArtifact(
+    request: ttfArtifact.ArtifactSymbol,
+    callback: (
+      error: ITtfError | null,
+      response: ttfCore.Behavior
+    ) => void
+  ): any;
+
   updateArtifact(
     request: ttfArtifact.UpdateArtifactRequest,
     callback: (error: ITtfError | null, response: any) => void

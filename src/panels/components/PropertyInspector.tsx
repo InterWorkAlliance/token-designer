@@ -1,9 +1,10 @@
 import React, { Fragment } from "react";
 
-import { Artifact } from "../../ttf/artifact_pb";
 import { TemplateDefinition, Property, Invocation } from "../../ttf/core_pb";
 
 import ArtifactReference from "./ArtifactReference";
+
+import { TaxonomyAsObjects } from "../taxonomyAsObjects";
 
 type PropertyTree = {
   path: string;
@@ -64,7 +65,11 @@ function Properties({ tree }: { tree: PropertyTree }) {
                   </div>
                   <ul style={paddingTop}>
                     {_.invocations.map((i) => (
-                      <li key={i.id}><b>{i.name}</b><br /><em>{i.description}</em></li>
+                      <li key={i.id}>
+                        <b>{i.name}</b>
+                        <br />
+                        <em>{i.description}</em>
+                      </li>
                     ))}
                   </ul>
                 </>
@@ -86,17 +91,11 @@ function Properties({ tree }: { tree: PropertyTree }) {
 }
 
 type Props = {
+  taxonomy: TaxonomyAsObjects;
   definition: TemplateDefinition.AsObject;
-  getArtifactById: (
-    id: string,
-    tooling?: string
-  ) => Artifact.AsObject | undefined;
 };
 
-export default function PropertyInspector({
-  definition,
-  getArtifactById,
-}: Props) {
+export default function PropertyInspector({ taxonomy, definition }: Props) {
   const properties = [
     ...definition.behaviorGroupsList.map((_) => _.behaviorArtifactsList).flat(),
     ...definition.behaviorsList,
@@ -113,10 +112,7 @@ export default function PropertyInspector({
         <Fragment key={tree.path}>
           <div>
             <b>
-              <ArtifactReference
-                getArtifactById={getArtifactById}
-                id={tree.referenceId}
-              />{" "}
+              <ArtifactReference taxonomy={taxonomy} id={tree.referenceId} />{" "}
               properties:
             </b>
           </div>
