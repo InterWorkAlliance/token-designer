@@ -19,7 +19,7 @@ export class TokenFormulaIdentifier {
         this.extensionPath,
         "resources",
         "token-designer",
-        "token-base.svg"
+        "unknown.svg"
       )
     );
     result.description = this.description;

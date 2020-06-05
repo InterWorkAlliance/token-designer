@@ -15,19 +15,13 @@ const JavascriptHrefPlaceholder: string = "[JAVASCRIPT_HREF]";
 const CssHrefPlaceholder: string = "[CSS_HREF]";
 const BaseHrefPlaceholder: string = "[BASE_HREF]";
 
-export class TokenDesignerPanel {
+export class FormulaPanel {
   get title() {
-    const suffix = " (" + this.environment + ")";
+    const suffix = " - " + this.environment;
     if (this.formula) {
       return (
         (this.formula.getArtifact()?.getName() || "New formula") +
         " - Token Formula" +
-        suffix
-      );
-    } else if (this.definition) {
-      return (
-        (this.definition.getArtifact()?.getName() || "New definition") +
-        " - Token Definition" +
         suffix
       );
     } else {
@@ -36,32 +30,19 @@ export class TokenDesignerPanel {
   }
 
   get iconPath() {
-    if (this.formula) {
-      return vscode.Uri.file(
-        path.join(
-          this.extensionPath,
-          "resources",
-          "token-designer",
-          "unknown.svg"
-        )
-      );
-    } else {
-      return vscode.Uri.file(
-        path.join(
-          this.extensionPath,
-          "resources",
-          "token-designer",
-          "token-base.svg"
-        )
-      );
-    }
+    return vscode.Uri.file(
+      path.join(
+        this.extensionPath,
+        "resources",
+        "token-designer",
+        "unknown.svg"
+      )
+    );
   }
 
   private readonly panel: vscode.WebviewPanel;
 
   private taxonomyObjects: TokenDesignerTaxonomy | null = null;
-
-  private definition: ttfCore.TemplateDefinition | null = null;
 
   private formula: ttfCore.TemplateFormula | null = null;
 
@@ -77,7 +58,7 @@ export class TokenDesignerPanel {
     disposables: vscode.Disposable[],
     panelReloadEvent: vscode.Event<void>
   ) {
-    const panel = new TokenDesignerPanel(
+    const panel = new FormulaPanel(
       ttfConnection,
       environment,
       ttfTaxonomy,
@@ -98,7 +79,7 @@ export class TokenDesignerPanel {
     disposables: vscode.Disposable[],
     panelReloadEvent: vscode.Event<void>
   ) {
-    const panel = new TokenDesignerPanel(
+    const panel = new FormulaPanel(
       ttfConnection,
       environment,
       ttfTaxonomy,
@@ -107,55 +88,6 @@ export class TokenDesignerPanel {
       panelReloadEvent
     );
     await panel.openFormula(toolingSymbol);
-    return panel;
-  }
-
-  static async openNewDefinition(
-    formulaId: any,
-    ttfConnection: ITtfInterface,
-    environment: string,
-    ttfTaxonomy: TokenTaxonomy,
-    extensionPath: string,
-    disposables: vscode.Disposable[],
-    panelReloadEvent: vscode.Event<void>
-  ) {
-    let definitionName = await vscode.window.showInputBox({
-      ignoreFocusOut: true,
-      prompt: "Choose a name for the definition",
-      validateInput: (_) => (_ && _.length ? "" : "The name cannot be empty"),
-    });
-    if (definitionName) {
-      const panel = new TokenDesignerPanel(
-        ttfConnection,
-        environment,
-        ttfTaxonomy,
-        extensionPath,
-        disposables,
-        panelReloadEvent
-      );
-      panel.newDefinition(formulaId, definitionName);
-      return panel;
-    }
-  }
-
-  static async openExistingDefinition(
-    artifactId: string,
-    ttfConnection: ITtfInterface,
-    environment: string,
-    ttfTaxonomy: TokenTaxonomy,
-    extensionPath: string,
-    disposables: vscode.Disposable[],
-    panelReloadEvent: vscode.Event<void>
-  ) {
-    const panel = new TokenDesignerPanel(
-      ttfConnection,
-      environment,
-      ttfTaxonomy,
-      extensionPath,
-      disposables,
-      panelReloadEvent
-    );
-    await panel.openDefinition(artifactId);
     return panel;
   }
 
@@ -168,7 +100,7 @@ export class TokenDesignerPanel {
     panelReloadEvent: vscode.Event<void>
   ) {
     this.panel = vscode.window.createWebviewPanel(
-      "tokenDesigner",
+      "formulaPanel",
       this.title,
       vscode.ViewColumn.Active,
       { enableScripts: true }
@@ -194,7 +126,7 @@ export class TokenDesignerPanel {
   }
 
   private async addArtifact(id: string) {
-    const toAdd = this.getArtifcactById(id);
+    const toAdd = this.ttfTaxonomy.getArtifcactById(id);
     if (this.formula && toAdd) {
       await this.removeArtifact(id, false); // avoid duplicates
       const addType = toAdd.getArtifact()?.getArtifactSymbol()?.getType();
@@ -228,19 +160,6 @@ export class TokenDesignerPanel {
       }
       await this.saveFormula();
     }
-  }
-
-  private getArtifcactById(id?: string) {
-    const taxonomy = this.ttfTaxonomy.taxonomy;
-    if (!id || !taxonomy) {
-      return undefined;
-    }
-    return (
-      taxonomy.getBaseTokenTypesMap().get(id) ||
-      taxonomy.getPropertySetsMap().get(id) ||
-      taxonomy.getBehaviorsMap().get(id) ||
-      taxonomy.getBehaviorGroupsMap().get(id)
-    );
   }
 
   private getPanelHtml() {
@@ -316,26 +235,6 @@ export class TokenDesignerPanel {
     this.refreshFormula(symbol);
   }
 
-  private async newDefinition(formulaId: any, name: string) {
-    const newTemplateDefinition = new ttfArtifact.NewTemplateDefinition();
-    newTemplateDefinition.setTemplateFormulaId(formulaId);
-    newTemplateDefinition.setTokenName(name);
-    const result: ttfCore.TemplateDefinition = await new Promise(
-      (resolve, reject) =>
-        this.ttfConnection.createTemplateDefinition(
-          newTemplateDefinition,
-          (error, response) => (error && reject(error)) || resolve(response)
-        )
-    );
-    const newDefinitionId: string =
-      result.getArtifact()?.getArtifactSymbol()?.getId() || "";
-    this.refreshDefinition(newDefinitionId);
-  }
-
-  private async openDefinition(artifactId: string) {
-    this.refreshDefinition(artifactId);
-  }
-
   private onClose() {
     this.dispose();
   }
@@ -343,7 +242,6 @@ export class TokenDesignerPanel {
   private async onMessage(message: any) {
     if (message.e === tokenDesignerEvents.Init) {
       this.panel.webview.postMessage({
-        definition: this.definition?.toObject(),
         formula: this.formula?.toObject(),
         taxonomy: this.taxonomyObjects,
         incompatabilities: this.incompatabilities,
@@ -352,26 +250,9 @@ export class TokenDesignerPanel {
       await this.addArtifact(message.id);
     } else if (message.e === tokenDesignerEvents.Remove) {
       await this.removeArtifact(message.id);
-    } else if (message.e === tokenDesignerEvents.SetDefinitionProperty) {
-      await this.setDefinitionProperty(
-        message.artifactId,
-        message.propertyName,
-        message.value
-      );
-    } else if (message.e === tokenDesignerEvents.SetDefinitionName) {
-      await this.setDefinitionName(message.name);
     } else if (message.e === tokenDesignerEvents.SetFormulaDescription) {
       await this.setFormulaDescription(message.description);
     }
-  }
-
-  private packTemplateDefinition(definition: ttfCore.TemplateDefinition) {
-    const any = new protobufAny.Any();
-    any.pack(
-      definition.serializeBinary(),
-      "taxonomy.model.core.TemplateDefinition"
-    );
-    return any;
   }
 
   private packTemplateFormula(formula: ttfCore.TemplateFormula) {
@@ -380,36 +261,7 @@ export class TokenDesignerPanel {
     return any;
   }
 
-  private async refreshDefinition(artifactId?: string) {
-    this.formula = null;
-    artifactId =
-      artifactId ||
-      this.definition?.getArtifact()?.getArtifactSymbol()?.getId();
-    if (artifactId) {
-      const existingArtifactSymbol = new ttfArtifact.ArtifactSymbol();
-      existingArtifactSymbol.setId(artifactId);
-      this.definition = await new Promise((resolve, reject) =>
-        this.ttfConnection.getTemplateDefinitionArtifact(
-          existingArtifactSymbol,
-          (error, response) => (error && reject(error)) || resolve(response)
-        )
-      );
-    } else {
-      this.definition = null;
-    }
-    this.updateIncompatibilities();
-    this.panel.webview.postMessage({
-      definition: this.definition?.toObject(),
-      formula: null,
-      incompatabilities: this.incompatabilities,
-    });
-    this.panel.title = this.title;
-    this.panel.iconPath = this.iconPath;
-    await this.ttfTaxonomy.refresh();
-  }
-
   private async refreshFormula(symbol?: string) {
-    this.definition = null;
     symbol =
       symbol || this.formula?.getArtifact()?.getArtifactSymbol()?.getTooling();
     if (symbol) {
@@ -437,44 +289,13 @@ export class TokenDesignerPanel {
 
   private async refreshTaxonomy() {
     if (!this.disposed) {
-      const taxonomy = this.ttfTaxonomy.taxonomy;
-      if (taxonomy) {
-        const taxonomyObject = taxonomy.toObject();
-        this.taxonomyObjects = {
-          baseTokenTypes: taxonomyObject.baseTokenTypesMap
-            .map((_) => _[1])
-            .sort(
-              (a, b) =>
-                a.artifact?.name.localeCompare(b.artifact?.name || "") || 0
-            ),
-          propertySets: taxonomyObject.propertySetsMap
-            .map((_) => _[1])
-            .sort(
-              (a, b) =>
-                a.artifact?.name.localeCompare(b.artifact?.name || "") || 0
-            ),
-          behaviors: taxonomyObject.behaviorsMap
-            .map((_) => _[1])
-            .sort(
-              (a, b) =>
-                a.artifact?.name.localeCompare(b.artifact?.name || "") || 0
-            ),
-          behaviorGroups: taxonomyObject.behaviorGroupsMap
-            .map((_) => _[1])
-            .sort(
-              (a, b) =>
-                a.artifact?.name.localeCompare(b.artifact?.name || "") || 0
-            ),
-        };
-      } else {
-        this.taxonomyObjects = null;
-      }
+      this.taxonomyObjects = this.ttfTaxonomy.asObjects();
       this.panel.webview.postMessage({ taxonomy: this.taxonomyObjects });
     }
   }
 
   private async removeArtifact(id: string, save: boolean = true) {
-    const toRemove = this.getArtifcactById(id);
+    const toRemove = this.ttfTaxonomy.getArtifcactById(id);
     if (this.formula && toRemove) {
       if (this.formula.getTokenBase()?.getBase()?.getId() === id) {
         this.formula.setTokenBase(undefined);
@@ -498,56 +319,6 @@ export class TokenDesignerPanel {
       if (save) {
         await this.saveFormula();
       }
-    }
-  }
-
-  private async saveDefintion(deleteAndRecreate: boolean = false) {
-    if (this.definition) {
-      if (deleteAndRecreate) {
-        // Saving and deleting (instead of updating) allows for artifact names
-        // to be changed and prevents the gRPC server from creating version
-        // subfolders.
-        const deleteSymbol = new ttfArtifact.ArtifactSymbol();
-        deleteSymbol.setType(ttfArtifact.ArtifactType.TEMPLATE_DEFINITION);
-        deleteSymbol.setTooling(
-          this.definition?.getArtifact()?.getArtifactSymbol()?.getTooling() ||
-            ""
-        );
-        const deleteRequest = new ttfArtifact.DeleteArtifactRequest();
-        deleteRequest.setArtifactSymbol(deleteSymbol);
-        await new Promise((resolve, reject) =>
-          this.ttfConnection.deleteArtifact(
-            deleteRequest,
-            (error, response) => (error && reject(error)) || resolve(response)
-          )
-        );
-        const newArtifactRequest = new ttfArtifact.NewArtifactRequest();
-        newArtifactRequest.setType(
-          ttfArtifact.ArtifactType.TEMPLATE_DEFINITION
-        );
-        newArtifactRequest.setArtifact(
-          this.packTemplateDefinition(this.definition)
-        );
-        await new Promise((resolve, reject) =>
-          this.ttfConnection.createArtifact(
-            newArtifactRequest,
-            (error, response) => (error && reject(error)) || resolve(response)
-          )
-        );
-      } else {
-        const updateReqest = new ttfArtifact.UpdateArtifactRequest();
-        updateReqest.setType(ttfArtifact.ArtifactType.TEMPLATE_DEFINITION);
-        updateReqest.setArtifactTypeObject(
-          this.packTemplateDefinition(this.definition)
-        );
-        await new Promise((resolve, reject) =>
-          this.ttfConnection.updateArtifact(
-            updateReqest,
-            (error, response) => (error && reject(error)) || resolve(response)
-          )
-        );
-      }
-      await this.refreshDefinition();
     }
   }
 
@@ -594,41 +365,6 @@ export class TokenDesignerPanel {
     }
   }
 
-  private async setDefinitionProperty(
-    artifactId: string,
-    propertyName: string,
-    value: string
-  ) {
-    const findAndSet = (
-      list: ttfCore.BehaviorReference[] | ttfCore.PropertySetReference[]
-    ) => {
-      for (const behavior of list) {
-        if (behavior.getReference()?.getId() === artifactId) {
-          for (const property of behavior.getPropertiesList()) {
-            if (property.getName() === propertyName) {
-              property.setTemplateValue(value);
-            }
-          }
-        }
-      }
-    };
-    if (this.definition) {
-      findAndSet(this.definition.getBehaviorsList());
-      this.definition
-        .getBehaviorGroupsList()
-        .forEach((bgl) => findAndSet(bgl.getBehaviorArtifactsList()));
-      findAndSet(this.definition.getPropertySetsList());
-      await this.saveDefintion();
-    }
-  }
-
-  private async setDefinitionName(name: string) {
-    if (this.definition) {
-      this.definition.getArtifact()?.setName(name);
-      await this.saveDefintion(true);
-    }
-  }
-
   private async setFormulaDescription(description: string) {
     if (this.formula) {
       this.formula
@@ -658,7 +394,7 @@ export class TokenDesignerPanel {
           .map((_) => _.getPropertySet()?.getId())
       );
       for (const id of allIds) {
-        const artifact = this.getArtifcactById(id);
+        const artifact = this.ttfTaxonomy.getArtifcactById(id);
         if (artifact) {
           const artifactName = artifact.getArtifact()?.getName();
           for (const artifactIncompatibleWith of artifact
