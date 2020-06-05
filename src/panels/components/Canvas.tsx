@@ -10,7 +10,7 @@ type Props = {
   propertySets?: PropertySet.AsObject[];
   behaviorGroups?: BehaviorGroup.AsObject[];
   behaviors?: Behavior.AsObject[];
-  incompatabilities: any;
+  incompatabilities?: any;
   selectedArtifact?: AnyArtifact;
   artifactBeingDraggedOn?: AnyArtifact;
   artifactOnDragStart?: (artifact?: AnyArtifact) => void;
@@ -69,7 +69,7 @@ export default function Canvas({
     }
   };
   const errorText = (id?: string) => {
-    if (id && incompatabilities[id]?.length) {
+    if (incompatabilities && id && incompatabilities[id]?.length) {
       return "Incompatible with " + incompatabilities[id].join(", ");
     }
   };

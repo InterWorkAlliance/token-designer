@@ -3,14 +3,15 @@ import * as path from "path";
 import * as ttfClient from "./ttf/service_grpc_pb";
 import * as vscode from "vscode";
 
+import { DefinitionPanel } from "./definitionPanel";
+import { FormulaPanel } from "./formulaPanel";
 import { HotReloadWatcher } from "./hotReloadWatcher";
+import { ITtfInterface } from "./ttfInterface";
 import { TokenArtifactExplorer } from "./tokenArtifactExplorer";
 import { TokenDefinitionExplorer } from "./tokenDefinitionExplorer";
-import { TokenDesignerPanel } from "./tokenDesignerPanel";
 import { TokenFormulaExplorer } from "./tokenFormulaExplorer";
 import { TokenTaxonomy } from "./tokenTaxonomy";
 import { TtfFileSystemConnection } from "./ttfFileSystemConnection";
-import { ITtfInterface } from "./ttfInterface";
 
 const StatusBarPrefix = "$(debug-disconnect) TTF: ";
 
@@ -89,7 +90,7 @@ export async function activate(context: vscode.ExtensionContext) {
   const createTokenFormulaCommand = vscode.commands.registerCommand(
     "visual-token-designer.createTokenFormula",
     async (commandContext) => {
-      const panel = await TokenDesignerPanel.openNewFormula(
+      const panel = await FormulaPanel.openNewFormula(
         ttfConnection,
         currentEnvironment,
         ttfTaxonomy,
@@ -103,7 +104,7 @@ export async function activate(context: vscode.ExtensionContext) {
   const openTokenFormulaCommand = vscode.commands.registerCommand(
     "visual-token-designer.openTokenFormula",
     async (commandContext) => {
-      const panel = await TokenDesignerPanel.openExistingFormula(
+      const panel = await FormulaPanel.openExistingFormula(
         commandContext,
         ttfConnection,
         currentEnvironment,
@@ -118,7 +119,7 @@ export async function activate(context: vscode.ExtensionContext) {
   const createTokenDefinitionCommand = vscode.commands.registerCommand(
     "visual-token-designer.createTokenDefinition",
     async (commandContext) => {
-      const panel = await TokenDesignerPanel.openNewDefinition(
+      const panel = await DefinitionPanel.openNewDefinition(
         commandContext?.id || "",
         ttfConnection,
         currentEnvironment,
@@ -133,7 +134,7 @@ export async function activate(context: vscode.ExtensionContext) {
   const openTokenDefinitionCommand = vscode.commands.registerCommand(
     "visual-token-designer.openTokenDefinition",
     async (commandContext) => {
-      const panel = await TokenDesignerPanel.openExistingDefinition(
+      const panel = await DefinitionPanel.openExistingDefinition(
         commandContext,
         ttfConnection,
         currentEnvironment,

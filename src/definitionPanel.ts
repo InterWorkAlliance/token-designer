@@ -5,10 +5,10 @@ import * as ttfCore from "./ttf/core_pb";
 import * as vscode from "vscode";
 import * as protobufAny from "google-protobuf/google/protobuf/any_pb";
 
-import { TokenTaxonomy } from "./tokenTaxonomy";
-import { tokenDesignerEvents } from "./panels/tokenDesignerEvents";
-import { TokenDesignerTaxonomy } from "./panels/tokenDesignerTaxonomy";
+import { definitionPanelEvents } from "./panels/definitionPanelEvents";
 import { ITtfInterface } from "./ttfInterface";
+import { TaxonomyAsObjects } from "./panels/taxonomyAsObjects";
+import { TokenTaxonomy } from "./tokenTaxonomy";
 
 const JavascriptHrefPlaceholder: string = "[JAVASCRIPT_HREF]";
 const CssHrefPlaceholder: string = "[CSS_HREF]";
@@ -41,7 +41,7 @@ export class DefinitionPanel {
 
   private readonly panel: vscode.WebviewPanel;
 
-  private taxonomyObjects: TokenDesignerTaxonomy | null = null;
+  private taxonomyObjects: TaxonomyAsObjects | null = null;
 
   private definition: ttfCore.TemplateDefinition | null = null;
 
@@ -132,7 +132,7 @@ export class DefinitionPanel {
 
   private getPanelHtml() {
     const htmlFileContents = fs.readFileSync(
-      path.join(this.extensionPath, "src", "panels", "designer.html"),
+      path.join(this.extensionPath, "src", "panels", "panel.html"),
       { encoding: "utf8" }
     );
     const javascriptHref: string =
@@ -143,7 +143,7 @@ export class DefinitionPanel {
             "out",
             "panels",
             "bundles",
-            "designer.main.js"
+            "definitionPanel.main.js"
           )
         )
       ) +
@@ -152,7 +152,7 @@ export class DefinitionPanel {
     const cssHref: string =
       this.panel.webview.asWebviewUri(
         vscode.Uri.file(
-          path.join(this.extensionPath, "out", "panels", "designer.css")
+          path.join(this.extensionPath, "out", "panels", "panel.css")
         )
       ) +
       "?" +
@@ -192,20 +192,14 @@ export class DefinitionPanel {
   }
 
   private async onMessage(message: any) {
-    if (message.e === tokenDesignerEvents.Init) {
+    if (message.e === definitionPanelEvents.Init) {
       this.panel.webview.postMessage({
         definition: this.definition?.toObject(),
         taxonomy: this.taxonomyObjects,
       });
-    } else if (message.e === tokenDesignerEvents.SetDefinitionProperty) {
-      await this.setDefinitionProperty(
-        message.artifactId,
-        message.propertyName,
-        message.value
-      );
-    } else if (message.e === tokenDesignerEvents.SetDefinitionName) {
+    } else if (message.e === definitionPanelEvents.SetDefinitionName) {
       await this.setDefinitionName(message.name);
-    } 
+    }
   }
 
   private packTemplateDefinition(definition: ttfCore.TemplateDefinition) {
@@ -296,34 +290,6 @@ export class DefinitionPanel {
         );
       }
       await this.refreshDefinition();
-    }
-  }
-
-  private async setDefinitionProperty(
-    artifactId: string,
-    propertyName: string,
-    value: string
-  ) {
-    const findAndSet = (
-      list: ttfCore.BehaviorReference[] | ttfCore.PropertySetReference[]
-    ) => {
-      for (const behavior of list) {
-        if (behavior.getReference()?.getId() === artifactId) {
-          for (const property of behavior.getPropertiesList()) {
-            if (property.getName() === propertyName) {
-              property.setTemplateValue(value);
-            }
-          }
-        }
-      }
-    };
-    if (this.definition) {
-      findAndSet(this.definition.getBehaviorsList());
-      this.definition
-        .getBehaviorGroupsList()
-        .forEach((bgl) => findAndSet(bgl.getBehaviorArtifactsList()));
-      findAndSet(this.definition.getPropertySetsList());
-      await this.saveDefintion();
     }
   }
 

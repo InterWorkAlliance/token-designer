@@ -13,10 +13,10 @@ import CanvasPane from "./CanvasPane";
 import ToolPane from "./ToolPane";
 import ToolBox from "./ToolBox";
 
-import { TokenDesignerTaxonomy } from "../tokenDesignerTaxonomy";
+import { TaxonomyAsObjects } from "../taxonomyAsObjects";
 
 type Props = {
-  taxonomy: TokenDesignerTaxonomy | null;
+  taxonomy: TaxonomyAsObjects | null;
   formula: TemplateFormula.AsObject;
   incompatabilities: any;
   addArtifact: (id: string) => void;

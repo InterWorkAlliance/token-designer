@@ -2,7 +2,7 @@ import * as vscode from "vscode";
 import * as ttfTaxonomy from "./ttf/taxonomy_pb";
 
 import { ITtfInterface } from "./ttfInterface";
-import { TokenDesignerTaxonomy } from "./panels/tokenDesignerTaxonomy";
+import { TaxonomyAsObjects } from "./panels/taxonomyAsObjects";
 
 export class TokenTaxonomy {
   private readonly onRefreshEmitter: vscode.EventEmitter<
@@ -21,7 +21,7 @@ export class TokenTaxonomy {
     this.refresh();
   }
 
-  public asObjects(): TokenDesignerTaxonomy | null {
+  public asObjects(): TaxonomyAsObjects | null {
     if (!this.taxonomy) {
       return null;
     }

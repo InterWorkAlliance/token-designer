@@ -6,10 +6,10 @@ import * as uuid from "uuid";
 import * as vscode from "vscode";
 import * as protobufAny from "google-protobuf/google/protobuf/any_pb";
 
-import { TokenTaxonomy } from "./tokenTaxonomy";
-import { tokenDesignerEvents } from "./panels/tokenDesignerEvents";
-import { TokenDesignerTaxonomy } from "./panels/tokenDesignerTaxonomy";
+import { formulaPanelEvents } from "./panels/formulaPanelEvents";
 import { ITtfInterface } from "./ttfInterface";
+import { TaxonomyAsObjects } from "./panels/taxonomyAsObjects";
+import { TokenTaxonomy } from "./tokenTaxonomy";
 
 const JavascriptHrefPlaceholder: string = "[JAVASCRIPT_HREF]";
 const CssHrefPlaceholder: string = "[CSS_HREF]";
@@ -42,7 +42,7 @@ export class FormulaPanel {
 
   private readonly panel: vscode.WebviewPanel;
 
-  private taxonomyObjects: TokenDesignerTaxonomy | null = null;
+  private taxonomyObjects: TaxonomyAsObjects | null = null;
 
   private formula: ttfCore.TemplateFormula | null = null;
 
@@ -164,7 +164,7 @@ export class FormulaPanel {
 
   private getPanelHtml() {
     const htmlFileContents = fs.readFileSync(
-      path.join(this.extensionPath, "src", "panels", "designer.html"),
+      path.join(this.extensionPath, "src", "panels", "panel.html"),
       { encoding: "utf8" }
     );
     const javascriptHref: string =
@@ -175,7 +175,7 @@ export class FormulaPanel {
             "out",
             "panels",
             "bundles",
-            "designer.main.js"
+            "formulaPanel.main.js"
           )
         )
       ) +
@@ -184,7 +184,7 @@ export class FormulaPanel {
     const cssHref: string =
       this.panel.webview.asWebviewUri(
         vscode.Uri.file(
-          path.join(this.extensionPath, "out", "panels", "designer.css")
+          path.join(this.extensionPath, "out", "panels", "panel.css")
         )
       ) +
       "?" +
@@ -240,17 +240,17 @@ export class FormulaPanel {
   }
 
   private async onMessage(message: any) {
-    if (message.e === tokenDesignerEvents.Init) {
+    if (message.e === formulaPanelEvents.Init) {
       this.panel.webview.postMessage({
         formula: this.formula?.toObject(),
         taxonomy: this.taxonomyObjects,
         incompatabilities: this.incompatabilities,
       });
-    } else if (message.e === tokenDesignerEvents.Add) {
+    } else if (message.e === formulaPanelEvents.Add) {
       await this.addArtifact(message.id);
-    } else if (message.e === tokenDesignerEvents.Remove) {
+    } else if (message.e === formulaPanelEvents.Remove) {
       await this.removeArtifact(message.id);
-    } else if (message.e === tokenDesignerEvents.SetFormulaDescription) {
+    } else if (message.e === formulaPanelEvents.SetFormulaDescription) {
       await this.setFormulaDescription(message.description);
     }
   }

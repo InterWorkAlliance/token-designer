@@ -14,26 +14,18 @@ import Canvas from "./Canvas";
 import CanvasPane from "./CanvasPane";
 import ToolPane from "./ToolPane";
 
-import { TokenDesignerTaxonomy } from "../tokenDesignerTaxonomy";
+import { TaxonomyAsObjects } from "../taxonomyAsObjects";
 
 type Props = {
-  taxonomy: TokenDesignerTaxonomy | null;
+  taxonomy: TaxonomyAsObjects | null;
   definition: TemplateDefinition.AsObject;
-  incompatabilities: any;
   setDefinitionName: (name: string) => void;
-  setDefinitionProperty: (
-    artifactId: string,
-    propertyName: string,
-    value: string
-  ) => void;
 };
 
 export default function DefinitionDesigner({
   taxonomy,
   definition,
-  incompatabilities,
   setDefinitionName,
-  setDefinitionProperty,
 }: Props) {
   const [selectedArtifact, setSelectedArtifact] = useState<
     AnyArtifact | undefined
@@ -131,7 +123,6 @@ export default function DefinitionDesigner({
           propertySets={propertySets}
           behaviorGroups={behaviorGroups}
           behaviors={behaviors}
-          incompatabilities={incompatabilities}
           selectedArtifact={selectedArtifact}
           setSelectedArtifact={setSelectedArtifact}
         />

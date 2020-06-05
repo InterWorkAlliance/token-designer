@@ -1,6 +1,7 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
-import App from './components/App';
+
+import FormulaPanel from './components/FormulaPanel';
 
 declare var acquireVsCodeApi: any;
 
@@ -8,7 +9,7 @@ function initialize() {
   const vsCodePostMessage = acquireVsCodeApi().postMessage;
   ReactDOM.render(
     <React.StrictMode>
-      <App postMessage={vsCodePostMessage} />
+      <FormulaPanel postMessage={vsCodePostMessage} />
     </React.StrictMode>,
     document.getElementById('root')
   );
