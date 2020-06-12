@@ -23,13 +23,13 @@ export default function DefinitionInspector({
   definition,
 }: Props) {
   const descriptionAreaStyle: React.CSSProperties = {
-    height: "45vh",
+    height: "70vh",
     overflowY: "auto",
     margin: "var(--padding)",
     padding: "var(--padding)",
   };
   const propertiesAreaStyle: React.CSSProperties = {
-    height: "45vh",
+    height: "20vh",
     overflowY: "auto",
     margin: "var(--padding)",
     padding: "var(--padding)",

@@ -14,7 +14,8 @@ export default function PropertyInspector({ taxonomy, artifact }: Props) {
   return (
     <div style={{ marginLeft: 25 }}>
       <p>
-        <b>{artifact.name}</b>
+        <b>{artifact.name}</b>{" "}
+        {!!artifact.templateValue && <> = {artifact.templateValue}</>}
         <br />
         <i>{artifact.valueDescription}</i>
       </p>

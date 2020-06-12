@@ -1,6 +1,12 @@
 import React from "react";
 
-import { Behavior, Base, BehaviorGroup, PropertySet } from "../../../ttf/core_pb";
+import {
+  Behavior,
+  Base,
+  BehaviorGroup,
+  PropertySet,
+  TemplateDefinition,
+} from "../../../ttf/core_pb";
 
 import AnyArtifact from "../AnyArtifact";
 import ArtifactReference from "../ArtifactReference";
@@ -10,6 +16,7 @@ import BehaviorGroupInspector from "./BehaviorGroupInspector";
 import BehaviorInspector from "./BehaviorInspector";
 import PropertySetInspector from "./PropertySetInspector";
 import { TaxonomyAsObjects } from "../../taxonomyAsObjects";
+import TemplateDefinitionInspector from "./TemplateDefinitionInspector";
 import TokenBaseInspector from "./TokenBaseInspector";
 
 type Props = {
@@ -57,6 +64,14 @@ export default function ArtifactInspector({
         <TokenBaseInspector
           taxonomy={taxonomy}
           artifact={artifact as Base.AsObject}
+        />
+      );
+      break;
+    case "template-definition":
+      specificTypeInspector = (
+        <TemplateDefinitionInspector
+          taxonomy={taxonomy}
+          artifact={artifact as TemplateDefinition.AsObject}
         />
       );
       break;

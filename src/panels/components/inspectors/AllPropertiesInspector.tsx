@@ -34,11 +34,10 @@ const extractProperties = (
 });
 
 function AllPropertiesInspector({ tree }: { tree: PropertyTree }) {
-  const paddingTop: React.CSSProperties = { paddingTop: "var(--padding)" };
   return (
     <ul>
       {tree.properties.map((_) => (
-        <li style={paddingTop} key={_.name}>
+        <li key={_.name}>
           {_.name && (
             <>
               <div>
@@ -49,25 +48,10 @@ function AllPropertiesInspector({ tree }: { tree: PropertyTree }) {
                     = <em>(not set)</em>
                   </>
                 )}
-                {!_.templateValue && !!_.children && (
-                  <>
-                    = <em>[ ]</em>
-                  </>
-                )}
-              </div>
-              <div>
-                <em>{_.valueDescription}</em>
               </div>
             </>
           )}
-          {_.children && (
-            <>
-              <div style={paddingTop}>
-                <u>Child properties:</u>
-              </div>
-              <AllPropertiesInspector tree={_.children} />
-            </>
-          )}
+          {_.children && <AllPropertiesInspector tree={_.children} />}
         </li>
       ))}
     </ul>

@@ -82,7 +82,9 @@ export default function DefinitionDesigner({
           taxonomy={taxonomy}
           definition={definition}
           artifact={selectedArtifact ? selectedArtifact[0] : definition}
-          artifactType={selectedArtifact ? selectedArtifact[1] : undefined}
+          artifactType={
+            selectedArtifact ? selectedArtifact[1] : "template-definition"
+          }
         />
       </ToolPane>
     </>
