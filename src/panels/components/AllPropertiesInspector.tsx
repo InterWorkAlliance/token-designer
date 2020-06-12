@@ -33,7 +33,7 @@ const extractProperties = (
   })),
 });
 
-function Properties({ tree }: { tree: PropertyTree }) {
+function AllPropertiesInspector({ tree }: { tree: PropertyTree }) {
   const paddingTop: React.CSSProperties = { paddingTop: "var(--padding)" };
   return (
     <ul>
@@ -65,7 +65,7 @@ function Properties({ tree }: { tree: PropertyTree }) {
               <div style={paddingTop}>
                 <u>Child properties:</u>
               </div>
-              <Properties tree={_.children} />
+              <AllPropertiesInspector tree={_.children} />
             </>
           )}
         </li>
@@ -100,7 +100,7 @@ export default function PropertyInspector({ taxonomy, definition }: Props) {
               properties:
             </b>
           </div>
-          <Properties tree={tree} />
+          <AllPropertiesInspector tree={tree} />
         </Fragment>
       ))}
     </>

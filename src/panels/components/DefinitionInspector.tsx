@@ -2,10 +2,10 @@ import React from "react";
 
 import { TemplateDefinition } from "../../ttf/core_pb";
 
+import AllPropertiesInspector from "./AllPropertiesInspector";
 import AnyArtifact from "./AnyArtifact";
 import ArtifactInspector from "./ArtifactInspector";
 import ArtifactType from "./ArtifactType";
-import PropertyInspector from "./PropertyInspector";
 import { TaxonomyAsObjects } from "../taxonomyAsObjects";
 import ToolBoxTitle from "./ToolBoxTitle";
 
@@ -48,7 +48,7 @@ export default function DefinitionInspector({
         title={`${definition.artifact?.name || "Definition"} properties`}
       />
       <div style={propertiesAreaStyle}>
-        <PropertyInspector taxonomy={taxonomy} definition={definition} />
+        <AllPropertiesInspector taxonomy={taxonomy} definition={definition} />
       </div>
     </>
   );
