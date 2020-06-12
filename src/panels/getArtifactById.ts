@@ -1,28 +1,27 @@
-import * as ttfArtifact from "../ttf/artifact_pb";
-
+import AnyArtifact from "./components/AnyArtifact";
 import { TaxonomyAsObjects } from "./taxonomyAsObjects";
 
 export function getArtifactByTooling(
   taxonomy: TaxonomyAsObjects,
   tooling: string
-): ttfArtifact.Artifact.AsObject | undefined {
+): AnyArtifact | undefined {
   let result:
-    | ttfArtifact.Artifact.AsObject
+    | AnyArtifact
     | undefined = taxonomy?.baseTokenTypes.find(
     (_) => _.artifact?.artifactSymbol?.tooling === tooling
-  )?.artifact;
+  );
   if (!result) {
     result = taxonomy?.propertySets.find(
       (_) => _.artifact?.artifactSymbol?.tooling === tooling
-    )?.artifact;
+    );
     if (!result) {
       result = taxonomy?.behaviors.find(
         (_) => _.artifact?.artifactSymbol?.tooling === tooling
-      )?.artifact;
+      );
       if (!result) {
         result = taxonomy?.behaviorGroups.find(
           (_) => _.artifact?.artifactSymbol?.tooling === tooling
-        )?.artifact;
+        );
       }
     }
   }
@@ -33,24 +32,24 @@ export function getArtifactById(
   taxonomy: TaxonomyAsObjects,
   id: string,
   tooling?: string
-): ttfArtifact.Artifact.AsObject | undefined {
+): AnyArtifact | undefined {
   let result:
-    | ttfArtifact.Artifact.AsObject
+    | AnyArtifact
     | undefined = taxonomy?.baseTokenTypes.find(
     (_) => _.artifact?.artifactSymbol?.id === id
-  )?.artifact;
+  );
   if (!result) {
     result = taxonomy?.propertySets.find(
       (_) => _.artifact?.artifactSymbol?.id === id
-    )?.artifact;
+    );
     if (!result) {
       result = taxonomy?.behaviors.find(
         (_) => _.artifact?.artifactSymbol?.id === id
-      )?.artifact;
+      );
       if (!result) {
         result = taxonomy?.behaviorGroups.find(
           (_) => _.artifact?.artifactSymbol?.id === id
-        )?.artifact;
+        );
       }
     }
   }

@@ -1,10 +1,12 @@
 import React from "react";
 
-import { Behavior, Base } from "../../ttf/core_pb";
+import { Behavior, Base, BehaviorGroup } from "../../ttf/core_pb";
 
 import AnyArtifact from "./AnyArtifact";
 import ArtifactReference from "./ArtifactReference";
+import ArtifactSymbolBox from "./ArtifactSymbolBox";
 import ArtifactType from "./ArtifactType";
+import BehaviorGroupInspector from "./BehaviorGroupInspector";
 import BehaviorInspector from "./BehaviorInspector";
 import { TaxonomyAsObjects } from "../taxonomyAsObjects";
 import TokenBaseInspector from "./TokenBaseInspector";
@@ -20,20 +22,6 @@ export default function ArtifactInspector({
   artifact,
   artifactType,
 }: Props) {
-  const badgeStyle: React.CSSProperties = {
-    backgroundColor: "var(--vscode-editor-background)",
-    color: "var(--vscode-editor-foreground)",
-    border:
-      "var(--borderWidth) solid var(--vscode-sideBarSectionHeader-border)",
-    marginRight: "var(--padding)",
-    marginBottom: "var(--padding)",
-    padding: "var(--paddingBig)",
-    fontSize: "1.6em",
-    minWidth: "2em",
-    textAlign: "center",
-    fontWeight: "bold",
-    float: "left",
-  };
   if (!artifact || !artifact.artifact) {
     return <></>;
   }
@@ -48,7 +36,12 @@ export default function ArtifactInspector({
       );
       break;
     case "behavior-group":
-      specificTypeInspector = <>TODO: Behavior group inspector</>;
+      specificTypeInspector = (
+        <BehaviorGroupInspector
+          taxonomy={taxonomy}
+          artifact={artifact as BehaviorGroup.AsObject}
+        />
+      );
       break;
     case "property-set":
       specificTypeInspector = <>TODO: Property set inspector</>;
@@ -71,8 +64,8 @@ export default function ArtifactInspector({
         </p>
       )}
       {!core.aliasesList?.length && <p></p>}
-      {!!core.artifactSymbol?.tooling && (
-        <span style={badgeStyle}>{core.artifactSymbol?.tooling}</span>
+      {!!core.artifactSymbol && (
+        <ArtifactSymbolBox symbol={core.artifactSymbol} />
       )}
       {core.artifactDefinition?.businessDescription && (
         <p>{core.artifactDefinition?.businessDescription}</p>

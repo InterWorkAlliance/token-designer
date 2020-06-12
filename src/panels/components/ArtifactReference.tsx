@@ -10,6 +10,8 @@ type Props = {
 };
 
 export default function ArtifactReference({ taxonomy, id, tooling }: Props) {
-  const artifact = id ? getArtifactById(taxonomy, id, tooling) : undefined;
+  const artifact = id
+    ? getArtifactById(taxonomy, id, tooling)?.artifact
+    : undefined;
   return <>{artifact?.name || tooling || ""}</>;
 }
