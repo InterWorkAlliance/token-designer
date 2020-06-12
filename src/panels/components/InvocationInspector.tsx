@@ -11,7 +11,7 @@ export default function InvocationInspector({ invocation }: Props) {
     <>
       <b>{invocation.name}</b>: {invocation.description}
       {!!(invocation.request || invocation.response) && (
-        <table cellPadding={5} cellSpacing={5}>
+        <table cellPadding={5} cellSpacing={5} style={{ width: "100%" }}>
           <tbody>
             <tr>
               <th style={{ width: "50%" }}>
