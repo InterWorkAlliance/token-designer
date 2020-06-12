@@ -60,7 +60,8 @@ export default function TokenBasePanel({ postMessage }: Props) {
           <div style={{ margin: "var(--padding)", padding: "var(--padding)" }}>
             <ArtifactInspector
               taxonomy={taxonomy}
-              artifact={artifact.artifact}
+              artifact={artifact}
+              artifactType="token-base"
             />
           </div>
         </ToolPane>

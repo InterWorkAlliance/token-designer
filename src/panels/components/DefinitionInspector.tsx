@@ -1,24 +1,26 @@
 import React from "react";
 
-import { Artifact } from "../../ttf/artifact_pb";
 import { TemplateDefinition } from "../../ttf/core_pb";
 
+import AnyArtifact from "./AnyArtifact";
 import ArtifactInspector from "./ArtifactInspector";
-import ToolBoxTitle from "./ToolBoxTitle";
+import ArtifactType from "./ArtifactType";
 import PropertyInspector from "./PropertyInspector";
-
 import { TaxonomyAsObjects } from "../taxonomyAsObjects";
+import ToolBoxTitle from "./ToolBoxTitle";
 
 type Props = {
   taxonomy: TaxonomyAsObjects;
-  artifact?: Artifact.AsObject;
+  artifact?: AnyArtifact;
+  artifactType?: ArtifactType;
   definition: TemplateDefinition.AsObject;
 };
 
 export default function DefinitionInspector({
   taxonomy,
-  definition,
   artifact,
+  artifactType,
+  definition,
 }: Props) {
   const descriptionAreaStyle: React.CSSProperties = {
     height: "45vh",
@@ -34,9 +36,13 @@ export default function DefinitionInspector({
   };
   return (
     <>
-      <ToolBoxTitle title={artifact?.name || ""} />
+      <ToolBoxTitle title={artifact?.artifact?.name || ""} />
       <div style={descriptionAreaStyle}>
-        <ArtifactInspector taxonomy={taxonomy} artifact={artifact} />
+        <ArtifactInspector
+          taxonomy={taxonomy}
+          artifact={artifact}
+          artifactType={artifactType}
+        />
       </div>
       <ToolBoxTitle
         title={`${definition.artifact?.name || "Definition"} properties`}

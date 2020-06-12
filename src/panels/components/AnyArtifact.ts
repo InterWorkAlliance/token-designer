@@ -1,9 +1,16 @@
-import { Base, PropertySet, BehaviorGroup, Behavior } from "../../ttf/core_pb";
+import {
+  Base,
+  PropertySet,
+  BehaviorGroup,
+  Behavior,
+  TemplateDefinition,
+} from "../../ttf/core_pb";
 
 type AnyArtifact =
   | Base.AsObject
   | PropertySet.AsObject
   | BehaviorGroup.AsObject
-  | Behavior.AsObject;
+  | Behavior.AsObject
+  | TemplateDefinition.AsObject;
 
 export default AnyArtifact;

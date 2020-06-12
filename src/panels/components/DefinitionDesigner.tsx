@@ -8,12 +8,12 @@ import {
 } from "../../ttf/core_pb";
 
 import AnyArtifact from "./AnyArtifact";
+import ArtifactType from "./ArtifactType";
 import Canvas from "./Canvas";
 import CanvasPane from "./CanvasPane";
 import DefinitionInspector from "./DefinitionInspector";
-import ToolPane from "./ToolPane";
-
 import { TaxonomyAsObjects } from "../taxonomyAsObjects";
+import ToolPane from "./ToolPane";
 
 type Props = {
   taxonomy: TaxonomyAsObjects;
@@ -27,7 +27,7 @@ export default function DefinitionDesigner({
   setDefinitionName,
 }: Props) {
   const [selectedArtifact, setSelectedArtifact] = useState<
-    AnyArtifact | undefined
+    [AnyArtifact, ArtifactType] | undefined
   >(undefined);
 
   const tokenBase = taxonomy?.baseTokenTypes.find(
@@ -81,7 +81,8 @@ export default function DefinitionDesigner({
         <DefinitionInspector
           taxonomy={taxonomy}
           definition={definition}
-          artifact={selectedArtifact?.artifact || definition.artifact}
+          artifact={selectedArtifact ? selectedArtifact[0] : definition}
+          artifactType={selectedArtifact ? selectedArtifact[1] : undefined}
         />
       </ToolPane>
     </>

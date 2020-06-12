@@ -1,17 +1,21 @@
 import React from "react";
 
-import { Artifact } from "../../ttf/artifact_pb";
-
+import AnyArtifact from "./AnyArtifact";
 import ArtifactReference from "./ArtifactReference";
-
+import ArtifactType from "./ArtifactType";
 import { TaxonomyAsObjects } from "../taxonomyAsObjects";
 
 type Props = {
   taxonomy: TaxonomyAsObjects;
-  artifact?: Artifact.AsObject;
+  artifact?: AnyArtifact;
+  artifactType?: ArtifactType;
 };
 
-export default function ArtifactInspector({ taxonomy, artifact }: Props) {
+export default function ArtifactInspector({
+  taxonomy,
+  artifact,
+  artifactType,
+}: Props) {
   const badgeStyle: React.CSSProperties = {
     backgroundColor: "var(--vscode-editor-background)",
     color: "var(--vscode-editor-foreground)",
@@ -26,38 +30,39 @@ export default function ArtifactInspector({ taxonomy, artifact }: Props) {
     fontWeight: "bold",
     float: "left",
   };
-  if (!artifact) {
+  if (!artifact || !artifact.artifact) {
     return <></>;
   }
+  const core = artifact.artifact;
   return (
     <>
-      {!!artifact.aliasesList?.length && (
+      {!!core.aliasesList?.length && (
         <p>
-          <b>Aliases: {artifact.aliasesList.join(", ")}</b>
+          <b>Aliases: {core.aliasesList.join(", ")}</b>
         </p>
       )}
-      {!artifact.aliasesList?.length && <p></p>}
-      {!!artifact.artifactSymbol?.tooling && (
-        <span style={badgeStyle}>{artifact.artifactSymbol?.tooling}</span>
+      {!core.aliasesList?.length && <p></p>}
+      {!!core.artifactSymbol?.tooling && (
+        <span style={badgeStyle}>{core.artifactSymbol?.tooling}</span>
       )}
-      {artifact.artifactDefinition?.businessDescription && (
-        <p>{artifact.artifactDefinition?.businessDescription}</p>
+      {core.artifactDefinition?.businessDescription && (
+        <p>{core.artifactDefinition?.businessDescription}</p>
       )}
-      {artifact.artifactDefinition?.businessExample && (
+      {core.artifactDefinition?.businessExample && (
         <p>
-          For example: <i>{artifact.artifactDefinition?.businessExample}</i>
+          For example: <i>{core.artifactDefinition?.businessExample}</i>
         </p>
       )}
-      {artifact.artifactDefinition?.comments && (
+      {core.artifactDefinition?.comments && (
         <p>
-          <i>Note:</i> {artifact.artifactDefinition?.comments}
+          <i>Note:</i> {core.artifactDefinition?.comments}
         </p>
       )}
-      {!!artifact.artifactDefinition?.analogiesList?.length && (
+      {!!core.artifactDefinition?.analogiesList?.length && (
         <div>
           <u>Analogies:</u>
           <ul>
-            {artifact.artifactDefinition?.analogiesList.map((_) => (
+            {core.artifactDefinition?.analogiesList.map((_) => (
               <li key={JSON.stringify(_)}>
                 {_.name}
                 <ul>
@@ -68,11 +73,11 @@ export default function ArtifactInspector({ taxonomy, artifact }: Props) {
           </ul>
         </div>
       )}
-      {!!artifact.contributorsList?.length && (
+      {!!core.contributorsList?.length && (
         <div>
           <u>Contributors:</u>
           <ul>
-            {artifact.contributorsList.map((_) => (
+            {core.contributorsList.map((_) => (
               <li key={JSON.stringify(_)}>
                 {_.name}
                 {_.name && _.organization && <>, </>}
@@ -82,11 +87,11 @@ export default function ArtifactInspector({ taxonomy, artifact }: Props) {
           </ul>
         </div>
       )}
-      {!!artifact.dependenciesList?.length && (
+      {!!core.dependenciesList?.length && (
         <div>
           <u>Dependencies:</u>
           <ul>
-            {artifact.dependenciesList.map((_) => (
+            {core.dependenciesList.map((_) => (
               <li key={JSON.stringify(_)}>
                 <ArtifactReference
                   taxonomy={taxonomy}
@@ -99,11 +104,11 @@ export default function ArtifactInspector({ taxonomy, artifact }: Props) {
           </ul>
         </div>
       )}
-      {!!artifact.influencedBySymbolsList?.length && (
+      {!!core.influencedBySymbolsList?.length && (
         <div>
           <u>Influenced by:</u>
           <ul>
-            {artifact.influencedBySymbolsList.map((_) => (
+            {core.influencedBySymbolsList.map((_) => (
               <li key={JSON.stringify(_)}>
                 <b>
                   <ArtifactReference
@@ -123,11 +128,11 @@ export default function ArtifactInspector({ taxonomy, artifact }: Props) {
           </ul>
         </div>
       )}
-      {!!artifact.incompatibleWithSymbolsList?.length && (
+      {!!core.incompatibleWithSymbolsList?.length && (
         <div>
           <u>Incompatible with:</u>
           <ul>
-            {artifact.incompatibleWithSymbolsList.map((_) => (
+            {core.incompatibleWithSymbolsList.map((_) => (
               <li key={JSON.stringify(_)}>
                 <ArtifactReference
                   taxonomy={taxonomy}
