@@ -25,7 +25,7 @@ async function forAllFiles(folder, extension, f) {
 }
 
 async function compileProtos() {
-    await run('npm', [ 'rebuild', '--target=7.2.0', '--runtime=electron', '--dist-url=https://atom.io/download/electron' ]);
+    await run('npm', [ 'rebuild', '--target=7.3.0', '--runtime=electron', '--dist-url=https://atom.io/download/electron' ]);
     const allProtos = [];
     await forAllFiles('src/ttf/protos', '.proto', f => allProtos.push(f));
     createIfNotExists('out/ttf');
