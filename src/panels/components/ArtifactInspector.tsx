@@ -1,12 +1,13 @@
 import React from "react";
 
-import { Behavior } from "../../ttf/core_pb";
+import { Behavior, Base } from "../../ttf/core_pb";
 
 import AnyArtifact from "./AnyArtifact";
 import ArtifactReference from "./ArtifactReference";
 import ArtifactType from "./ArtifactType";
 import BehaviorInspector from "./BehaviorInspector";
 import { TaxonomyAsObjects } from "../taxonomyAsObjects";
+import TokenBaseInspector from "./TokenBaseInspector";
 
 type Props = {
   taxonomy: TaxonomyAsObjects;
@@ -53,7 +54,12 @@ export default function ArtifactInspector({
       specificTypeInspector = <>TODO: Property set inspector</>;
       break;
     case "token-base":
-      specificTypeInspector = <>TODO: Token base inspector</>;
+      specificTypeInspector = (
+        <TokenBaseInspector
+          taxonomy={taxonomy}
+          artifact={artifact as Base.AsObject}
+        />
+      );
       break;
   }
   const core = artifact.artifact;
