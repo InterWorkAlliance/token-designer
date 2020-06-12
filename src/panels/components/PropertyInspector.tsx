@@ -58,22 +58,6 @@ function Properties({ tree }: { tree: PropertyTree }) {
               <div>
                 <em>{_.valueDescription}</em>
               </div>
-              {!!_.invocations.length && (
-                <>
-                  <div style={paddingTop}>
-                    <u>Invocations:</u>
-                  </div>
-                  <ul style={paddingTop}>
-                    {_.invocations.map((i) => (
-                      <li key={i.id}>
-                        <b>{i.name}</b>
-                        <br />
-                        <em>{i.description}</em>
-                      </li>
-                    ))}
-                  </ul>
-                </>
-              )}
             </>
           )}
           {_.children && (

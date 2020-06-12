@@ -1,8 +1,11 @@
 import React from "react";
 
+import { Behavior } from "../../ttf/core_pb";
+
 import AnyArtifact from "./AnyArtifact";
 import ArtifactReference from "./ArtifactReference";
 import ArtifactType from "./ArtifactType";
+import BehaviorInspector from "./BehaviorInspector";
 import { TaxonomyAsObjects } from "../taxonomyAsObjects";
 
 type Props = {
@@ -32,6 +35,26 @@ export default function ArtifactInspector({
   };
   if (!artifact || !artifact.artifact) {
     return <></>;
+  }
+  let specificTypeInspector = <></>;
+  switch (artifactType) {
+    case "behavior":
+      specificTypeInspector = (
+        <BehaviorInspector
+          taxonomy={taxonomy}
+          artifact={artifact as Behavior.AsObject}
+        />
+      );
+      break;
+    case "behavior-group":
+      specificTypeInspector = <>TODO: Behavior group inspector</>;
+      break;
+    case "property-set":
+      specificTypeInspector = <>TODO: Property set inspector</>;
+      break;
+    case "token-base":
+      specificTypeInspector = <>TODO: Token base inspector</>;
+      break;
   }
   const core = artifact.artifact;
   return (
@@ -144,6 +167,7 @@ export default function ArtifactInspector({
           </ul>
         </div>
       )}
+      {specificTypeInspector}
     </>
   );
 }
