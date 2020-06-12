@@ -1,11 +1,11 @@
 import React, { useEffect, useState } from "react";
 
-import { TemplateDefinition } from "../../ttf/core_pb";
+import { TemplateDefinition } from "../../../ttf/core_pb";
 
-import DefinitionDesigner from "./DefinitionDesigner";
+import DefinitionDesigner from "../DefinitionDesigner";
 
-import { definitionPanelEvents } from "../definitionPanelEvents";
-import { TaxonomyAsObjects } from "../taxonomyAsObjects";
+import { definitionPanelEvents } from "../../definitionPanelEvents";
+import { TaxonomyAsObjects } from "../../taxonomyAsObjects";
 
 type Props = {
   postMessage: (message: any) => void;

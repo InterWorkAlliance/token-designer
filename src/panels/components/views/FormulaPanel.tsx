@@ -1,10 +1,10 @@
 import React, { useEffect, useState } from "react";
 
-import { TemplateFormula } from "../../ttf/core_pb";
+import { TemplateFormula } from "../../../ttf/core_pb";
 
-import FormulaDesigner from "./FormulaDesigner";
+import FormulaDesigner from "../FormulaDesigner";
 
-import { formulaPanelEvents } from "../formulaPanelEvents";
+import { formulaPanelEvents } from "../../formulaPanelEvents";
 
 type Props = {
   postMessage: (message: any) => void;

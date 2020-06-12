@@ -1,7 +1,7 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
 
-import DefinitionPanel from './components/DefinitionPanel';
+import DefinitionPanel from './components/views/DefinitionPanel';
 
 declare var acquireVsCodeApi: any;
 

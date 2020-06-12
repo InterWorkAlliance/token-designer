@@ -1,13 +1,13 @@
 import React from "react";
 
-import { TemplateDefinition } from "../../ttf/core_pb";
+import { TemplateDefinition } from "../../../ttf/core_pb";
 
 import AllPropertiesInspector from "./AllPropertiesInspector";
-import AnyArtifact from "./AnyArtifact";
+import AnyArtifact from "../AnyArtifact";
 import ArtifactInspector from "./ArtifactInspector";
-import ArtifactType from "./ArtifactType";
-import { TaxonomyAsObjects } from "../taxonomyAsObjects";
-import ToolBoxTitle from "./ToolBoxTitle";
+import ArtifactType from "../ArtifactType";
+import { TaxonomyAsObjects } from "../../taxonomyAsObjects";
+import ToolBoxTitle from "../ToolBoxTitle";
 
 type Props = {
   taxonomy: TaxonomyAsObjects;

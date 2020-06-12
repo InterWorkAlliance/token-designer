@@ -1,8 +1,8 @@
 import React from "react";
 
-import { BehaviorGroup } from "../../ttf/core_pb";
+import { BehaviorGroup } from "../../../ttf/core_pb";
 
-import { TaxonomyAsObjects } from "../taxonomyAsObjects";
+import { TaxonomyAsObjects } from "../../taxonomyAsObjects";
 import BehaviorReferenceInspector from "./BehaviorReferenceInspector";
 
 type Props = {

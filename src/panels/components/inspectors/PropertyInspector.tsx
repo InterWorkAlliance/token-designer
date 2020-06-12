@@ -1,8 +1,8 @@
 import React from "react";
 
-import { Property } from "../../ttf/core_pb";
+import { Property } from "../../../ttf/core_pb";
 
-import { TaxonomyAsObjects } from "../taxonomyAsObjects";
+import { TaxonomyAsObjects } from "../../taxonomyAsObjects";
 import InvocationInspector from "./InvocationInspector";
 
 type Props = {

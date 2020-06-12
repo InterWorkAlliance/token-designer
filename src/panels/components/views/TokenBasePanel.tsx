@@ -1,22 +1,22 @@
 import React, { useEffect, useState } from "react";
 
-import { BehaviorGroup } from "../../ttf/core_pb";
+import { Base } from "../../../ttf/core_pb";
 
-import ArtifactInspector from "./ArtifactInspector";
-import CanvasPane from "./CanvasPane";
-import ToolPane from "./ToolPane";
-import ToolBoxTitle from "./ToolBoxTitle";
+import ArtifactInspector from "../inspectors/ArtifactInspector";
+import CanvasPane from "../CanvasPane";
+import ToolPane from "../ToolPane";
+import ToolBoxTitle from "../ToolBoxTitle";
 
-import { behaviorGroupPanelEvents } from "../behaviorGroupPanelEvents";
-import { TaxonomyAsObjects } from "../taxonomyAsObjects";
+import { tokenBasePanelEvents } from "../../tokenBasePanelEvents";
+import { TaxonomyAsObjects } from "../../taxonomyAsObjects";
 
 type Props = {
   postMessage: (message: any) => void;
 };
 
-export default function BehaviorGroupPanel({ postMessage }: Props) {
+export default function TokenBasePanel({ postMessage }: Props) {
   const [taxonomy, setTaxonomy] = useState<TaxonomyAsObjects | null>(null);
-  const [artifact, setArtifact] = useState<BehaviorGroup.AsObject | null>(null);
+  const [artifact, setArtifact] = useState<Base.AsObject | null>(null);
 
   const handleMessage = (message: any) => {
     if (message.taxonomy) {
@@ -31,7 +31,7 @@ export default function BehaviorGroupPanel({ postMessage }: Props) {
 
   useEffect(() => {
     window.addEventListener("message", (msg) => handleMessage(msg.data));
-    postMessage({ e: behaviorGroupPanelEvents.Init });
+    postMessage({ e: tokenBasePanelEvents.Init });
   }, []);
 
   if (artifact && taxonomy) {
@@ -61,7 +61,7 @@ export default function BehaviorGroupPanel({ postMessage }: Props) {
             <ArtifactInspector
               taxonomy={taxonomy}
               artifact={artifact}
-              artifactType="behavior-group"
+              artifactType="token-base"
             />
           </div>
         </ToolPane>

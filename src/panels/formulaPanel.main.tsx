@@ -1,7 +1,7 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
 
-import FormulaPanel from './components/FormulaPanel';
+import FormulaPanel from './components/views/FormulaPanel';
 
 declare var acquireVsCodeApi: any;
 

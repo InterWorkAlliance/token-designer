@@ -1,8 +1,8 @@
 import React from "react";
 
-import { Base } from "../../ttf/core_pb";
+import { Base } from "../../../ttf/core_pb";
 
-import { TaxonomyAsObjects } from "../taxonomyAsObjects";
+import { TaxonomyAsObjects } from "../../taxonomyAsObjects";
 
 type Props = {
   taxonomy: TaxonomyAsObjects;

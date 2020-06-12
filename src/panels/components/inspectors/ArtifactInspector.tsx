@@ -1,15 +1,15 @@
 import React from "react";
 
-import { Behavior, Base, BehaviorGroup, PropertySet } from "../../ttf/core_pb";
+import { Behavior, Base, BehaviorGroup, PropertySet } from "../../../ttf/core_pb";
 
-import AnyArtifact from "./AnyArtifact";
-import ArtifactReference from "./ArtifactReference";
-import ArtifactSymbolBox from "./ArtifactSymbolBox";
-import ArtifactType from "./ArtifactType";
+import AnyArtifact from "../AnyArtifact";
+import ArtifactReference from "../ArtifactReference";
+import ArtifactSymbolBox from "../ArtifactSymbolBox";
+import ArtifactType from "../ArtifactType";
 import BehaviorGroupInspector from "./BehaviorGroupInspector";
 import BehaviorInspector from "./BehaviorInspector";
 import PropertySetInspector from "./PropertySetInspector";
-import { TaxonomyAsObjects } from "../taxonomyAsObjects";
+import { TaxonomyAsObjects } from "../../taxonomyAsObjects";
 import TokenBaseInspector from "./TokenBaseInspector";
 
 type Props = {

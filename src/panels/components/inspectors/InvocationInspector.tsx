@@ -1,6 +1,6 @@
 import React from "react";
 
-import { Invocation } from "../../ttf/core_pb";
+import { Invocation } from "../../../ttf/core_pb";
 
 type Props = {
   invocation: Invocation.AsObject;

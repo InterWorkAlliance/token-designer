@@ -1,10 +1,10 @@
 import React, { Fragment } from "react";
 
-import { TemplateDefinition, Property, Invocation } from "../../ttf/core_pb";
+import { TemplateDefinition, Property, Invocation } from "../../../ttf/core_pb";
 
-import ArtifactReference from "./ArtifactReference";
+import ArtifactReference from "../ArtifactReference";
 
-import { TaxonomyAsObjects } from "../taxonomyAsObjects";
+import { TaxonomyAsObjects } from "../../taxonomyAsObjects";
 
 type PropertyTree = {
   path: string;

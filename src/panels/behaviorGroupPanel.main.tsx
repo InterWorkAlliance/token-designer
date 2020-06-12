@@ -1,7 +1,7 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
 
-import BehaviorGroupPanel from './components/BehaviorGroupPanel';
+import BehaviorGroupPanel from './components/views/BehaviorGroupPanel';
 
 declare var acquireVsCodeApi: any;
 

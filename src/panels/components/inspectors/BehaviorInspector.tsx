@@ -1,9 +1,9 @@
 import React from "react";
 
-import { Behavior } from "../../ttf/core_pb";
+import { Behavior } from "../../../ttf/core_pb";
 
 import InvocationInspector from "./InvocationInspector";
-import { TaxonomyAsObjects } from "../taxonomyAsObjects";
+import { TaxonomyAsObjects } from "../../taxonomyAsObjects";
 
 type Props = {
   taxonomy: TaxonomyAsObjects;

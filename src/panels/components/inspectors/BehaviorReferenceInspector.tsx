@@ -1,13 +1,13 @@
 import React from "react";
 
-import { BehaviorReference, Behavior } from "../../ttf/core_pb";
+import { BehaviorReference, Behavior } from "../../../ttf/core_pb";
 
 import ArtifactInspector from "./ArtifactInspector";
-import ArtifactReference from "./ArtifactReference";
-import ArtifactSymbolBox from "./ArtifactSymbolBox";
-import { getArtifactById } from "../getArtifactById";
+import ArtifactReference from "../ArtifactReference";
+import ArtifactSymbolBox from "../ArtifactSymbolBox";
+import { getArtifactById } from "../../getArtifactById";
 import InvocationInspector from "./InvocationInspector";
-import { TaxonomyAsObjects } from "../taxonomyAsObjects";
+import { TaxonomyAsObjects } from "../../taxonomyAsObjects";
 
 type Props = {
   taxonomy: TaxonomyAsObjects;

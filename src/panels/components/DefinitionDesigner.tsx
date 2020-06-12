@@ -11,7 +11,7 @@ import AnyArtifact from "./AnyArtifact";
 import ArtifactType from "./ArtifactType";
 import Canvas from "./Canvas";
 import CanvasPane from "./CanvasPane";
-import DefinitionInspector from "./DefinitionInspector";
+import DefinitionInspector from "./inspectors/DefinitionInspector";
 import { TaxonomyAsObjects } from "../taxonomyAsObjects";
 import ToolPane from "./ToolPane";
 

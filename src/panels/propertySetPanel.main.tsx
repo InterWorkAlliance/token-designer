@@ -1,7 +1,7 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
 
-import PropertySetPanel from './components/PropertySetPanel';
+import PropertySetPanel from './components/views/PropertySetPanel';
 
 declare var acquireVsCodeApi: any;
 

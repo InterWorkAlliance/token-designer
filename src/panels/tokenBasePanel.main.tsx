@@ -1,7 +1,7 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
 
-import TokenBasePanel from './components/TokenBasePanel';
+import TokenBasePanel from './components/views/TokenBasePanel';
 
 declare var acquireVsCodeApi: any;
 

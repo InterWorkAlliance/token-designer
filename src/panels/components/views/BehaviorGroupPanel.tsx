@@ -1,22 +1,22 @@
 import React, { useEffect, useState } from "react";
 
-import { PropertySet } from "../../ttf/core_pb";
+import { BehaviorGroup } from "../../../ttf/core_pb";
 
-import ArtifactInspector from "./ArtifactInspector";
-import CanvasPane from "./CanvasPane";
-import ToolPane from "./ToolPane";
-import ToolBoxTitle from "./ToolBoxTitle";
+import ArtifactInspector from "../inspectors/ArtifactInspector";
+import CanvasPane from "../CanvasPane";
+import ToolPane from "../ToolPane";
+import ToolBoxTitle from "../ToolBoxTitle";
 
-import { propertySetPanelEvents } from "../propertySetPanelEvents";
-import { TaxonomyAsObjects } from "../taxonomyAsObjects";
+import { behaviorGroupPanelEvents } from "../../behaviorGroupPanelEvents";
+import { TaxonomyAsObjects } from "../../taxonomyAsObjects";
 
 type Props = {
   postMessage: (message: any) => void;
 };
 
-export default function PropertySetPanel({ postMessage }: Props) {
+export default function BehaviorGroupPanel({ postMessage }: Props) {
   const [taxonomy, setTaxonomy] = useState<TaxonomyAsObjects | null>(null);
-  const [artifact, setArtifact] = useState<PropertySet.AsObject | null>(null);
+  const [artifact, setArtifact] = useState<BehaviorGroup.AsObject | null>(null);
 
   const handleMessage = (message: any) => {
     if (message.taxonomy) {
@@ -31,7 +31,7 @@ export default function PropertySetPanel({ postMessage }: Props) {
 
   useEffect(() => {
     window.addEventListener("message", (msg) => handleMessage(msg.data));
-    postMessage({ e: propertySetPanelEvents.Init });
+    postMessage({ e: behaviorGroupPanelEvents.Init });
   }, []);
 
   if (artifact && taxonomy) {
@@ -61,7 +61,7 @@ export default function PropertySetPanel({ postMessage }: Props) {
             <ArtifactInspector
               taxonomy={taxonomy}
               artifact={artifact}
-              artifactType="property-set"
+              artifactType="behavior-group"
             />
           </div>
         </ToolPane>

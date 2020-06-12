@@ -1,14 +1,14 @@
 import React, { useEffect, useState } from "react";
 
-import { Behavior } from "../../ttf/core_pb";
+import { Behavior } from "../../../ttf/core_pb";
 
-import ArtifactInspector from "./ArtifactInspector";
+import ArtifactInspector from "../inspectors/ArtifactInspector";
 
-import { behaviorPanelEvents } from "../behaviorPanelEvents";
-import { TaxonomyAsObjects } from "../taxonomyAsObjects";
-import CanvasPane from "./CanvasPane";
-import ToolPane from "./ToolPane";
-import ToolBoxTitle from "./ToolBoxTitle";
+import { behaviorPanelEvents } from "../../behaviorPanelEvents";
+import { TaxonomyAsObjects } from "../../taxonomyAsObjects";
+import CanvasPane from "../CanvasPane";
+import ToolPane from "../ToolPane";
+import ToolBoxTitle from "../ToolBoxTitle";
 
 type Props = {
   postMessage: (message: any) => void;
