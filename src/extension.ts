@@ -3,13 +3,19 @@ import * as path from "path";
 import * as ttfClient from "./ttf/service_grpc_pb";
 import * as vscode from "vscode";
 
+import { BehaviorPanel } from "./behaviorPanel";
+import { BehaviorGroupPanel } from "./behaviorGroupPanel";
+import { DefinitionPanel } from "./definitionPanel";
+import { FormulaPanel } from "./formulaPanel";
 import { HotReloadWatcher } from "./hotReloadWatcher";
+import { ITtfInterface } from "./ttfInterface";
+import { PropertySetPanel } from "./propertySetPanel";
+import { TokenArtifactExplorer } from "./tokenArtifactExplorer";
+import { TokenBasePanel } from "./tokenBasePanel";
 import { TokenDefinitionExplorer } from "./tokenDefinitionExplorer";
-import { TokenDesignerPanel } from "./tokenDesignerPanel";
 import { TokenFormulaExplorer } from "./tokenFormulaExplorer";
 import { TokenTaxonomy } from "./tokenTaxonomy";
 import { TtfFileSystemConnection } from "./ttfFileSystemConnection";
-import { ITtfInterface } from "./ttfInterface";
 
 const StatusBarPrefix = "$(debug-disconnect) TTF: ";
 
@@ -35,6 +41,11 @@ export async function activate(context: vscode.ExtensionContext) {
   let currentEnvironment = "Sandbox";
   let ttfConnection: ITtfInterface = await newSandboxConnection();
   let ttfTaxonomy = new TokenTaxonomy(ttfConnection);
+
+  const tokenArtifactExplorer = new TokenArtifactExplorer(
+    context.extensionPath,
+    ttfTaxonomy
+  );
 
   const tokenFormulaExplorer = new TokenFormulaExplorer(
     context.extensionPath,
@@ -72,6 +83,7 @@ export async function activate(context: vscode.ExtensionContext) {
         currentEnvironment = "Sandbox";
       }
       ttfTaxonomy = new TokenTaxonomy(ttfConnection);
+      tokenArtifactExplorer.setTaxonomy(ttfTaxonomy);
       tokenFormulaExplorer.setTaxonomy(ttfTaxonomy);
       tokenDefinitionExplorer.setTaxonomy(ttfTaxonomy);
       statusBarItem.text = StatusBarPrefix + currentEnvironment;
@@ -82,7 +94,7 @@ export async function activate(context: vscode.ExtensionContext) {
   const createTokenFormulaCommand = vscode.commands.registerCommand(
     "visual-token-designer.createTokenFormula",
     async (commandContext) => {
-      const panel = await TokenDesignerPanel.openNewFormula(
+      const panel = await FormulaPanel.openNewFormula(
         ttfConnection,
         currentEnvironment,
         ttfTaxonomy,
@@ -96,7 +108,7 @@ export async function activate(context: vscode.ExtensionContext) {
   const openTokenFormulaCommand = vscode.commands.registerCommand(
     "visual-token-designer.openTokenFormula",
     async (commandContext) => {
-      const panel = await TokenDesignerPanel.openExistingFormula(
+      const panel = await FormulaPanel.openExistingFormula(
         commandContext,
         ttfConnection,
         currentEnvironment,
@@ -111,7 +123,7 @@ export async function activate(context: vscode.ExtensionContext) {
   const createTokenDefinitionCommand = vscode.commands.registerCommand(
     "visual-token-designer.createTokenDefinition",
     async (commandContext) => {
-      const panel = await TokenDesignerPanel.openNewDefinition(
+      const panel = await DefinitionPanel.openNewDefinition(
         commandContext?.id || "",
         ttfConnection,
         currentEnvironment,
@@ -126,7 +138,67 @@ export async function activate(context: vscode.ExtensionContext) {
   const openTokenDefinitionCommand = vscode.commands.registerCommand(
     "visual-token-designer.openTokenDefinition",
     async (commandContext) => {
-      const panel = await TokenDesignerPanel.openExistingDefinition(
+      const panel = await DefinitionPanel.openExistingDefinition(
+        commandContext,
+        ttfConnection,
+        currentEnvironment,
+        ttfTaxonomy,
+        context.extensionPath,
+        context.subscriptions,
+        panelReloadEvent
+      );
+    }
+  );
+
+  const openBehaviorCommand = vscode.commands.registerCommand(
+    "visual-token-designer.openBehavior",
+    async (commandContext) => {
+      const panel = await BehaviorPanel.openExistingBehavior(
+        commandContext,
+        ttfConnection,
+        currentEnvironment,
+        ttfTaxonomy,
+        context.extensionPath,
+        context.subscriptions,
+        panelReloadEvent
+      );
+    }
+  );
+
+  const openBehaviorGroupCommand = vscode.commands.registerCommand(
+    "visual-token-designer.openBehaviorGroup",
+    async (commandContext) => {
+      const panel = await BehaviorGroupPanel.openExistingBehaviorGroup(
+        commandContext,
+        ttfConnection,
+        currentEnvironment,
+        ttfTaxonomy,
+        context.extensionPath,
+        context.subscriptions,
+        panelReloadEvent
+      );
+    }
+  );
+
+  const openPropertySetCommand = vscode.commands.registerCommand(
+    "visual-token-designer.openPropertySet",
+    async (commandContext) => {
+      const panel = await PropertySetPanel.openExistingPropertySet(
+        commandContext,
+        ttfConnection,
+        currentEnvironment,
+        ttfTaxonomy,
+        context.extensionPath,
+        context.subscriptions,
+        panelReloadEvent
+      );
+    }
+  );
+
+  const openTokenBaseCommand = vscode.commands.registerCommand(
+    "visual-token-designer.openTokenBase",
+    async (commandContext) => {
+      const panel = await TokenBasePanel.openExistingTokenBase(
         commandContext,
         ttfConnection,
         currentEnvironment,
@@ -143,6 +215,11 @@ export async function activate(context: vscode.ExtensionContext) {
     async (commandContext) => {
       await ttfTaxonomy.refresh();
     }
+  );
+
+  const tokenArtifactExplorerProvider = vscode.window.registerTreeDataProvider(
+    "visual-token-designer.tokenArtifactExplorer",
+    tokenArtifactExplorer
   );
 
   const tokenFormulaExplorerProvider = vscode.window.registerTreeDataProvider(
@@ -167,7 +244,12 @@ export async function activate(context: vscode.ExtensionContext) {
   context.subscriptions.push(openTokenFormulaCommand);
   context.subscriptions.push(createTokenDefinitionCommand);
   context.subscriptions.push(openTokenDefinitionCommand);
+  context.subscriptions.push(openBehaviorCommand);
+  context.subscriptions.push(openBehaviorGroupCommand);
+  context.subscriptions.push(openPropertySetCommand);
+  context.subscriptions.push(openTokenBaseCommand);
   context.subscriptions.push(refreshTokenTaxonomyCommand);
+  context.subscriptions.push(tokenArtifactExplorerProvider);
   context.subscriptions.push(tokenFormulaExplorerProvider);
   context.subscriptions.push(tokenDefinitionExplorerProvider);
   context.subscriptions.push(statusBarItem);

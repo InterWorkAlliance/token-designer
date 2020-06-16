@@ -1,21 +1,17 @@
 import React from "react";
 
-import { Artifact } from "../../ttf/artifact_pb";
+import { getArtifactById } from "../getArtifactById";
+import { TaxonomyAsObjects } from "../taxonomyAsObjects";
 
 type Props = {
+  taxonomy: TaxonomyAsObjects;
   id?: string;
   tooling?: string;
-  getArtifactById: (
-    id: string,
-    tooling?: string
-  ) => Artifact.AsObject | undefined;
 };
 
-export default function ArtifactReference({
-  id,
-  tooling,
-  getArtifactById,
-}: Props) {
-  const artifact = id ? getArtifactById(id, tooling) : undefined;
+export default function ArtifactReference({ taxonomy, id, tooling }: Props) {
+  const artifact = id
+    ? getArtifactById(taxonomy, id, tooling)?.artifact
+    : undefined;
   return <>{artifact?.name || tooling || ""}</>;
 }

@@ -45,6 +45,26 @@ export interface ITtfInterface {
     ) => void
   ): any;
 
+  getBehaviorArtifact(
+    request: ttfArtifact.ArtifactSymbol,
+    callback: (error: ITtfError | null, response: ttfCore.Behavior) => void
+  ): any;
+
+  getBehaviorGroupArtifact(
+    request: ttfArtifact.ArtifactSymbol,
+    callback: (error: ITtfError | null, response: ttfCore.BehaviorGroup) => void
+  ): any;
+
+  getPropertySetArtifact(
+    request: ttfArtifact.ArtifactSymbol,
+    callback: (error: ITtfError | null, response: ttfCore.PropertySet) => void
+  ): any;
+
+  getBaseArtifact(
+    request: ttfArtifact.ArtifactSymbol,
+    callback: (error: ITtfError | null, response: ttfCore.Base) => void
+  ): any;
+
   updateArtifact(
     request: ttfArtifact.UpdateArtifactRequest,
     callback: (error: ITtfError | null, response: any) => void

@@ -5,11 +5,11 @@ import ArtifactType from "./ArtifactType";
 
 type Props = {
   artifact?: AnyArtifact;
-  type: ArtifactType | "unknown";
+  type?: ArtifactType;
   error?: string;
   selected?: boolean;
-  onClick?: (artifact?: AnyArtifact) => void;
-  onDragStart?: (artifact?: AnyArtifact) => void;
+  onClick?: (artifact?: [AnyArtifact, ArtifactType]) => void;
+  onDragStart?: (artifact?: [AnyArtifact, ArtifactType]) => void;
 };
 
 export default function ArtifactIcon({
@@ -78,11 +78,11 @@ export default function ArtifactIcon({
     tooltip += ` - ${error}`;
   }
   const dispatchOnDragStart = onDragStart
-    ? () => onDragStart(artifact)
+    ? () => onDragStart(artifact && type ? [artifact, type] : undefined)
     : undefined;
   const dispatchOnClick = onClick
     ? (ev: React.MouseEvent) => {
-        onClick(artifact);
+        onClick(artifact && type ? [artifact, type] : undefined);
         ev.stopPropagation();
       }
     : undefined;

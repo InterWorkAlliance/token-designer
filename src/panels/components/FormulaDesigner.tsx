@@ -13,10 +13,11 @@ import CanvasPane from "./CanvasPane";
 import ToolPane from "./ToolPane";
 import ToolBox from "./ToolBox";
 
-import { TokenDesignerTaxonomy } from "../tokenDesignerTaxonomy";
+import { TaxonomyAsObjects } from "../taxonomyAsObjects";
+import ArtifactType from "./ArtifactType";
 
 type Props = {
-  taxonomy: TokenDesignerTaxonomy | null;
+  taxonomy: TaxonomyAsObjects | null;
   formula: TemplateFormula.AsObject;
   incompatabilities: any;
   addArtifact: (id: string) => void;
@@ -33,11 +34,11 @@ export default function FormulaDesigner({
   setFormulaDescription,
 }: Props) {
   const [artifactBeingDraggedOn, setArtifactBeingDraggedOn] = useState<
-    AnyArtifact | undefined
+    [AnyArtifact, ArtifactType] | undefined
   >(undefined);
 
   const [artifactBeingDraggedOff, setArtifactBeingDraggedOff] = useState<
-    AnyArtifact | undefined
+  [AnyArtifact, ArtifactType] | undefined
   >(undefined);
 
   const toolPaneWidth = "25vw";
@@ -74,7 +75,7 @@ export default function FormulaDesigner({
       <ToolPane
         position="left"
         width={toolPaneWidth}
-        artifactBeingDragged={artifactBeingDraggedOff}
+        artifactBeingDragged={artifactBeingDraggedOff ? artifactBeingDraggedOff[0] : undefined}
         onDropArtifact={removeArtifact}
       >
         <ToolBox
@@ -115,7 +116,7 @@ export default function FormulaDesigner({
       <ToolPane
         position="right"
         width={toolPaneWidth}
-        artifactBeingDragged={artifactBeingDraggedOff}
+        artifactBeingDragged={artifactBeingDraggedOff ? artifactBeingDraggedOff[0] : undefined}
         onDropArtifact={removeArtifact}
       >
         <ToolBox

@@ -1,4 +1,5 @@
 import { promises as fs } from "fs";
+import * as protobuf from "google-protobuf";
 import * as ttfArtifact from "./ttf/artifact_pb";
 import * as ttfCore from "./ttf/core_pb";
 import * as ttfTaxonomy from "./ttf/taxonomy_pb";
@@ -309,6 +310,54 @@ export class TtfFileSystemConnection implements ITtfInterface {
     }
   }
 
+  getBehaviorArtifact(
+    request: ttfArtifact.ArtifactSymbol,
+    callback: (error: ITtfError | null, response: ttfCore.Behavior) => void
+  ) {
+    this.getArtifact(
+      request,
+      this.taxonomy.getBehaviorsMap(),
+      new ttfCore.Behavior(),
+      callback
+    );
+  }
+
+  getBehaviorGroupArtifact(
+    request: ttfArtifact.ArtifactSymbol,
+    callback: (error: ITtfError | null, response: ttfCore.BehaviorGroup) => void
+  ) {
+    this.getArtifact(
+      request,
+      this.taxonomy.getBehaviorGroupsMap(),
+      new ttfCore.BehaviorGroup(),
+      callback
+    );
+  }
+
+  getPropertySetArtifact(
+    request: ttfArtifact.ArtifactSymbol,
+    callback: (error: ITtfError | null, response: ttfCore.PropertySet) => void
+  ) {
+    this.getArtifact(
+      request,
+      this.taxonomy.getPropertySetsMap(),
+      new ttfCore.PropertySet(),
+      callback
+    );
+  }
+
+  getBaseArtifact(
+    request: ttfArtifact.ArtifactSymbol,
+    callback: (error: ITtfError | null, response: ttfCore.Base) => void
+  ) {
+    this.getArtifact(
+      request,
+      this.taxonomy.getBaseTokenTypesMap(),
+      new ttfCore.Base(),
+      callback
+    );
+  }
+
   updateArtifact(
     request: ttfArtifact.UpdateArtifactRequest,
     callback: (error: ITtfError | null, response: any) => void
@@ -349,6 +398,30 @@ export class TtfFileSystemConnection implements ITtfInterface {
     }
     if (!done) {
       callback("Artifact could not be updated", {});
+    }
+  }
+
+  private getArtifact<
+    T extends {
+      getArtifact(): ttfArtifact.Artifact | undefined;
+      clone(): T;
+    }
+  >(
+    request: ttfArtifact.ArtifactSymbol,
+    map: protobuf.Map<string, T>,
+    defaultValue: T,
+    callback: (error: ITtfError | null, response: T) => void
+  ) {
+    let success = false;
+    const id = request.getId();
+    map.forEach((_) => {
+      if (!success && _.getArtifact()?.getArtifactSymbol()?.getId() === id) {
+        success = true;
+        callback(null, _.clone());
+      }
+    });
+    if (!success) {
+      callback(`Behavior not found: ${id}`, defaultValue);
     }
   }
 }

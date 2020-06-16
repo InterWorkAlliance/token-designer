@@ -31,9 +31,8 @@
   "activationEvents": [
     "onCommand:visual-token-designer.changeEnvironment",
     "onCommand:visual-token-designer.createTokenFormula",
-    "onCommand:visual-token-designer.openTokenFormula",
-    "onCommand:visual-token-designer.openTokenDefinition",
     "onCommand:visual-token-designer.createTokenDefinition",
+    "onView:visual-token-designer.tokenArtifactExplorer",
     "onView:visual-token-designer.tokenFormulaExplorer",
     "onView:visual-token-designer.tokenDefinitionExplorer"
   ],
@@ -50,6 +49,10 @@
     },
     "views": {
       "visual-token-designer-mainView": [
+        {
+          "id": "visual-token-designer.tokenArtifactExplorer",
+          "name": "Token Artifacts"
+        },
         {
           "id": "visual-token-designer.tokenFormulaExplorer",
           "name": "Token Formulae"
@@ -82,6 +85,26 @@
         "category": "Token Taxonomy Framework"
       },
       {
+        "command": "visual-token-designer.openBehavior",
+        "title": "Open behavior",
+        "category": "Token Taxonomy Framework"
+      },
+      {
+        "command": "visual-token-designer.openBehaviorGroup",
+        "title": "Open behavior group",
+        "category": "Token Taxonomy Framework"
+      },
+      {
+        "command": "visual-token-designer.openPropertySet",
+        "title": "Open property set",
+        "category": "Token Taxonomy Framework"
+      },
+      {
+        "command": "visual-token-designer.openTokenBase",
+        "title": "Open token base",
+        "category": "Token Taxonomy Framework"
+      },
+      {
         "command": "visual-token-designer.refreshTokenTaxonomy",
         "title": "Refresh Token Taxonomy",
         "category": "Token Taxonomy Framework",
@@ -98,6 +121,11 @@
     ],
     "menus": {
       "view/title": [
+        {
+          "command": "visual-token-designer.refreshTokenTaxonomy",
+          "when": "view == visual-token-designer.tokenArtifactExplorer",
+          "group": "navigation"
+        },
         {
           "command": "visual-token-designer.refreshTokenTaxonomy",
           "when": "view == visual-token-designer.tokenFormulaExplorer",
@@ -130,6 +158,22 @@
         },
         {
           "command": "visual-token-designer.openTokenDefinition",
+          "when": "false"
+        },
+        {
+          "command": "visual-token-designer.openBehavior",
+          "when": "false"
+        },
+        {
+          "command": "visual-token-designer.openBehaviorGroup",
+          "when": "false"
+        },
+        {
+          "command": "visual-token-designer.openPropertySet",
+          "when": "false"
+        },
+        {
+          "command": "visual-token-designer.openTokenBase",
           "when": "false"
         }
       ]

@@ -2,6 +2,7 @@ type ArtifactType =
   | "token-base"
   | "property-set"
   | "behavior"
-  | "behavior-group";
+  | "behavior-group"
+  | "template-definition";
 
 export default ArtifactType;

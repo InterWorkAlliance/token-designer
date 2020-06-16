@@ -4,17 +4,18 @@ import { Base, PropertySet, BehaviorGroup, Behavior } from "../../ttf/core_pb";
 
 import AnyArtifact from "./AnyArtifact";
 import ArtifactIcon from "./ArtifactIcon";
+import ArtifactType from "./ArtifactType";
 
 type Props = {
   tokenBase?: Base.AsObject;
   propertySets?: PropertySet.AsObject[];
   behaviorGroups?: BehaviorGroup.AsObject[];
   behaviors?: Behavior.AsObject[];
-  incompatabilities: any;
-  selectedArtifact?: AnyArtifact;
-  artifactBeingDraggedOn?: AnyArtifact;
-  artifactOnDragStart?: (artifact?: AnyArtifact) => void;
-  setSelectedArtifact?: (artifact?: AnyArtifact) => void;
+  incompatabilities?: any;
+  selectedArtifact?: [AnyArtifact, ArtifactType];
+  artifactBeingDraggedOn?: [AnyArtifact, ArtifactType];
+  artifactOnDragStart?: (artifact?: [AnyArtifact, ArtifactType]) => void;
+  setSelectedArtifact?: (artifact?: [AnyArtifact, ArtifactType]) => void;
   addArtifact?: (id: string) => void;
 };
 
@@ -61,15 +62,19 @@ export default function Canvas({
   };
   const onDrop = (ev: React.DragEvent<HTMLDivElement>) => {
     setDropTargetActive(false);
-    if (addArtifact && artifactBeingDraggedOn?.artifact?.artifactSymbol?.id) {
-      addArtifact(artifactBeingDraggedOn?.artifact?.artifactSymbol?.id);
+    if (
+      addArtifact &&
+      artifactBeingDraggedOn &&
+      artifactBeingDraggedOn[0]?.artifact?.artifactSymbol?.id
+    ) {
+      addArtifact(artifactBeingDraggedOn[0]?.artifact?.artifactSymbol?.id);
       if (setSelectedArtifact) {
         setSelectedArtifact(artifactBeingDraggedOn);
       }
     }
   };
   const errorText = (id?: string) => {
-    if (id && incompatabilities[id]?.length) {
+    if (incompatabilities && id && incompatabilities[id]?.length) {
       return "Incompatible with " + incompatabilities[id].join(", ");
     }
   };
@@ -86,10 +91,11 @@ export default function Canvas({
           <div style={{ whiteSpace: "nowrap" }}>
             <ArtifactIcon
               artifact={tokenBase}
-              type={tokenBase ? "token-base" : "unknown"}
+              type={tokenBase ? "token-base" : undefined}
               selected={
-                selectedArtifact?.artifact?.artifactSymbol?.id ===
-                tokenBase?.artifact?.artifactSymbol?.id
+                selectedArtifact &&
+                selectedArtifact[0].artifact?.artifactSymbol?.id ===
+                  tokenBase?.artifact?.artifactSymbol?.id
               }
               onClick={setSelectedArtifact}
               onDragStart={artifactOnDragStart}
@@ -101,8 +107,9 @@ export default function Canvas({
                 artifact={_}
                 type="property-set"
                 selected={
-                  selectedArtifact?.artifact?.artifactSymbol?.id ===
-                  _.artifact?.artifactSymbol?.id
+                  selectedArtifact &&
+                  selectedArtifact[0].artifact?.artifactSymbol?.id ===
+                    _.artifact?.artifactSymbol?.id
                 }
                 onClick={setSelectedArtifact}
                 onDragStart={artifactOnDragStart}
@@ -117,8 +124,9 @@ export default function Canvas({
                 artifact={_}
                 type="behavior-group"
                 selected={
-                  selectedArtifact?.artifact?.artifactSymbol?.id ===
-                  _.artifact?.artifactSymbol?.id
+                  selectedArtifact &&
+                  selectedArtifact[0].artifact?.artifactSymbol?.id ===
+                    _.artifact?.artifactSymbol?.id
                 }
                 onClick={setSelectedArtifact}
                 onDragStart={artifactOnDragStart}
@@ -131,8 +139,9 @@ export default function Canvas({
                 artifact={_}
                 type="behavior"
                 selected={
-                  selectedArtifact?.artifact?.artifactSymbol?.id ===
-                  _.artifact?.artifactSymbol?.id
+                  selectedArtifact &&
+                  selectedArtifact[0].artifact?.artifactSymbol?.id ===
+                    _.artifact?.artifactSymbol?.id
                 }
                 onClick={setSelectedArtifact}
                 onDragStart={artifactOnDragStart}
