@@ -35,36 +35,16 @@ export default function TokenBasePanel({ postMessage }: Props) {
   }, []);
 
   if (artifact && taxonomy) {
-    const previewWidth = "40vw";
     return (
       <>
-        <CanvasPane
-          formula={artifact.artifact?.name}
-          left="0"
-          right={previewWidth}
-        >
-          <div
-            style={{
-              height: "100%",
-              overflowY: "scroll",
-              padding: "var(--padding)",
-              fontFamily: "monospace",
-              whiteSpace: "pre-wrap",
-            }}
-          >
-            {JSON.stringify(artifact, undefined, 4)}
-          </div>
-        </CanvasPane>
-        <ToolPane position="right" width={previewWidth}>
-          <ToolBoxTitle title={artifact.artifact?.name || ""} />
-          <div style={{ margin: "var(--padding)", padding: "var(--padding)" }}>
-            <ArtifactInspector
-              taxonomy={taxonomy}
-              artifact={artifact}
-              artifactType="token-base"
-            />
-          </div>
-        </ToolPane>
+        <ToolBoxTitle title={artifact.artifact?.name || ""} />
+        <div style={{ margin: "var(--padding)", padding: "var(--padding)" }}>
+          <ArtifactInspector
+            taxonomy={taxonomy}
+            artifact={artifact}
+            artifactType="token-base"
+          />
+        </div>
       </>
     );
   } else {
