@@ -61,8 +61,8 @@ function createIfNotExists(folder) {
     createIfNotExists('out/panels');
     createIfNotExists('out/panels/bundles');
     await compileProtos();
-    await run('tsc', [ '-p',  './' ]);
-    await run('tsc', [ '-p',  './src/panels' ]);
+    await run('node_modules/.bin/tsc', [ '-p',  './' ]);
+    await run('node_modules/.bin/tsc', [ '-p',  './src/panels' ]);
     await forAllFiles('src/panels', '.scss', file => run('node-sass', [ file, '-o', 'out/panels' ]));
     await forAllFiles('out/panels', '.main.js', (file, basename) => run('browserify', [ '-t [ babelify --presets [ @babel/preset-react ] ]', file, '-o out/panels/bundles/' + basename ]));
 
@@ -78,8 +78,8 @@ function createIfNotExists(folder) {
         setInterval(canary, 2000);
         
         const tasks = [];
-        tasks.push(run('tsc', [ '-watch', '-p', './' ]));
-        tasks.push(run('tsc', [ '-watch', '-p', './src/panels' ]));
+        tasks.push(run('node_modules/.bin/tsc', [ '-watch', '-p', './' ]));
+        tasks.push(run('node_modules/.bin/tsc', [ '-watch', '-p', './src/panels' ]));
         await forAllFiles('src/panels', '.scss', file => tasks.push(run('node-sass', [ file, '-wo', 'out/panels' ])));
         await forAllFiles('out/panels', '.main.js', (file, basename) => tasks.push(run('watchify', [ '-t [ babelify --presets [ @babel/preset-react ] ]', file, '-o out/panels/bundles/' + basename ])));
         await Promise.all(tasks);
