@@ -7,7 +7,7 @@ on:
     branches: [ master ]
 
 jobs:
-  buildgrpcbinaries:
+  buildgrpc:
     strategy:
       matrix:
         #runs-on: [ 'windows-2019', 'ubuntu-18.04', 'macos-10.15' ]
@@ -36,9 +36,9 @@ jobs:
       with:
         name: grpc-${{ matrix.runs-on }}-${{ matrix.electrum-version }}
         path: node_modules/grpc/src/node/extension_binary/*electron*/**/*
-  buildlinux:
+  buildextension:
     runs-on: ubuntu-18.04
-    needs: buildgrpcbinaries
+    needs: buildgrpc
     steps:
     - name: ⏳ Checkout
       uses: actions/checkout@v2
