@@ -45,7 +45,7 @@ jobs:
       uses: actions/upload-artifact@v2
       with:
         name: grpc-${{ matrix.runs-on }}-${{ matrix.electrum-version }}
-        path: node_modules/grpc/src/node/extension_binary/**/*
+        path: node_modules/grpc/src/node/extension_binary/*electron*/**/*
   buildlinux:
     runs-on: ubuntu-18.04
     needs: buildgrpcbinaries
