@@ -31,14 +31,22 @@ jobs:
     - name: 🔢 Set version
       run: npm run setversion
     - name: 🎁 Package
-      run: npm run package
+      id: package
+      shell: bash
+      run: |
+        npm run package
+        cp visual-token-designer-*.vsix visual-token-designer.vsix
+        echo "##[set-output name=branch;]$(echo ${GITHUB_REF#refs/heads/})"
     - name: 🗑 Artifact cleanup
       uses: kolpav/purge-artifacts-action@v1
       with:
         token: ${{ secrets.GITHUB_TOKEN }}
         expire-in: 24 hours
-    - name: 🌎 Publish
-      uses: actions/upload-artifact@v2
+    - name: 🌎 Release
+      uses: djnicholson/release-action@v2
       with:
-        name: vscode-extension
-        path: '*.vsix'
+        token: ${{ secrets.GITHUB_TOKEN }}
+        tag-name: v0.0-${{ steps.package.outputs.branch }}
+        release-name: 'Rolling build'
+        asset-name: 'visual-token-designer.vsix'
+        file: 'visual-token-designer.vsix'
