@@ -58,7 +58,7 @@ jobs:
     - name: 🚀 Build
       run: |
         npm install
-        for d in grpc_artifacts/* ; do mv grpc_artifacts/${d}/* node_modules/grpc/src/node/extension_binary/ ; done
+        for d in grpc_artifacts/* ; do mv ${d}/* node_modules/grpc/src/node/extension_binary/ ; done
         npm run compile
 # TODO: Remove below step
     - name: Display structure of extracted files
