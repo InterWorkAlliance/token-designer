@@ -7,8 +7,13 @@ on:
     branches: [ master ]
 
 jobs:
-  buildlinux:
-    runs-on: ubuntu-18.04
+
+  buildgrpc:
+    strategy:
+      matrix:
+        electron-version: [ '7.2.0', '7.3.0' ]
+        runs-on: [ 'windows-2019', 'ubuntu-18.04', 'macos-10.15' ]
+    runs-on: ${{ matrix.runs-on }}
     steps:
     - name: ⏳ Checkout
       uses: actions/checkout@v2
@@ -16,29 +21,59 @@ jobs:
       uses: actions/setup-node@v1
       with:
         node-version: 12.x
-    - name: 💾 Cache .npm
-      uses: actions/cache@v1
-      with:
-        path: ~/.npm # npm cache files are stored in `~/.npm` on Linux/macOS
-        key: ${{ runner.os }}-build-cache-npm-cache-${{ hashFiles('**/package-lock.json') }}
     - name: 💾 Cache node_modules
       uses: actions/cache@v1
       with:
         path: node_modules
-        key: ${{ runner.os }}-build-cache-node-modules-${{ hashFiles('**/package-lock.json') }}
+        key: ${{ runner.os }}-${{ matrix.electron-version }}-build-grpc-cache-node-modules-${{ hashFiles('**/package-lock.json') }}
     - name: 🚀 Build
-      run: npm run compile
+      run: |
+        npm install
+        npm rebuild --target=${{ matrix.electron-version }} --runtime=electron --dist-url=https://atom.io/download/electron
+    - name: 🌎 Publish
+      uses: actions/upload-artifact@v2
+      with:
+        name: grpc-${{ matrix.runs-on }}-${{ matrix.electron-version }}
+        path: node_modules/grpc/src/node/extension_binary/*electron*/**/*
+  
+  buildextension:
+    runs-on: ubuntu-18.04
+    needs: buildgrpc
+    steps:
+    - name: ⏳ Checkout
+      uses: actions/checkout@v2
+    - name: 💿 Setup NodeJS
+      uses: actions/setup-node@v1
+      with:
+        node-version: 12.x
+    - name: 💾 Get GRPC binaries
+      uses: actions/download-artifact@v2
+      with:
+        path: grpc_artifacts
+    - name: 🚀 Build
+      run: |
+        npm install
+        for d in grpc_artifacts/* ; do mv ${d}/* node_modules/grpc/src/node/extension_binary/ ; done
+        npm run compile
     - name: 🔢 Set version
       run: npm run setversion
     - name: 🎁 Package
-      run: npm run package
+      id: package
+      shell: bash
+      run: |
+        npm run package
+        cp visual-token-designer-*.vsix visual-token-designer.vsix
+        echo "##[set-output name=branch;]$(echo ${GITHUB_REF#refs/heads/})"
     - name: 🗑 Artifact cleanup
       uses: kolpav/purge-artifacts-action@v1
       with:
         token: ${{ secrets.GITHUB_TOKEN }}
         expire-in: 24 hours
-    - name: 🌎 Publish
-      uses: actions/upload-artifact@v2
+    - name: 🌎 Release
+      uses: djnicholson/release-action@v2
       with:
-        name: vscode-extension
-        path: '*.vsix'
+        token: ${{ secrets.GITHUB_TOKEN }}
+        tag-name: v0.0-${{ steps.package.outputs.branch }}
+        release-name: 'Rolling build'
+        asset-name: 'visual-token-designer.vsix'
+        file: 'visual-token-designer.vsix'
