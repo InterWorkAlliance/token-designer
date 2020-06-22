@@ -26,7 +26,7 @@ jobs:
         path: node_modules
         key: ${{ runner.os }}-${{ matrix.electrum-version }}-build-grpc-cache-node-modules-${{ hashFiles('**/package-lock.json') }}
     - name: 🚀 Build
-      run: npm ci --target=${{ matrix.electrum-version }} --runtime=electron
+      run: npm install --target=${{ matrix.electrum-version }} --runtime=electron
     - name: 🌎 Publish
       uses: actions/upload-artifact@v2
       with:
