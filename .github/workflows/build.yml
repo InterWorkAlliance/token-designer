@@ -2,13 +2,53 @@ name: Build
 
 on:
   push:
-    branches: [ master ]
+    branches: [ master, ship-grpc ]
   pull_request:
     branches: [ master ]
 
 jobs:
+  buildgrpcbinaries:
+    strategy:
+      matrix:
+        runs-on: [ 'windows-2019', 'ubuntu-18.04', 'macos-10.15' ]
+        electrum-version: [ '7.3.0', '7.2.0' ]
+        include:
+          - runs-on: windows-2019
+            npm-cache: %APPDATA%/Roaming/npm
+          - runs-on: ubuntu-18.04
+            npm-cache: ~/.npm
+          - runs-on: macos-10.15
+            npm-cache: ~/.npm
+    runs-on: ${{ matrix.runs-on }}
+    steps:
+    - name: ⏳ Checkout
+      uses: actions/checkout@v2
+    - name: 💿 Setup NodeJS
+      uses: actions/setup-node@v1
+      with:
+        node-version: 12.x
+    - name: 💾 Cache .npm
+      uses: actions/cache@v1
+      with:
+        path: ${{ matrix.npm-cache }}
+        key: ${{ runner.os }}-${{ matrix.electrum-version }}-build-grpc-cache-npm-cache-${{ hashFiles('**/package-lock.json') }}
+    - name: 💾 Cache node_modules
+      uses: actions/cache@v1
+      with:
+        path: node_modules
+        key: ${{ runner.os }}-${{ matrix.electrum-version }}-build-grpc--cache-node-modules-${{ hashFiles('**/package-lock.json') }}
+    - name: 🚀 Build
+      run: |
+        npm ci
+        npm rebuild --target=${{ matrix.electrum-version }} --runtime=electron --dist-url=https://atom.io/download/electron
+    - name: 🌎 Publish
+      uses: actions/upload-artifact@v2
+      with:
+        name: grpc-${{ runner.os }}-${{ matrix.electrum-version }}
+        path: node_modules/grpc/src/node/extension_binary/**/*
   buildlinux:
     runs-on: ubuntu-18.04
+    needs: buildgrpcbinaries
     steps:
     - name: ⏳ Checkout
       uses: actions/checkout@v2
