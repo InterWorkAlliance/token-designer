@@ -64,14 +64,14 @@ jobs:
         npm run package
         cp visual-token-designer-*.vsix visual-token-designer.vsix
         echo "##[set-output name=branch;]$(echo ${GITHUB_REF#refs/heads/})"
-        ls -l visual-token-designer.vsix
+        ls -l *.vsix
     - name: 🗑 Artifact cleanup
       uses: kolpav/purge-artifacts-action@v1
       with:
         token: ${{ secrets.GITHUB_TOKEN }}
         expire-in: 24 hours
     - name: 🌎 Release
-      uses: djnicholson/release-action@v2
+      uses: djnicholson/release-action@v2.1
       with:
         token: ${{ secrets.GITHUB_TOKEN }}
         tag-name: v0.0-${{ steps.package.outputs.branch }}
