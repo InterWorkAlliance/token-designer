@@ -9,3 +9,5 @@ src/**
 gulpfile.ts
 *.yml
 version.json
+scripts/**
+screenshots/**
