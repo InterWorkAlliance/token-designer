@@ -35,14 +35,14 @@ export default function TemplateDefinitionInspector({
         </>
       )}
       {artifact.childTokensList.map((_, i) => (
-        <>
+        <div key={i}>
           <div style={{ marginTop: 25 }}>
             <b>Child token #{i + 1}:</b>
           </div>
           <div style={{ marginLeft: 25 }}>
             <TemplateDefinitionInspector taxonomy={taxonomy} artifact={_} />
           </div>
-        </>
+        </div>
       ))}
       {!!artifact.tokenBase && (
         <>
@@ -56,28 +56,28 @@ export default function TemplateDefinitionInspector({
         </>
       )}
       {artifact.behaviorsList.map((_, i) => (
-        <>
+        <div key={i}>
           <div style={{ marginTop: 25 }}>
             <b>Behavior #{i + 1}:</b>
           </div>
           <BehaviorReferenceInspector taxonomy={taxonomy} artifact={_} />
-        </>
+        </div>
       ))}
       {artifact.behaviorGroupsList.map((_, i) => (
-        <>
+        <div key={i}>
           <div style={{ marginTop: 25 }}>
             <b>Behavior group #{i + 1}:</b>
           </div>
           <BehaviorGroupReferenceInspector taxonomy={taxonomy} artifact={_} />
-        </>
+        </div>
       ))}
       {artifact.propertySetsList.map((_, i) => (
-        <>
+        <div key={i}>
           <div style={{ marginTop: 25 }}>
             <b>Property set #{i + 1}:</b>
           </div>
           <PropertySetReferenceInspector taxonomy={taxonomy} artifact={_} />
-        </>
+        </div>
       ))}
     </>
   );

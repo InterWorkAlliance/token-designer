@@ -28,7 +28,7 @@ export default function PropertyInspector({ taxonomy, artifact }: Props) {
             <u>{artifact.name} invocations:</u>
           </p>
           {artifact.propertyInvocationsList.map((_) => (
-            <InvocationInspector key={_.id} invocation={_} />
+            <InvocationInspector key={_.name + "-" + _.id} invocation={_} />
           ))}
         </>
       )}

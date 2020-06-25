@@ -15,12 +15,12 @@ export default function BehaviorGroupInspector({ taxonomy, artifact }: Props) {
     <>
       {!!artifact.behaviorsList.length &&
         artifact.behaviorsList.map((_, i) => (
-          <>
+          <div key={i}>
             <div style={{ marginTop: 25 }}>
               <b>Behavior #{i + 1}:</b>
             </div>
             <BehaviorReferenceInspector artifact={_} taxonomy={taxonomy} />
-          </>
+          </div>
         ))}
     </>
   );
