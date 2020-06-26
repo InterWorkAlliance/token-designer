@@ -1,8 +1,7 @@
 import * as vscode from "vscode";
-import * as ttfTaxonomy from "./ttf/taxonomy_pb";
+import { taxonomy } from "./ttf/protobufs";
 
 import { ITtfInterface } from "./ttfInterface";
-import { TaxonomyAsObjects } from "./panels/taxonomyAsObjects";
 
 export class TokenTaxonomy {
   private readonly onRefreshEmitter: vscode.EventEmitter<
@@ -11,9 +10,9 @@ export class TokenTaxonomy {
 
   public readonly onRefresh: vscode.Event<void> = this.onRefreshEmitter.event;
 
-  private latestTaxonomy: ttfTaxonomy.Taxonomy | null = null;
+  private latestTaxonomy: taxonomy.model.ITaxonomy | null = null;
 
-  get taxonomy(): ttfTaxonomy.Taxonomy | null {
+  get taxonomy(): taxonomy.model.ITaxonomy | null {
     return this.latestTaxonomy;
   }
 
@@ -21,38 +20,9 @@ export class TokenTaxonomy {
     this.refresh();
   }
 
-  public asObjects(): TaxonomyAsObjects | null {
-    if (!this.taxonomy) {
-      return null;
-    }
-    const taxonomyObject = this.taxonomy.toObject();
-    return {
-      baseTokenTypes: taxonomyObject.baseTokenTypesMap
-        .map((_) => _[1])
-        .sort(
-          (a, b) => a.artifact?.name.localeCompare(b.artifact?.name || "") || 0
-        ),
-      propertySets: taxonomyObject.propertySetsMap
-        .map((_) => _[1])
-        .sort(
-          (a, b) => a.artifact?.name.localeCompare(b.artifact?.name || "") || 0
-        ),
-      behaviors: taxonomyObject.behaviorsMap
-        .map((_) => _[1])
-        .sort(
-          (a, b) => a.artifact?.name.localeCompare(b.artifact?.name || "") || 0
-        ),
-      behaviorGroups: taxonomyObject.behaviorGroupsMap
-        .map((_) => _[1])
-        .sort(
-          (a, b) => a.artifact?.name.localeCompare(b.artifact?.name || "") || 0
-        ),
-    };
-  }
-
   public async refresh() {
-    const version = new ttfTaxonomy.TaxonomyVersion();
-    version.setVersion("1.0");
+    const version = new taxonomy.model.TaxonomyVersion();
+    version.version = "1.0";
     this.latestTaxonomy = await new Promise((resolve, reject) =>
       this.ttfConnection.getFullTaxonomy(version, (error, response) =>
         error ? reject(error) : resolve(response)
@@ -61,15 +31,22 @@ export class TokenTaxonomy {
     this.onRefreshEmitter.fire();
   }
 
-  public getArtifcactById(id?: string) {
+  public getArtifcactById(
+    id?: string | null
+  ):
+    | taxonomy.model.core.IBase
+    | taxonomy.model.core.IPropertySet
+    | taxonomy.model.core.IBehavior
+    | taxonomy.model.core.IBehaviorGroup
+    | undefined {
     if (!id || !this.latestTaxonomy) {
       return undefined;
     }
     return (
-      this.latestTaxonomy.getBaseTokenTypesMap().get(id) ||
-      this.latestTaxonomy.getPropertySetsMap().get(id) ||
-      this.latestTaxonomy.getBehaviorsMap().get(id) ||
-      this.latestTaxonomy.getBehaviorGroupsMap().get(id)
+      (this.latestTaxonomy.baseTokenTypes || {})[id] ||
+      (this.latestTaxonomy.propertySets || {})[id] ||
+      (this.latestTaxonomy.behaviors || {})[id] ||
+      (this.latestTaxonomy.behaviorGroups || {})[id]
     );
   }
 }

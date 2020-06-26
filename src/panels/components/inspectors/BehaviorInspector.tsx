@@ -1,13 +1,12 @@
 import React from "react";
 
-import { Behavior } from "../../../ttf/core_pb";
+import { taxonomy } from "../../../ttf/protobufs";
 
 import InvocationInspector from "./InvocationInspector";
-import { TaxonomyAsObjects } from "../../taxonomyAsObjects";
 
 type Props = {
-  taxonomy: TaxonomyAsObjects;
-  artifact: Behavior.AsObject;
+  taxonomy: taxonomy.model.ITaxonomy;
+  artifact: taxonomy.model.core.IBehavior;
 };
 
 export default function BehaviorInspector({ taxonomy, artifact }: Props) {
@@ -16,14 +15,18 @@ export default function BehaviorInspector({ taxonomy, artifact }: Props) {
       {!!artifact.constructorType && (
         <div>
           <u>Constructor:</u>
-          <ul><li><b>{artifact.constructorType}</b></li></ul>
+          <ul>
+            <li>
+              <b>{artifact.constructorType}</b>
+            </li>
+          </ul>
         </div>
       )}
-      {!!artifact.propertiesList.length && (
+      {!!artifact?.properties?.length && (
         <div>
           <u>Properties:</u>
           <ul>
-            {artifact.propertiesList.map((_) => (
+            {artifact.properties.map((_) => (
               <li key={JSON.stringify(_)}>
                 <b>{_.name}:</b>
                 {!!(_.templateValue || _.valueDescription) && (
@@ -36,10 +39,10 @@ export default function BehaviorInspector({ taxonomy, artifact }: Props) {
                     <br />
                   </>
                 )}
-                {!!_.propertyInvocationsList.length && (
+                {!!_.propertyInvocations?.length && (
                   <ul>
-                    {_.propertyInvocationsList.map((_) => (
-                      <li key={_.id}>
+                    {_.propertyInvocations.map((_) => (
+                      <li key={_.id || ""}>
                         <InvocationInspector invocation={_} />
                       </li>
                     ))}
@@ -50,12 +53,12 @@ export default function BehaviorInspector({ taxonomy, artifact }: Props) {
           </ul>
         </div>
       )}
-      {!!artifact.invocationsList.length && (
+      {!!artifact?.invocations?.length && (
         <div>
           <u>Invocations:</u>
           <ul>
-            {artifact.invocationsList.map((_) => (
-              <li key={_.id}>
+            {artifact.invocations.map((_) => (
+              <li key={_.id || ""}>
                 <InvocationInspector invocation={_} />
               </li>
             ))}

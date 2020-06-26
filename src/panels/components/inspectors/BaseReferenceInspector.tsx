@@ -1,10 +1,9 @@
 import React from "react";
 
-import { BaseReference, Base } from "../../../ttf/core_pb";
+import { taxonomy } from "../../../ttf/protobufs";
 
 import ArtifactInspector from "./ArtifactInspector";
 import { getArtifactById } from "../../getArtifactById";
-import { TaxonomyAsObjects } from "../../taxonomyAsObjects";
 
 function thisOrThat<T>(p: string, primary: any, secondary: any): T {
   if (primary[p] === undefined || primary[p] === null) {
@@ -17,8 +16,8 @@ function thisOrThat<T>(p: string, primary: any, secondary: any): T {
 }
 
 type Props = {
-  taxonomy: TaxonomyAsObjects;
-  artifact: BaseReference.AsObject;
+  taxonomy: taxonomy.model.ITaxonomy;
+  artifact: taxonomy.model.core.IBaseReference;
 };
 
 export default function BaseReferenceInspector({ taxonomy, artifact }: Props) {
@@ -27,9 +26,9 @@ export default function BaseReferenceInspector({ taxonomy, artifact }: Props) {
     poachFrom = getArtifactById(taxonomy, artifact.reference.id) || {};
   }
 
-  let mergedBehavior: Base.AsObject | undefined = {
+  let mergedBehavior: taxonomy.model.core.IBase | undefined = {
     artifact: thisOrThat("artifact", artifact, poachFrom),
-    constructor: thisOrThat("constructor", artifact, poachFrom),
+    constructor_: thisOrThat("constructor_", artifact, poachFrom),
     constructorName: thisOrThat("constructorName", artifact, poachFrom),
     decimals: thisOrThat("decimals", artifact, poachFrom),
     name: thisOrThat("name", artifact, poachFrom),
@@ -38,7 +37,7 @@ export default function BaseReferenceInspector({ taxonomy, artifact }: Props) {
     representationType: thisOrThat("representationType", artifact, poachFrom),
     supply: thisOrThat("supply", artifact, poachFrom),
     symbol: thisOrThat("symbol", artifact, poachFrom),
-    tokenPropertiesMap: thisOrThat("tokenPropertiesMap", artifact, poachFrom),
+    tokenProperties: thisOrThat("tokenProperties", artifact, poachFrom),
     tokenType: thisOrThat("tokenType", artifact, poachFrom),
     tokenUnit: thisOrThat("tokenUnit", artifact, poachFrom),
     valueType: thisOrThat("valueType", artifact, poachFrom),

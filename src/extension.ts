@@ -1,6 +1,6 @@
 import * as grpc from "grpc";
+import * as grpcProtoLoader from "@grpc/proto-loader";
 import * as path from "path";
-import * as ttfClient from "./ttf/service_grpc_pb";
 import * as vscode from "vscode";
 
 import { BehaviorPanel } from "./behaviorPanel";
@@ -73,7 +73,13 @@ export async function activate(context: vscode.ExtensionContext) {
               "Leave blank to use the sandbox.",
       });
       if (newServer) {
-        ttfConnection = new ttfClient.ServiceClient(
+        const packageDefinition = grpcProtoLoader.loadSync(
+          "/change/to/path/to/.../ttf/protos/service.proto"
+        );
+        const serviceProto = grpc.loadPackageDefinition(packageDefinition)
+          .taxonomy as any;
+
+        ttfConnection = new serviceProto.Service(
           newServer,
           grpc.credentials.createInsecure()
         );

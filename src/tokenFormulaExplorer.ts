@@ -79,9 +79,9 @@ export class TokenFormulaExplorer
 
   private refresh() {
     if (this.ttfTaxonomy.taxonomy && !this.disposed) {
-      this.rootItems = this.ttfTaxonomy.taxonomy
-        .toObject()
-        .templateFormulasMap.map((_) => _[1])
+      this.rootItems = Object.values(
+        this.ttfTaxonomy.taxonomy.templateFormulas || {}
+      )
         .filter((_) => !!_.artifact?.artifactSymbol?.tooling)
         .map(
           (_) =>

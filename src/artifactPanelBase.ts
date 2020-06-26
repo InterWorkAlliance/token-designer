@@ -1,9 +1,8 @@
 import * as fs from "fs";
 import * as path from "path";
-import * as ttfArtifact from "./ttf/artifact_pb";
+import { taxonomy } from "./ttf/protobufs";
 import * as vscode from "vscode";
 
-import { TaxonomyAsObjects } from "./panels/taxonomyAsObjects";
 import { TokenTaxonomy } from "./tokenTaxonomy";
 
 const JavascriptHrefPlaceholder: string = "[JAVASCRIPT_HREF]";
@@ -11,14 +10,15 @@ const CssHrefPlaceholder: string = "[CSS_HREF]";
 const BaseHrefPlaceholder: string = "[BASE_HREF]";
 
 export abstract class ArtifactPanelBase<
-  T extends { getArtifact(): ttfArtifact.Artifact | undefined; toObject(): any }
+  T extends {
+    artifact?: taxonomy.model.artifact.IArtifact | null;
+  }
 > {
   get title() {
     const suffix = ` -  ${this.environment}`;
     if (this.artifact) {
       const name =
-        this.artifact.getArtifact()?.getName() ||
-        `New  ${this.artifactTypeString}`;
+        this.artifact.artifact?.name || `New  ${this.artifactTypeString}`;
       return `${name} - ${this.artifactTypeString} ${suffix}`;
     } else {
       return `${this.artifactTypeString} Designer ${suffix}`;
@@ -32,8 +32,6 @@ export abstract class ArtifactPanelBase<
   }
 
   private readonly panel: vscode.WebviewPanel;
-
-  private taxonomyObjects: TaxonomyAsObjects | null = null;
 
   private artifact: T | null = null;
 
@@ -79,7 +77,7 @@ export abstract class ArtifactPanelBase<
   protected abstract async onMessage(message: any): Promise<void>;
 
   protected abstract async getArtifact(
-    symbol: ttfArtifact.ArtifactSymbol
+    symbol: taxonomy.model.artifact.IArtifactSymbol
   ): Promise<T>;
 
   protected async openArtifact(artifactId: string) {
@@ -88,8 +86,8 @@ export abstract class ArtifactPanelBase<
 
   protected postCurrentState() {
     this.panel.webview.postMessage({
-      artifact: this.artifact?.toObject(),
-      taxonomy: this.taxonomyObjects,
+      artifact: this.artifact,
+      taxonomy: this.ttfTaxonomy.taxonomy,
     });
   }
 
@@ -135,11 +133,11 @@ export abstract class ArtifactPanelBase<
   }
 
   private async refreshArtifact(artifactId: string) {
-    const existingArtifactSymbol = new ttfArtifact.ArtifactSymbol();
-    existingArtifactSymbol.setId(artifactId);
+    const existingArtifactSymbol = taxonomy.model.artifact.ArtifactSymbol.create();
+    existingArtifactSymbol.id = artifactId;
     this.artifact = await this.getArtifact(existingArtifactSymbol);
     this.panel.webview.postMessage({
-      artifact: this.artifact?.toObject(),
+      artifact: this.artifact,
       formula: null,
     });
     this.panel.title = this.title;
@@ -149,8 +147,9 @@ export abstract class ArtifactPanelBase<
 
   private async refreshTaxonomy() {
     if (!this.disposed) {
-      this.taxonomyObjects = this.ttfTaxonomy.asObjects();
-      this.panel.webview.postMessage({ taxonomy: this.taxonomyObjects });
+      this.panel.webview.postMessage({
+        taxonomy: this.ttfTaxonomy.taxonomy,
+      });
     }
   }
 }

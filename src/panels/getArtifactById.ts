@@ -1,27 +1,20 @@
 import AnyArtifact from "./components/AnyArtifact";
-import { TaxonomyAsObjects } from "./taxonomyAsObjects";
+
+import { taxonomy } from "../ttf/protobufs";
 
 export function getArtifactByTooling(
-  taxonomy: TaxonomyAsObjects,
+  taxonomy: taxonomy.model.ITaxonomy,
   tooling: string
 ): AnyArtifact | undefined {
-  let result:
-    | AnyArtifact
-    | undefined = taxonomy?.baseTokenTypes.find(
-    (_) => _.artifact?.artifactSymbol?.tooling === tooling
-  );
+  let result: AnyArtifact | undefined = (taxonomy?.baseTokenTypes || {})[
+    tooling
+  ];
   if (!result) {
-    result = taxonomy?.propertySets.find(
-      (_) => _.artifact?.artifactSymbol?.tooling === tooling
-    );
+    result = (taxonomy?.propertySets || {})[tooling];
     if (!result) {
-      result = taxonomy?.behaviors.find(
-        (_) => _.artifact?.artifactSymbol?.tooling === tooling
-      );
+      result = (taxonomy?.behaviors || {})[tooling];
       if (!result) {
-        result = taxonomy?.behaviorGroups.find(
-          (_) => _.artifact?.artifactSymbol?.tooling === tooling
-        );
+        result = (taxonomy?.behaviorGroups || {})[tooling];
       }
     }
   }
@@ -29,27 +22,19 @@ export function getArtifactByTooling(
 }
 
 export function getArtifactById(
-  taxonomy: TaxonomyAsObjects,
-  id: string,
-  tooling?: string
+  taxonomy: taxonomy.model.ITaxonomy,
+  id?: string | null,
+  tooling?: string | null
 ): AnyArtifact | undefined {
-  let result:
-    | AnyArtifact
-    | undefined = taxonomy?.baseTokenTypes.find(
-    (_) => _.artifact?.artifactSymbol?.id === id
-  );
+  let result: AnyArtifact | undefined = (taxonomy?.baseTokenTypes || {})[
+    id || ""
+  ];
   if (!result) {
-    result = taxonomy?.propertySets.find(
-      (_) => _.artifact?.artifactSymbol?.id === id
-    );
+    result = (taxonomy?.propertySets || {})[id || ""];
     if (!result) {
-      result = taxonomy?.behaviors.find(
-        (_) => _.artifact?.artifactSymbol?.id === id
-      );
+      result = (taxonomy?.behaviors || {})[id || ""];
       if (!result) {
-        result = taxonomy?.behaviorGroups.find(
-          (_) => _.artifact?.artifactSymbol?.id === id
-        );
+        result = (taxonomy?.behaviorGroups || {})[id || ""];
       }
     }
   }

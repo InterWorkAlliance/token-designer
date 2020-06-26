@@ -30,7 +30,7 @@ message Base{
     int32 decimals = 11; //This is a deployemnt value, a number of decimal places a single token can be divided into.  A typical fiat currency has a value of 2, i.e. $100.53. A value of 0 means that subdivision is not supported and a whole token is the smallest unit of the token that can be owned.
     map<string, string> token_properties = 12; //This is a deployemnt value, contains generic non-behavioral properties as a list of simple `name, value` pairs that can be implemented without property invocations for each.
     string constructor_name = 13; //A template must have a constructor, the name is the proto3 message name in the implemented token base definition.  The default is Constructor.
-    google.protobuf.Any constructor = 14; //The constructor type defined in the token template artifact.
+    google.protobuf.Any constructor_ = 14; //The constructor type defined in the token template artifact.
 }
 
 //Collection of base token types
@@ -50,7 +50,7 @@ message BaseReference {
     int32 decimals = 8; //A number of decimal places a single token can be divided into.  A typical fiat currency has a value of 2, i.e. $100.53. A value of 0 means that subdivision is not supported and a whole token is the smallest unit of the token that can be owned.
     map<string, string> token_properties = 9; //Generic non-behavioral properties as a list of simple `name, value` pairs that can be implemented without property invocations for each.
     string constructor_name = 10; //A template must have a constructor, the name is the proto3 message name in the implemented token base definition.  The default is Constructor.
-    google.protobuf.Any constructor = 11; //The constructor type defined in the token template artifact.
+    google.protobuf.Any constructor_ = 11; //The constructor type defined in the token template artifact.
 }
 
 //Behavior artifact type
@@ -58,7 +58,7 @@ message Behavior{
     taxonomy.model.artifact.Artifact artifact = 1; //Artifact metadata
     bool is_external = 2; //Indicator if this behavior is available or internal only.
     string constructor_type = 3; //Proto message name empty if there is no constructor, used when unpacking the Any.
-    google.protobuf.Any constructor = 4; //Cptionally retrieved for behaviors like Role Support that needs input when setting up the roles when the token class is created.  Uses Any as the type as it will not be known by the framework.
+    google.protobuf.Any constructor_ = 4; //Cptionally retrieved for behaviors like Role Support that needs input when setting up the roles when the token class is created.  Uses Any as the type as it will not be known by the framework.
     repeated Invocation invocations = 5;//Definitions only will not have values, null for string or composite types and 0 for numbers, false for bools.
     repeated Property properties = 6; //For any properties that should be added to the token if the behavior is implemented, values not set, should consider a dependent property-set.
 }
@@ -73,7 +73,7 @@ message BehaviorReference{
     taxonomy.model.artifact.ArtifactReference reference = 1; //ArtifactReference
     bool is_external = 2; //Indicator if this is available externally or internally only.
     string constructor_type = 3; //Proto message name empty if there is no constructor, used when unpacking the Any.
-    google.protobuf.Any constructor = 4; //Optionally retrieved for behaviors like Role Support that needs input when setting up the roles when the token class is created.  Uses Any as the type as it will not be known by the framework.
+    google.protobuf.Any constructor_ = 4; //Optionally retrieved for behaviors like Role Support that needs input when setting up the roles when the token class is created.  Uses Any as the type as it will not be known by the framework.
     repeated taxonomy.model.artifact.ArtifactSymbol applies_to = 5; //If this is an influence behavior, list the influenced symbols here, the details on how it influences is in the influence bindings.
     repeated Invocation invocations = 6; //Updated invocations from the base artifact, include the invocations used in the definition. If the defintion does not contain the InvocationId, it will not be included in the specification.
     repeated InfluenceBinding influence_bindings = 7; //Influence invocation definitions, only defined in the influencing behavior, but applied during specification generation.
@@ -244,7 +244,7 @@ message BehaviorSpecification{
     taxonomy.model.artifact.Artifact artifact = 1;
     bool is_external = 2; //Indicator if this is externally visible or internal only.
     string constructor_type = 3; //Proto message name empty if there is no constructor, used when unpacking the Any.
-    google.protobuf.Any constructor = 4; //Optionally retrieved for behaviors like Role Support that needs input when setting up the roles when the token class is created.  Uses Any as the type as it will not be known by the framework.
+    google.protobuf.Any constructor_ = 4; //Optionally retrieved for behaviors like Role Support that needs input when setting up the roles when the token class is created.  Uses Any as the type as it will not be known by the framework.
     repeated InvocationBinding invocations = 5;//Definitions only will not have values, null for string or composite types and 0 for numbers, false for bools.
     repeated Property properties = 6; //For any properties that should be added to the token if the behavior is implemented, values not set, should consider a dependent property-set.
 }

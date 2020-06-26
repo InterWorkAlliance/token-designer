@@ -1,5 +1,4 @@
-import * as ttfArtifact from "./ttf/artifact_pb";
-import * as ttfCore from "./ttf/core_pb";
+import { taxonomy } from "./ttf/protobufs";
 import * as vscode from "vscode";
 
 import { ArtifactPanelBase } from "./artifactPanelBase";
@@ -7,7 +6,7 @@ import { behaviorGroupPanelEvents } from "./panels/behaviorGroupPanelEvents";
 import { ITtfInterface } from "./ttfInterface";
 import { TokenTaxonomy } from "./tokenTaxonomy";
 
-export class BehaviorGroupPanel extends ArtifactPanelBase<ttfCore.BehaviorGroup> {
+export class BehaviorGroupPanel extends ArtifactPanelBase<taxonomy.model.core.IBehaviorGroup> {
   static async openExistingBehaviorGroup(
     artifactId: string,
     ttfConnection: ITtfInterface,
@@ -57,8 +56,8 @@ export class BehaviorGroupPanel extends ArtifactPanelBase<ttfCore.BehaviorGroup>
   }
 
   protected async getArtifact(
-    symbol: ttfArtifact.ArtifactSymbol
-  ): Promise<ttfCore.BehaviorGroup> {
+    symbol: taxonomy.model.artifact.IArtifactSymbol
+  ): Promise<taxonomy.model.core.IBehaviorGroup> {
     return await new Promise((resolve, reject) =>
       this.ttfConnection.getBehaviorGroupArtifact(
         symbol,

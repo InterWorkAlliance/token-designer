@@ -1,5 +1,4 @@
-import * as ttfArtifact from "./ttf/artifact_pb";
-import * as ttfCore from "./ttf/core_pb";
+import { taxonomy } from "./ttf/protobufs";
 import * as vscode from "vscode";
 
 import { ArtifactPanelBase } from "./artifactPanelBase";
@@ -7,7 +6,7 @@ import { ITtfInterface } from "./ttfInterface";
 import { tokenBasePanelEvents } from "./panels/tokenBasePanelEvents";
 import { TokenTaxonomy } from "./tokenTaxonomy";
 
-export class TokenBasePanel extends ArtifactPanelBase<ttfCore.Base> {
+export class TokenBasePanel extends ArtifactPanelBase<taxonomy.model.core.IBase> {
   static async openExistingTokenBase(
     artifactId: string,
     ttfConnection: ITtfInterface,
@@ -57,8 +56,8 @@ export class TokenBasePanel extends ArtifactPanelBase<ttfCore.Base> {
   }
 
   protected async getArtifact(
-    symbol: ttfArtifact.ArtifactSymbol
-  ): Promise<ttfCore.Base> {
+    symbol: taxonomy.model.artifact.IArtifactSymbol
+  ): Promise<taxonomy.model.core.IBase> {
     return await new Promise((resolve, reject) =>
       this.ttfConnection.getBaseArtifact(
         symbol,

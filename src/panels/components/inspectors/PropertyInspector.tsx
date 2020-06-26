@@ -1,13 +1,12 @@
 import React from "react";
 
-import { Property } from "../../../ttf/core_pb";
+import { taxonomy } from "../../../ttf/protobufs";
 
-import { TaxonomyAsObjects } from "../../taxonomyAsObjects";
 import InvocationInspector from "./InvocationInspector";
 
 type Props = {
-  taxonomy: TaxonomyAsObjects;
-  artifact: Property.AsObject;
+  taxonomy: taxonomy.model.ITaxonomy;
+  artifact: taxonomy.model.core.IProperty;
 };
 
 export default function PropertyInspector({ taxonomy, artifact }: Props) {
@@ -19,15 +18,19 @@ export default function PropertyInspector({ taxonomy, artifact }: Props) {
         <br />
         <i>{artifact.valueDescription}</i>
       </p>
-      {artifact.propertiesList.map((_) => (
-        <PropertyInspector key={_.name} taxonomy={taxonomy} artifact={_} />
+      {artifact.properties?.map((_) => (
+        <PropertyInspector
+          key={_.name || ""}
+          taxonomy={taxonomy}
+          artifact={_}
+        />
       ))}
-      {!!artifact.propertyInvocationsList.length && (
+      {!!artifact.propertyInvocations?.length && (
         <>
           <p>
             <u>{artifact.name} invocations:</u>
           </p>
-          {artifact.propertyInvocationsList.map((_) => (
+          {artifact.propertyInvocations.map((_) => (
             <InvocationInspector key={_.name + "-" + _.id} invocation={_} />
           ))}
         </>

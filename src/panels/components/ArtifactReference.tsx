@@ -1,12 +1,12 @@
 import React from "react";
 
 import { getArtifactById } from "../getArtifactById";
-import { TaxonomyAsObjects } from "../taxonomyAsObjects";
+import { taxonomy } from "../../ttf/protobufs";
 
 type Props = {
-  taxonomy: TaxonomyAsObjects;
-  id?: string;
-  tooling?: string;
+  taxonomy: taxonomy.model.ITaxonomy;
+  id?: string | null;
+  tooling?: string | null;
 };
 
 export default function ArtifactReference({ taxonomy, id, tooling }: Props) {

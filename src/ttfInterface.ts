@@ -1,72 +1,70 @@
-import * as ttfArtifact from "./ttf/artifact_pb";
-import * as ttfCore from "./ttf/core_pb";
-import * as ttfTaxonomy from "./ttf/taxonomy_pb";
+import { taxonomy } from "./ttf/protobufs";
 
 export interface ITtfInterface {
   createArtifact(
-    request: ttfArtifact.NewArtifactRequest,
+    request: taxonomy.model.artifact.INewArtifactRequest,
     callback: (
       error: ITtfError | null,
-      response: ttfArtifact.NewArtifactResponse
+      response: taxonomy.model.artifact.INewArtifactResponse
     ) => void
   ): any;
 
   createTemplateDefinition(
-    request: ttfArtifact.NewTemplateDefinition,
+    request: taxonomy.model.artifact.INewTemplateDefinition,
     callback: (
       error: ITtfError | null,
-      response: ttfCore.TemplateDefinition
+      response: taxonomy.model.core.ITemplateDefinition
     ) => void
   ): any;
 
   deleteArtifact(
-    request: ttfArtifact.DeleteArtifactRequest,
+    request: taxonomy.model.artifact.IDeleteArtifactRequest,
     callback: (error: ITtfError | null, response: any) => void
   ): any;
 
   getFullTaxonomy(
-    request: ttfTaxonomy.TaxonomyVersion,
-    callback: (error: ITtfError | null, response: ttfTaxonomy.Taxonomy) => void
+    request: taxonomy.model.ITaxonomyVersion,
+    callback: (error: ITtfError | null, response: taxonomy.model.ITaxonomy) => void
   ): any;
 
   getTemplateDefinitionArtifact(
-    request: ttfArtifact.ArtifactSymbol,
+    request: taxonomy.model.artifact.IArtifactSymbol,
     callback: (
       error: ITtfError | null,
-      response: ttfCore.TemplateDefinition
+      response: taxonomy.model.core.ITemplateDefinition
     ) => void
   ): any;
 
   getTemplateFormulaArtifact(
-    request: ttfArtifact.ArtifactSymbol,
+    request: taxonomy.model.artifact.IArtifactSymbol,
     callback: (
       error: ITtfError | null,
-      response: ttfCore.TemplateFormula
+      response: taxonomy.model.core.ITemplateFormula
     ) => void
   ): any;
 
   getBehaviorArtifact(
-    request: ttfArtifact.ArtifactSymbol,
-    callback: (error: ITtfError | null, response: ttfCore.Behavior) => void
+    request: taxonomy.model.artifact.IArtifactSymbol,
+    callback: (error: ITtfError | null, response: taxonomy.model.core.IBehavior) => void
   ): any;
 
   getBehaviorGroupArtifact(
-    request: ttfArtifact.ArtifactSymbol,
-    callback: (error: ITtfError | null, response: ttfCore.BehaviorGroup) => void
+    request: taxonomy.model.artifact.IArtifactSymbol,
+    callback: (error: ITtfError | null, response: taxonomy.model.core.IBehaviorGroup) => void
   ): any;
 
   getPropertySetArtifact(
-    request: ttfArtifact.ArtifactSymbol,
-    callback: (error: ITtfError | null, response: ttfCore.PropertySet) => void
+    request: taxonomy.model.artifact.IArtifactSymbol,
+    callback: (error: ITtfError | null, response: taxonomy.model.core.IPropertySet) => void
   ): any;
 
   getBaseArtifact(
-    request: ttfArtifact.ArtifactSymbol,
-    callback: (error: ITtfError | null, response: ttfCore.Base) => void
+    request: taxonomy.model.artifact.IArtifactSymbol,
+    callback: (error: ITtfError | null, response: taxonomy.model.core.IBase) => void
   ): any;
 
   updateArtifact(
-    request: ttfArtifact.UpdateArtifactRequest,
+    request: taxonomy.model.artifact.IUpdateArtifactRequest,
     callback: (error: ITtfError | null, response: any) => void
   ): any;
 }

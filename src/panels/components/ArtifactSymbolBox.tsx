@@ -1,9 +1,9 @@
 import React from "react";
 
-import { ArtifactSymbol } from "../../ttf/artifact_pb";
+import { taxonomy } from "../../ttf/protobufs";
 
 type Props = {
-  symbol: ArtifactSymbol.AsObject;
+  symbol: taxonomy.model.artifact.IArtifactSymbol;
 };
 
 export default function ArtifactSymbolBox({ symbol }: Props) {

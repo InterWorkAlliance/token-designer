@@ -1,22 +1,19 @@
 import React, { useEffect, useState } from "react";
 
-import { BehaviorGroup } from "../../../ttf/core_pb";
+import { taxonomy } from "../../../ttf/protobufs";
 
 import ArtifactInspector from "../inspectors/ArtifactInspector";
-import CanvasPane from "../CanvasPane";
-import ToolPane from "../ToolPane";
 import ToolBoxTitle from "../ToolBoxTitle";
 
 import { behaviorGroupPanelEvents } from "../../behaviorGroupPanelEvents";
-import { TaxonomyAsObjects } from "../../taxonomyAsObjects";
 
 type Props = {
   postMessage: (message: any) => void;
 };
 
 export default function BehaviorGroupPanel({ postMessage }: Props) {
-  const [taxonomy, setTaxonomy] = useState<TaxonomyAsObjects | null>(null);
-  const [artifact, setArtifact] = useState<BehaviorGroup.AsObject | null>(null);
+  const [taxonomy, setTaxonomy] = useState<taxonomy.model.ITaxonomy | null>(null);
+  const [artifact, setArtifact] = useState<taxonomy.model.core.IBehaviorGroup | null>(null);
 
   const handleMessage = (message: any) => {
     if (message.taxonomy) {

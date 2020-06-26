@@ -1,17 +1,16 @@
 import React from "react";
 
-import { TemplateDefinition } from "../../../ttf/core_pb";
+import { taxonomy } from "../../../ttf/protobufs";
 
 import ArtifactReference from "../ArtifactReference";
 import BaseReferenceInspector from "./BaseReferenceInspector";
 import BehaviorReferenceInspector from "./BehaviorReferenceInspector";
 import BehaviorGroupReferenceInspector from "./BehaviorGroupReferenceInspector";
 import PropertySetReferenceInspector from "./PropertySetReferenceInspector";
-import { TaxonomyAsObjects } from "../../taxonomyAsObjects";
 
 type Props = {
-  taxonomy: TaxonomyAsObjects;
-  artifact: TemplateDefinition.AsObject;
+  taxonomy: taxonomy.model.ITaxonomy;
+  artifact: taxonomy.model.core.ITemplateDefinition;
 };
 
 export default function TemplateDefinitionInspector({
@@ -34,7 +33,7 @@ export default function TemplateDefinitionInspector({
           </ul>
         </>
       )}
-      {artifact.childTokensList.map((_, i) => (
+      {artifact.childTokens?.map((_, i) => (
         <div key={i}>
           <div style={{ marginTop: 25 }}>
             <b>Child token #{i + 1}:</b>
@@ -55,7 +54,7 @@ export default function TemplateDefinitionInspector({
           />
         </>
       )}
-      {artifact.behaviorsList.map((_, i) => (
+      {artifact.behaviors?.map((_, i) => (
         <div key={i}>
           <div style={{ marginTop: 25 }}>
             <b>Behavior #{i + 1}:</b>
@@ -63,7 +62,7 @@ export default function TemplateDefinitionInspector({
           <BehaviorReferenceInspector taxonomy={taxonomy} artifact={_} />
         </div>
       ))}
-      {artifact.behaviorGroupsList.map((_, i) => (
+      {artifact.behaviorGroups?.map((_, i) => (
         <div key={i}>
           <div style={{ marginTop: 25 }}>
             <b>Behavior group #{i + 1}:</b>
@@ -71,7 +70,7 @@ export default function TemplateDefinitionInspector({
           <BehaviorGroupReferenceInspector taxonomy={taxonomy} artifact={_} />
         </div>
       ))}
-      {artifact.propertySetsList.map((_, i) => (
+      {artifact.propertySets?.map((_, i) => (
         <div key={i}>
           <div style={{ marginTop: 25 }}>
             <b>Property set #{i + 1}:</b>

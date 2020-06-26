@@ -1,19 +1,18 @@
 import React from "react";
 
-import { TemplateDefinition } from "../../../ttf/core_pb";
+import { taxonomy } from "../../../ttf/protobufs";
 
 import AllPropertiesInspector from "./AllPropertiesInspector";
 import AnyArtifact from "../AnyArtifact";
 import ArtifactInspector from "./ArtifactInspector";
 import ArtifactType from "../ArtifactType";
-import { TaxonomyAsObjects } from "../../taxonomyAsObjects";
 import ToolBoxTitle from "../ToolBoxTitle";
 
 type Props = {
-  taxonomy: TaxonomyAsObjects;
+  taxonomy: taxonomy.model.ITaxonomy;
   artifact?: AnyArtifact;
   artifactType?: ArtifactType;
-  definition: TemplateDefinition.AsObject;
+  definition: taxonomy.model.core.ITemplateDefinition;
 };
 
 export default function DefinitionInspector({

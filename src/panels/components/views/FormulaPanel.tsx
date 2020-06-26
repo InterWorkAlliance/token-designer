@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 
-import { TemplateFormula } from "../../../ttf/core_pb";
+import { taxonomy } from "../../../ttf/protobufs";
 
 import FormulaDesigner from "../FormulaDesigner";
 
@@ -12,7 +12,7 @@ type Props = {
 
 export default function FormulaPanel({ postMessage }: Props) {
   const [taxonomy, setTaxonomy] = useState(null);
-  const [formula, setFormula] = useState<TemplateFormula.AsObject | null>(null);
+  const [formula, setFormula] = useState<taxonomy.model.core.ITemplateFormula | null>(null);
   const [incompatabilities, setIncompatabilities] = useState<any>({});
 
   const handleMessage = (message: any) => {

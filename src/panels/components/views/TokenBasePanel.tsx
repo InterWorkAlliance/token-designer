@@ -1,22 +1,23 @@
 import React, { useEffect, useState } from "react";
 
-import { Base } from "../../../ttf/core_pb";
+import { taxonomy } from "../../../ttf/protobufs";
 
 import ArtifactInspector from "../inspectors/ArtifactInspector";
-import CanvasPane from "../CanvasPane";
-import ToolPane from "../ToolPane";
 import ToolBoxTitle from "../ToolBoxTitle";
 
 import { tokenBasePanelEvents } from "../../tokenBasePanelEvents";
-import { TaxonomyAsObjects } from "../../taxonomyAsObjects";
 
 type Props = {
   postMessage: (message: any) => void;
 };
 
 export default function TokenBasePanel({ postMessage }: Props) {
-  const [taxonomy, setTaxonomy] = useState<TaxonomyAsObjects | null>(null);
-  const [artifact, setArtifact] = useState<Base.AsObject | null>(null);
+  const [taxonomy, setTaxonomy] = useState<taxonomy.model.ITaxonomy | null>(
+    null
+  );
+  const [artifact, setArtifact] = useState<taxonomy.model.core.IBase | null>(
+    null
+  );
 
   const handleMessage = (message: any) => {
     if (message.taxonomy) {

@@ -1,16 +1,10 @@
-import {
-  Base,
-  PropertySet,
-  BehaviorGroup,
-  Behavior,
-  TemplateDefinition,
-} from "../../ttf/core_pb";
+import { taxonomy } from "../../ttf/protobufs";
 
 type AnyArtifact =
-  | Base.AsObject
-  | PropertySet.AsObject
-  | BehaviorGroup.AsObject
-  | Behavior.AsObject
-  | TemplateDefinition.AsObject;
+  | taxonomy.model.core.IBase
+  | taxonomy.model.core.IPropertySet
+  | taxonomy.model.core.IBehaviorGroup
+  | taxonomy.model.core.IBehavior
+  | taxonomy.model.core.ITemplateDefinition;
 
 export default AnyArtifact;

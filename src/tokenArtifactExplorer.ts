@@ -1,5 +1,5 @@
 import * as path from "path";
-import * as ttfCore from "./ttf/core_pb";
+import { taxonomy } from "./ttf/protobufs";
 import * as vscode from "vscode";
 
 import { TokenTaxonomy } from "./tokenTaxonomy";
@@ -142,10 +142,10 @@ export class TokenArtifactExplorer
     nodeName: string,
     childType: ArtifactType,
     childArtifacts: (
-      | ttfCore.Behavior.AsObject
-      | ttfCore.BehaviorGroup.AsObject
-      | ttfCore.PropertySet.AsObject
-      | ttfCore.Base.AsObject
+      | taxonomy.model.core.IBehavior
+      | taxonomy.model.core.IBehaviorGroup
+      | taxonomy.model.core.IPropertySet
+      | taxonomy.model.core.IBase
     )[]
   ): NodeIdentifier {
     const childIdentifiers: LeafIdentifier[] = [];
@@ -173,28 +173,26 @@ export class TokenArtifactExplorer
 
   private refresh() {
     if (this.ttfTaxonomy.taxonomy && !this.disposed) {
-      const taxonomyObject = this.ttfTaxonomy.taxonomy.toObject();
-
       this.rootItems = [
         this.createRootItem(
           "Token Bases",
           "token-base",
-          taxonomyObject.baseTokenTypesMap.map((_) => _[1])
+          Object.values(this.ttfTaxonomy.taxonomy.baseTokenTypes || {})
         ),
         this.createRootItem(
           "Behaviors",
           "behavior",
-          taxonomyObject.behaviorsMap.map((_) => _[1])
+          Object.values(this.ttfTaxonomy.taxonomy.behaviors || {})
         ),
         this.createRootItem(
           "Behaviors Groups",
           "behavior-group",
-          taxonomyObject.behaviorGroupsMap.map((_) => _[1])
+          Object.values(this.ttfTaxonomy.taxonomy.behaviorGroups || {})
         ),
         this.createRootItem(
           "Property Sets",
           "property-set",
-          taxonomyObject.propertySetsMap.map((_) => _[1])
+          Object.values(this.ttfTaxonomy.taxonomy.propertySets || {})
         ),
       ];
 

@@ -189,9 +189,9 @@
     "@babel/core": "^7.9.6",
     "@babel/preset-react": "^7.9.4",
     "@types/glob": "^7.1.1",
-    "@types/google-protobuf": "^3.7.2",
     "@types/gulp": "^4.0.6",
     "@types/node": "^10.12.21",
+    "@types/protobufjs": "^6.0.0",
     "@types/react": "^16.9.35",
     "@types/react-dom": "^16.9.8",
     "@types/uuid": "^7.0.3",
@@ -211,8 +211,9 @@
     "watchify": "^3.11.1"
   },
   "dependencies": {
-    "google-protobuf": "^3.11.4",
+    "@grpc/proto-loader": "^0.5.4",
     "grpc": "^1.24.2",
+    "protobufjs": "^6.9.0",
     "react": "^16.13.1",
     "react-dom": "^16.13.1",
     "uuid": "^8.0.0",

@@ -1,13 +1,10 @@
 import React, { useEffect, useState } from "react";
 
-import { Behavior } from "../../../ttf/core_pb";
+import { taxonomy } from "../../../ttf/protobufs";
 
 import ArtifactInspector from "../inspectors/ArtifactInspector";
 
 import { behaviorPanelEvents } from "../../behaviorPanelEvents";
-import { TaxonomyAsObjects } from "../../taxonomyAsObjects";
-import CanvasPane from "../CanvasPane";
-import ToolPane from "../ToolPane";
 import ToolBoxTitle from "../ToolBoxTitle";
 
 type Props = {
@@ -15,8 +12,8 @@ type Props = {
 };
 
 export default function BehaviorPanel({ postMessage }: Props) {
-  const [taxonomy, setTaxonomy] = useState<TaxonomyAsObjects | null>(null);
-  const [artifact, setArtifact] = useState<Behavior.AsObject | null>(null);
+  const [taxonomy, setTaxonomy] = useState<taxonomy.model.ITaxonomy | null>(null);
+  const [artifact, setArtifact] = useState<taxonomy.model.core.IBehavior | null>(null);
 
   const handleMessage = (message: any) => {
     if (message.taxonomy) {

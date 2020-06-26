@@ -1,14 +1,11 @@
 import * as fs from "fs";
 import * as path from "path";
-import * as ttfArtifact from "./ttf/artifact_pb";
-import * as ttfCore from "./ttf/core_pb";
+import { taxonomy, google } from "./ttf/protobufs";
 import * as uuid from "uuid";
 import * as vscode from "vscode";
-import * as protobufAny from "google-protobuf/google/protobuf/any_pb";
 
 import { formulaPanelEvents } from "./panels/formulaPanelEvents";
 import { ITtfInterface } from "./ttfInterface";
-import { TaxonomyAsObjects } from "./panels/taxonomyAsObjects";
 import { TokenTaxonomy } from "./tokenTaxonomy";
 
 const JavascriptHrefPlaceholder: string = "[JAVASCRIPT_HREF]";
@@ -20,7 +17,7 @@ export class FormulaPanel {
     const suffix = " - " + this.environment;
     if (this.formula) {
       return (
-        (this.formula.getArtifact()?.getName() || "New formula") +
+        (this.formula.artifact?.name || "New formula") +
         " - Token Formula" +
         suffix
       );
@@ -42,9 +39,7 @@ export class FormulaPanel {
 
   private readonly panel: vscode.WebviewPanel;
 
-  private taxonomyObjects: TaxonomyAsObjects | null = null;
-
-  private formula: ttfCore.TemplateFormula | null = null;
+  private formula: taxonomy.model.core.ITemplateFormula | null = null;
 
   private incompatabilities: any = {};
 
@@ -129,33 +124,30 @@ export class FormulaPanel {
     const toAdd = this.ttfTaxonomy.getArtifcactById(id);
     if (this.formula && toAdd) {
       await this.removeArtifact(id, false); // avoid duplicates
-      const addType = toAdd.getArtifact()?.getArtifactSymbol()?.getType();
+      const addType = toAdd.artifact?.artifactSymbol?.type;
       switch (addType) {
-        case ttfArtifact.ArtifactType.BASE:
-          const templateBase = new ttfCore.TemplateBase();
-          templateBase.setBase(toAdd.getArtifact()?.getArtifactSymbol());
-          this.formula.setTokenBase(templateBase);
+        case taxonomy.model.artifact.ArtifactType.BASE:
+          const templateBase = taxonomy.model.core.TemplateBase.create();
+          templateBase.base = toAdd.artifact?.artifactSymbol;
+          this.formula.tokenBase = templateBase;
           break;
-        case ttfArtifact.ArtifactType.PROPERTY_SET:
-          const templatePropertySet = new ttfCore.TemplatePropertySet();
-          templatePropertySet.setPropertySet(
-            toAdd.getArtifact()?.getArtifactSymbol()
-          );
-          this.formula.getPropertySetsList().push(templatePropertySet);
+        case taxonomy.model.artifact.ArtifactType.PROPERTY_SET:
+          const templatePropertySet = taxonomy.model.core.TemplatePropertySet.create();
+          templatePropertySet.propertySet = toAdd.artifact?.artifactSymbol;
+          this.formula.propertySets = this.formula.propertySets || [];
+          this.formula.propertySets.push(templatePropertySet);
           break;
-        case ttfArtifact.ArtifactType.BEHAVIOR:
-          const templateBehavior = new ttfCore.TemplateBehavior();
-          templateBehavior.setBehavior(
-            toAdd.getArtifact()?.getArtifactSymbol()
-          );
-          this.formula.getBehaviorsList().push(templateBehavior);
+        case taxonomy.model.artifact.ArtifactType.BEHAVIOR:
+          const templateBehavior = taxonomy.model.core.TemplateBehavior.create();
+          templateBehavior.behavior = toAdd.artifact?.artifactSymbol;
+          this.formula.behaviors = this.formula.behaviors || [];
+          this.formula.behaviors.push(templateBehavior);
           break;
-        case ttfArtifact.ArtifactType.BEHAVIOR_GROUP:
-          const templateBehaviorGroup = new ttfCore.TemplateBehaviorGroup();
-          templateBehaviorGroup.setBehaviorGroup(
-            toAdd.getArtifact()?.getArtifactSymbol()
-          );
-          this.formula.getBehaviorGroupsList().push(templateBehaviorGroup);
+        case taxonomy.model.artifact.ArtifactType.BEHAVIOR_GROUP:
+          const templateBehaviorGroup = taxonomy.model.core.TemplateBehaviorGroup.create();
+          templateBehaviorGroup.behaviorGroup = toAdd.artifact?.artifactSymbol;
+          this.formula.behaviorGroups = this.formula.behaviorGroups || [];
+          this.formula.behaviorGroups.push(templateBehaviorGroup);
           break;
       }
       await this.saveFormula();
@@ -202,26 +194,27 @@ export class FormulaPanel {
   private async newFormula() {
     const id = uuid.v1();
     const temporaryTooling = id;
-    const newArtifactSymbol = new ttfArtifact.ArtifactSymbol();
-    newArtifactSymbol.setId(id);
-    newArtifactSymbol.setTooling(temporaryTooling);
-    newArtifactSymbol.setVisual("");
-    newArtifactSymbol.setVersion("1.0,");
-    newArtifactSymbol.setType(ttfArtifact.ArtifactType.TEMPLATE_FORMULA);
-    newArtifactSymbol.setTemplateValidated(false);
-    const newArtifactDefinition = new ttfArtifact.ArtifactDefinition();
-    newArtifactDefinition.setBusinessDescription(
-      "Enter a business description here"
-    );
-    const newArtifact = new ttfArtifact.Artifact();
-    newArtifact.setName("Untitled");
-    newArtifact.setArtifactDefinition(newArtifactDefinition);
-    newArtifact.setArtifactSymbol(newArtifactSymbol);
-    const newFormula = new ttfCore.TemplateFormula();
-    newFormula.setArtifact(newArtifact);
-    const newArtifactRequest = new ttfArtifact.NewArtifactRequest();
-    newArtifactRequest.setType(ttfArtifact.ArtifactType.TEMPLATE_FORMULA);
-    newArtifactRequest.setArtifact(this.packTemplateFormula(newFormula));
+    const newArtifactSymbol = taxonomy.model.artifact.ArtifactSymbol.create();
+    newArtifactSymbol.id = id;
+    newArtifactSymbol.tooling = temporaryTooling;
+    newArtifactSymbol.visual = "";
+    newArtifactSymbol.version = "1.0,";
+    newArtifactSymbol.type =
+      taxonomy.model.artifact.ArtifactType.TEMPLATE_FORMULA;
+    newArtifactSymbol.templateValidated = false;
+    const newArtifactDefinition = taxonomy.model.artifact.ArtifactDefinition.create();
+    newArtifactDefinition.businessDescription =
+      "Enter a business description here";
+    const newArtifact = taxonomy.model.artifact.Artifact.create();
+    newArtifact.name = "Untitled";
+    newArtifact.artifactDefinition = newArtifactDefinition;
+    newArtifact.artifactSymbol = newArtifactSymbol;
+    const newFormula = taxonomy.model.core.TemplateFormula.create();
+    newFormula.artifact = newArtifact;
+    const newArtifactRequest = taxonomy.model.artifact.NewArtifactRequest.create();
+    newArtifactRequest.type =
+      taxonomy.model.artifact.ArtifactType.TEMPLATE_FORMULA;
+    newArtifactRequest.artifact = this.packTemplateFormula(newFormula);
     await new Promise((resolve, reject) =>
       this.ttfConnection.createArtifact(
         newArtifactRequest,
@@ -242,8 +235,8 @@ export class FormulaPanel {
   private async onMessage(message: any) {
     if (message.e === formulaPanelEvents.Init) {
       this.panel.webview.postMessage({
-        formula: this.formula?.toObject(),
-        taxonomy: this.taxonomyObjects,
+        formula: this.formula,
+        taxonomy: this.ttfTaxonomy.taxonomy,
         incompatabilities: this.incompatabilities,
       });
     } else if (message.e === formulaPanelEvents.Add) {
@@ -255,18 +248,18 @@ export class FormulaPanel {
     }
   }
 
-  private packTemplateFormula(formula: ttfCore.TemplateFormula) {
-    const any = new protobufAny.Any();
-    any.pack(formula.serializeBinary(), "taxonomy.model.core.TemplateFormula");
+  private packTemplateFormula(formula: taxonomy.model.core.ITemplateFormula) {
+    const any = google.protobuf.Any.create();
+    any.value = taxonomy.model.core.TemplateFormula.encode(formula).finish();
+    any.typeUrl = "taxonomy.model.core.TemplateFormula";
     return any;
   }
 
-  private async refreshFormula(symbol?: string) {
-    symbol =
-      symbol || this.formula?.getArtifact()?.getArtifactSymbol()?.getTooling();
+  private async refreshFormula(symbol?: string | null) {
+    symbol = symbol || this.formula?.artifact?.artifactSymbol?.tooling;
     if (symbol) {
-      const existingArtifactSymbol = new ttfArtifact.ArtifactSymbol();
-      existingArtifactSymbol.setTooling(symbol);
+      const existingArtifactSymbol = taxonomy.model.artifact.ArtifactSymbol.create();
+      existingArtifactSymbol.tooling = symbol;
       this.formula = await new Promise((resolve, reject) =>
         this.ttfConnection.getTemplateFormulaArtifact(
           existingArtifactSymbol,
@@ -279,7 +272,7 @@ export class FormulaPanel {
     this.updateIncompatibilities();
     this.panel.webview.postMessage({
       definition: null,
-      formula: this.formula?.toObject() || null,
+      formula: this.formula,
       incompatabilities: this.incompatabilities,
     });
     this.panel.title = this.title;
@@ -289,31 +282,26 @@ export class FormulaPanel {
 
   private async refreshTaxonomy() {
     if (!this.disposed) {
-      this.taxonomyObjects = this.ttfTaxonomy.asObjects();
-      this.panel.webview.postMessage({ taxonomy: this.taxonomyObjects });
+      this.panel.webview.postMessage({
+        taxonomy: this.ttfTaxonomy.taxonomy,
+      });
     }
   }
 
   private async removeArtifact(id: string, save: boolean = true) {
     const toRemove = this.ttfTaxonomy.getArtifcactById(id);
     if (this.formula && toRemove) {
-      if (this.formula.getTokenBase()?.getBase()?.getId() === id) {
-        this.formula.setTokenBase(undefined);
+      if (this.formula.tokenBase?.base?.id === id) {
+        this.formula.tokenBase = undefined;
       } else {
-        this.formula.setPropertySetsList(
-          this.formula
-            .getPropertySetsList()
-            .filter((_) => _.getPropertySet()?.getId() !== id)
+        this.formula.propertySets = this.formula.propertySets?.filter(
+          (_) => _.propertySet?.id !== id
         );
-        this.formula.setBehaviorsList(
-          this.formula
-            .getBehaviorsList()
-            .filter((_) => _.getBehavior()?.getId() !== id)
+        this.formula.behaviors = this.formula.behaviors?.filter(
+          (_) => _.behavior?.id !== id
         );
-        this.formula.setBehaviorGroupsList(
-          this.formula
-            .getBehaviorGroupsList()
-            .filter((_) => _.getBehaviorGroup()?.getId() !== id)
+        this.formula.behaviorGroups = this.formula.behaviorGroups?.filter(
+          (_) => _.behaviorGroup?.id !== id
         );
       }
       if (save) {
@@ -326,22 +314,22 @@ export class FormulaPanel {
     if (this.formula) {
       const deleteAndRecreate = this.updateSymbol();
       if (forceDeleteAndRecreate || deleteAndRecreate) {
-        const deleteSymbol = new ttfArtifact.ArtifactSymbol();
-        deleteSymbol.setType(ttfArtifact.ArtifactType.TEMPLATE_FORMULA);
-        deleteSymbol.setId(
-          this.formula.getArtifact()?.getArtifactSymbol()?.getId() || ""
-        );
-        const deleteRequest = new ttfArtifact.DeleteArtifactRequest();
-        deleteRequest.setArtifactSymbol(deleteSymbol);
+        const deleteSymbol = taxonomy.model.artifact.ArtifactSymbol.create();
+        deleteSymbol.type =
+          taxonomy.model.artifact.ArtifactType.TEMPLATE_FORMULA;
+        deleteSymbol.id = this.formula.artifact?.artifactSymbol?.id || "";
+        const deleteRequest = taxonomy.model.artifact.DeleteArtifactRequest.create();
+        deleteRequest.artifactSymbol = deleteSymbol;
         await new Promise((resolve, reject) =>
           this.ttfConnection.deleteArtifact(
             deleteRequest,
             (error, response) => (error && reject(error)) || resolve(response)
           )
         );
-        const newArtifactRequest = new ttfArtifact.NewArtifactRequest();
-        newArtifactRequest.setType(ttfArtifact.ArtifactType.TEMPLATE_FORMULA);
-        newArtifactRequest.setArtifact(this.packTemplateFormula(this.formula));
+        const newArtifactRequest = taxonomy.model.artifact.NewArtifactRequest.create();
+        newArtifactRequest.type =
+          taxonomy.model.artifact.ArtifactType.TEMPLATE_FORMULA;
+        newArtifactRequest.artifact = this.packTemplateFormula(this.formula);
         await new Promise((resolve, reject) =>
           this.ttfConnection.createArtifact(
             newArtifactRequest,
@@ -349,10 +337,11 @@ export class FormulaPanel {
           )
         );
       } else {
-        const updateReqest = new ttfArtifact.UpdateArtifactRequest();
-        updateReqest.setType(ttfArtifact.ArtifactType.TEMPLATE_FORMULA);
-        updateReqest.setArtifactTypeObject(
-          this.packTemplateFormula(this.formula)
+        const updateReqest = taxonomy.model.artifact.UpdateArtifactRequest.create();
+        updateReqest.type =
+          taxonomy.model.artifact.ArtifactType.TEMPLATE_FORMULA;
+        updateReqest.artifactTypeObject = this.packTemplateFormula(
+          this.formula
         );
         await new Promise((resolve, reject) =>
           this.ttfConnection.updateArtifact(
@@ -366,11 +355,8 @@ export class FormulaPanel {
   }
 
   private async setFormulaDescription(description: string) {
-    if (this.formula) {
-      this.formula
-        .getArtifact()
-        ?.getArtifactDefinition()
-        ?.setBusinessDescription(description);
+    if (this.formula?.artifact?.artifactDefinition) {
+      this.formula.artifact.artifactDefinition.businessDescription = description;
       await this.saveFormula(true);
     }
   }
@@ -379,35 +365,32 @@ export class FormulaPanel {
     const newIncompatabilities: any = {};
     if (this.formula) {
       const allIds = [];
-      allIds.push(this.formula.getTokenBase()?.getBase()?.getId());
+      allIds.push(this.formula.tokenBase?.base?.id);
       allIds.push(
-        ...this.formula.getBehaviorsList().map((_) => _.getBehavior()?.getId())
+        ...(this.formula.behaviors?.map((_) => _.behavior?.id) || [])
       );
       allIds.push(
-        ...this.formula
-          .getBehaviorGroupsList()
-          .map((_) => _.getBehaviorGroup()?.getId())
+        ...(this.formula.behaviorGroups?.map((_) => _.behaviorGroup?.id) || [])
       );
       allIds.push(
-        ...this.formula
-          .getPropertySetsList()
-          .map((_) => _.getPropertySet()?.getId())
+        ...(this.formula.propertySets?.map((_) => _.propertySet?.id) || [])
       );
       for (const id of allIds) {
         const artifact = this.ttfTaxonomy.getArtifcactById(id);
         if (artifact) {
-          const artifactName = artifact.getArtifact()?.getName();
-          for (const artifactIncompatibleWith of artifact
-            .getArtifact()
-            ?.getIncompatibleWithSymbolsList() || []) {
-            if (newIncompatabilities[artifactIncompatibleWith.getId()]) {
-              newIncompatabilities[artifactIncompatibleWith.getId()].push(
-                artifactName
-              );
-            } else {
-              newIncompatabilities[artifactIncompatibleWith.getId()] = [
-                artifactName,
-              ];
+          const artifactName = artifact.artifact?.name;
+          for (const artifactIncompatibleWith of artifact.artifact
+            ?.incompatibleWithSymbols || []) {
+            if (artifactIncompatibleWith.id) {
+              if (newIncompatabilities[artifactIncompatibleWith.id]) {
+                newIncompatabilities[artifactIncompatibleWith.id].push(
+                  artifactName
+                );
+              } else {
+                newIncompatabilities[artifactIncompatibleWith.id] = [
+                  artifactName,
+                ];
+              }
             }
           }
         }
@@ -418,10 +401,8 @@ export class FormulaPanel {
 
   private updateSymbol() {
     if (this.formula) {
-      const tokenBaseTooling =
-        this.formula.getTokenBase()?.getBase()?.getTooling() || "?{}";
-      const tokenBaseVisual =
-        this.formula.getTokenBase()?.getBase()?.getVisual() || "?{}";
+      const tokenBaseTooling = this.formula.tokenBase?.base?.tooling || "?{}";
+      const tokenBaseVisual = this.formula.tokenBase?.base?.visual || "?{}";
       let [tooling, includedBehaviorsTooling] = tokenBaseTooling
         .replace("}", "")
         .split("{", 2);
@@ -430,48 +411,46 @@ export class FormulaPanel {
         .split("{", 2);
       const behaviorsTooling = (includedBehaviorsTooling || "").split(",");
       const behaviorsVisual = (includedBehaviorsVisual || "").split(",");
-      for (const behavior of this.formula.getBehaviorsList()) {
-        if (
-          behaviorsTooling.indexOf(
-            behavior.getBehavior()?.getTooling() || ""
-          ) === -1
-        ) {
-          behaviorsTooling.push(behavior.getBehavior()?.getTooling() || "?");
-          behaviorsVisual.push(behavior.getBehavior()?.getVisual() || "?");
+      for (const behavior of this.formula.behaviors || []) {
+        if (behaviorsTooling.indexOf(behavior.behavior?.tooling || "") === -1) {
+          behaviorsTooling.push(behavior.behavior?.tooling || "?");
+          behaviorsVisual.push(behavior.behavior?.visual || "?");
         }
       }
-      for (const behaviorGroup of this.formula.getBehaviorGroupsList()) {
+      for (const behaviorGroup of this.formula.behaviorGroups || []) {
         if (
           behaviorsTooling.indexOf(
-            behaviorGroup.getBehaviorGroup()?.getTooling() || ""
+            behaviorGroup.behaviorGroup?.tooling || ""
           ) === -1
         ) {
-          behaviorsTooling.push(
-            behaviorGroup.getBehaviorGroup()?.getTooling() || "?"
-          );
-          behaviorsVisual.push(
-            behaviorGroup.getBehaviorGroup()?.getVisual() || "?"
-          );
+          behaviorsTooling.push(behaviorGroup.behaviorGroup?.tooling || "?");
+          behaviorsVisual.push(behaviorGroup.behaviorGroup?.visual || "?");
         }
       }
       tooling += "{" + behaviorsTooling.join(",") + "}";
       visual += "{" + behaviorsVisual.join(",") + "}";
       let containsAdditions = false;
-      for (const propertySet of this.formula.getPropertySetsList()) {
+      for (const propertySet of this.formula.propertySets || []) {
         containsAdditions = true;
-        tooling += "+" + (propertySet.getPropertySet()?.getTooling() || "?");
-        visual += "+" + (propertySet.getPropertySet()?.getVisual() || "?");
+        tooling += "+" + (propertySet.propertySet?.tooling || "?");
+        visual += "+" + (propertySet.propertySet?.visual || "?");
       }
       if (containsAdditions) {
         tooling = "[" + tooling + "]";
         visual = "[" + visual + "]";
       }
-      this.formula.getArtifact()?.getArtifactSymbol()?.setTooling(tooling);
-      this.formula.getArtifact()?.getArtifactSymbol()?.setVisual(visual);
-      // By convention, formulae use their tooling symbol as their name:
-      if (this.formula.getArtifact()?.getName() !== tooling) {
-        this.formula.getArtifact()?.setName(tooling);
-        return true; // delete-and-create instead of update
+      if (this.formula.artifact) {
+        if (this.formula.artifact.artifactSymbol) {
+          this.formula.artifact.artifactSymbol.tooling = tooling;
+          this.formula.artifact.artifactSymbol.visual = visual;
+        }
+        // By convention, formulae use their tooling symbol as their name:
+        if (!this.formula.artifact || this.formula.artifact.name !== tooling) {
+          this.formula.artifact.name = tooling;
+          return true; // delete-and-create instead of update
+        } else {
+          return false;
+        }
       } else {
         return false;
       }

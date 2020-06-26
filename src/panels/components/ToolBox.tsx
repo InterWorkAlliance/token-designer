@@ -32,7 +32,7 @@ export default function ToolBox({
           (artifact) =>
             artifact && (
               <ArtifactIcon
-                key={artifact.artifact?.name}
+                key={artifact.artifact?.name || ""}
                 artifact={artifact}
                 type={type}
                 onDragStart={artifactOnDragStart}

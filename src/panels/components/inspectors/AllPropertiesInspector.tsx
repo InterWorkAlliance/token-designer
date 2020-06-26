@@ -1,34 +1,32 @@
 import React, { Fragment } from "react";
 
-import { TemplateDefinition, Property, Invocation } from "../../../ttf/core_pb";
+import { taxonomy } from "../../../ttf/protobufs";
 
 import ArtifactReference from "../ArtifactReference";
 
-import { TaxonomyAsObjects } from "../../taxonomyAsObjects";
-
 type PropertyTree = {
   path: string;
-  properties: {
-    name: string;
-    templateValue: string;
-    valueDescription: string;
-    invocations: Invocation.AsObject[];
+  properties?: {
+    name?: string | null;
+    templateValue?: string | null;
+    valueDescription?: string | null;
+    invocations?: taxonomy.model.core.IInvocation[] | null;
     children?: PropertyTree;
   }[];
 };
 
 const extractProperties = (
   path: string,
-  properties: Property.AsObject[]
+  properties?: taxonomy.model.core.IProperty[] | null
 ): PropertyTree => ({
   path,
-  properties: properties.map((_) => ({
+  properties: properties?.map((_) => ({
     name: _.name,
     templateValue: _.templateValue,
     valueDescription: _.valueDescription,
-    invocations: _.propertyInvocationsList,
-    children: _.propertiesList.length
-      ? extractProperties(`${path}/${_.name}`, _.propertiesList)
+    invocations: _.propertyInvocations,
+    children: _.properties?.length
+      ? extractProperties(`${path}/${_.name}`, _.properties)
       : undefined,
   })),
 });
@@ -36,8 +34,8 @@ const extractProperties = (
 function AllPropertiesInspector({ tree }: { tree: PropertyTree }) {
   return (
     <ul>
-      {tree.properties.map((_) => (
-        <li key={_.name}>
+      {tree.properties?.map((_) => (
+        <li key={_.name || ""}>
           {_.name && (
             <>
               <div>
@@ -59,21 +57,22 @@ function AllPropertiesInspector({ tree }: { tree: PropertyTree }) {
 }
 
 type Props = {
-  taxonomy: TaxonomyAsObjects;
-  definition: TemplateDefinition.AsObject;
+  taxonomy: taxonomy.model.ITaxonomy;
+  definition: taxonomy.model.core.ITemplateDefinition;
 };
 
 export default function PropertyInspector({ taxonomy, definition }: Props) {
   const properties = [
-    ...definition.behaviorGroupsList.map((_) => _.behaviorArtifactsList).flat(),
-    ...definition.behaviorsList,
-    ...definition.propertySetsList,
+    ...(definition.behaviorGroups?.map((_) => _.behaviorArtifacts).flat() ||
+      []),
+    ...(definition.behaviors || []),
+    ...(definition.propertySets || []),
   ]
     .map((_) => ({
-      referenceId: _.reference?.id,
-      ...extractProperties(_.reference?.id || "", _.propertiesList),
+      referenceId: _?.reference?.id,
+      ...extractProperties(_?.reference?.id || "", _?.properties),
     }))
-    .filter((_) => _.properties.length); // exclude empty paths
+    .filter((_) => _?.properties?.length); // exclude empty paths
   return (
     <>
       {properties.map((tree) => (

@@ -1,13 +1,14 @@
-import * as ttfArtifact from "./ttf/artifact_pb";
-import * as ttfCore from "./ttf/core_pb";
 import * as vscode from "vscode";
+import { taxonomy } from "./ttf/protobufs";
 
 import { ArtifactPanelBase } from "./artifactPanelBase";
 import { ITtfInterface } from "./ttfInterface";
 import { propertySetPanelEvents } from "./panels/propertySetPanelEvents";
 import { TokenTaxonomy } from "./tokenTaxonomy";
 
-export class PropertySetPanel extends ArtifactPanelBase<ttfCore.PropertySet> {
+export class PropertySetPanel extends ArtifactPanelBase<
+  taxonomy.model.core.IPropertySet
+> {
   static async openExistingPropertySet(
     artifactId: string,
     ttfConnection: ITtfInterface,
@@ -57,8 +58,8 @@ export class PropertySetPanel extends ArtifactPanelBase<ttfCore.PropertySet> {
   }
 
   protected async getArtifact(
-    symbol: ttfArtifact.ArtifactSymbol
-  ): Promise<ttfCore.PropertySet> {
+    symbol: taxonomy.model.artifact.IArtifactSymbol
+  ): Promise<taxonomy.model.core.IPropertySet> {
     return await new Promise((resolve, reject) =>
       this.ttfConnection.getPropertySetArtifact(
         symbol,

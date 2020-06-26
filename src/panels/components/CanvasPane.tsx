@@ -4,9 +4,9 @@ type Props = {
   left: string;
   right: string;
   children: any;
-  formula?: string;
-  formulaDescription?: string;
-  definitionName?: string;
+  formula?: string | null;
+  formulaDescription?: string | null;
+  definitionName?: string | null;
   setFormulaDescription?: (description: string) => void;
   setDefinitionName?: (name: string) => void;
 };

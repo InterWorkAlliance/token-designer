@@ -1,6 +1,5 @@
 import * as path from "path";
-import * as ttfArtifact from "./ttf/artifact_pb";
-import * as ttfTaxonomy from "./ttf/taxonomy_pb";
+import { taxonomy } from "./ttf/protobufs";
 import * as vscode from "vscode";
 
 import { TokenTaxonomy } from "./tokenTaxonomy";
@@ -135,7 +134,7 @@ export class TokenDefinitionIdentifier {
     public readonly extensionPath: string,
     public readonly label: string,
     public readonly parent: TokenDefinitionIdentifier | undefined,
-    public readonly artifact?: ttfArtifact.Artifact.AsObject
+    public readonly artifact?: taxonomy.model.artifact.IArtifact
   ) {}
 
   public asTreeItem(): vscode.TreeItem {
@@ -177,7 +176,7 @@ export class TokenDefinitionExplorer
 
   private disposed = false;
 
-  private hierarchy: ttfTaxonomy.Hierarchy.AsObject | undefined = undefined;
+  private hierarchy: taxonomy.model.IHierarchy | undefined | null = null;
 
   private ttfTaxonomy: TokenTaxonomy;
 
@@ -228,7 +227,7 @@ export class TokenDefinitionExplorer
 
   private refresh() {
     if (this.ttfTaxonomy.taxonomy && !this.disposed) {
-      this.hierarchy = this.ttfTaxonomy.taxonomy.toObject().tokenTemplateHierarchy;
+      this.hierarchy = this.ttfTaxonomy.taxonomy.tokenTemplateHierarchy;
       this.onDidChangeTreeDataEmitter.fire();
     }
   }

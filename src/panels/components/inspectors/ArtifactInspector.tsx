@@ -1,12 +1,6 @@
 import React from "react";
 
-import {
-  Behavior,
-  Base,
-  BehaviorGroup,
-  PropertySet,
-  TemplateDefinition,
-} from "../../../ttf/core_pb";
+import { taxonomy } from "../../../ttf/protobufs";
 
 import AnyArtifact from "../AnyArtifact";
 import ArtifactReference from "../ArtifactReference";
@@ -15,12 +9,11 @@ import ArtifactType from "../ArtifactType";
 import BehaviorGroupInspector from "./BehaviorGroupInspector";
 import BehaviorInspector from "./BehaviorInspector";
 import PropertySetInspector from "./PropertySetInspector";
-import { TaxonomyAsObjects } from "../../taxonomyAsObjects";
 import TemplateDefinitionInspector from "./TemplateDefinitionInspector";
 import TokenBaseInspector from "./TokenBaseInspector";
 
 type Props = {
-  taxonomy: TaxonomyAsObjects;
+  taxonomy: taxonomy.model.ITaxonomy;
   artifact?: AnyArtifact;
   artifactType?: ArtifactType;
 };
@@ -39,7 +32,7 @@ export default function ArtifactInspector({
       specificTypeInspector = (
         <BehaviorInspector
           taxonomy={taxonomy}
-          artifact={artifact as Behavior.AsObject}
+          artifact={artifact as taxonomy.model.core.IBehavior}
         />
       );
       break;
@@ -47,7 +40,7 @@ export default function ArtifactInspector({
       specificTypeInspector = (
         <BehaviorGroupInspector
           taxonomy={taxonomy}
-          artifact={artifact as BehaviorGroup.AsObject}
+          artifact={artifact as taxonomy.model.core.IBehaviorGroup}
         />
       );
       break;
@@ -55,15 +48,14 @@ export default function ArtifactInspector({
       specificTypeInspector = (
         <PropertySetInspector
           taxonomy={taxonomy}
-          artifact={artifact as PropertySet.AsObject}
+          artifact={artifact as taxonomy.model.core.IPropertySet}
         />
       );
       break;
     case "token-base":
       specificTypeInspector = (
         <TokenBaseInspector
-          taxonomy={taxonomy}
-          artifact={artifact as Base.AsObject}
+          artifact={artifact as taxonomy.model.core.IBase}
         />
       );
       break;
@@ -71,7 +63,7 @@ export default function ArtifactInspector({
       specificTypeInspector = (
         <TemplateDefinitionInspector
           taxonomy={taxonomy}
-          artifact={artifact as TemplateDefinition.AsObject}
+          artifact={artifact as taxonomy.model.core.ITemplateDefinition}
         />
       );
       break;
@@ -79,12 +71,12 @@ export default function ArtifactInspector({
   const core = artifact.artifact;
   return (
     <>
-      {!!core.aliasesList?.length && (
+      {!!core.aliases?.length && (
         <p>
-          <b>Aliases: {core.aliasesList.join(", ")}</b>
+          <b>Aliases: {core.aliases.join(", ")}</b>
         </p>
       )}
-      {!core.aliasesList?.length && <p></p>}
+      {!core.aliases?.length && <p></p>}
       {!!core.artifactSymbol && (
         <ArtifactSymbolBox symbol={core.artifactSymbol} />
       )}
@@ -101,11 +93,11 @@ export default function ArtifactInspector({
           <i>Note:</i> {core.artifactDefinition?.comments}
         </p>
       )}
-      {!!core.artifactDefinition?.analogiesList?.length && (
+      {!!core.artifactDefinition?.analogies?.length && (
         <div>
           <u>Analogies:</u>
           <ul>
-            {core.artifactDefinition?.analogiesList.map((_) => (
+            {core.artifactDefinition?.analogies.map((_) => (
               <li key={JSON.stringify(_)}>
                 {_.name}
                 <ul>
@@ -116,11 +108,11 @@ export default function ArtifactInspector({
           </ul>
         </div>
       )}
-      {!!core.contributorsList?.length && (
+      {!!core.contributors?.length && (
         <div>
           <u>Contributors:</u>
           <ul>
-            {core.contributorsList.map((_) => (
+            {core.contributors.map((_) => (
               <li key={JSON.stringify(_)}>
                 {_.name}
                 {_.name && _.organization && <>, </>}
@@ -130,11 +122,11 @@ export default function ArtifactInspector({
           </ul>
         </div>
       )}
-      {!!core.dependenciesList?.length && (
+      {!!core.dependencies?.length && (
         <div>
           <u>Dependencies:</u>
           <ul>
-            {core.dependenciesList.map((_) => (
+            {core.dependencies.map((_) => (
               <li key={JSON.stringify(_)}>
                 <ArtifactReference
                   taxonomy={taxonomy}
@@ -147,11 +139,11 @@ export default function ArtifactInspector({
           </ul>
         </div>
       )}
-      {!!core.influencedBySymbolsList?.length && (
+      {!!core.influencedBySymbols?.length && (
         <div>
           <u>Influenced by:</u>
           <ul>
-            {core.influencedBySymbolsList.map((_) => (
+            {core.influencedBySymbols.map((_) => (
               <li key={JSON.stringify(_)}>
                 <b>
                   <ArtifactReference
@@ -171,11 +163,11 @@ export default function ArtifactInspector({
           </ul>
         </div>
       )}
-      {!!core.incompatibleWithSymbolsList?.length && (
+      {!!core.incompatibleWithSymbols?.length && (
         <div>
           <u>Incompatible with:</u>
           <ul>
-            {core.incompatibleWithSymbolsList.map((_) => (
+            {core.incompatibleWithSymbols.map((_) => (
               <li key={JSON.stringify(_)}>
                 <ArtifactReference
                   taxonomy={taxonomy}

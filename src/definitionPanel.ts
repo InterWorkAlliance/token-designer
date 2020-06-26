@@ -1,13 +1,10 @@
 import * as fs from "fs";
 import * as path from "path";
-import * as ttfArtifact from "./ttf/artifact_pb";
-import * as ttfCore from "./ttf/core_pb";
+import { taxonomy, google } from "./ttf/protobufs";
 import * as vscode from "vscode";
-import * as protobufAny from "google-protobuf/google/protobuf/any_pb";
 
 import { definitionPanelEvents } from "./panels/definitionPanelEvents";
 import { ITtfInterface } from "./ttfInterface";
-import { TaxonomyAsObjects } from "./panels/taxonomyAsObjects";
 import { TokenTaxonomy } from "./tokenTaxonomy";
 
 const JavascriptHrefPlaceholder: string = "[JAVASCRIPT_HREF]";
@@ -19,7 +16,7 @@ export class DefinitionPanel {
     const suffix = " - " + this.environment;
     if (this.definition) {
       return (
-        (this.definition.getArtifact()?.getName() || "New definition") +
+        (this.definition.artifact?.name || "New definition") +
         " - Token Definition" +
         suffix
       );
@@ -41,9 +38,7 @@ export class DefinitionPanel {
 
   private readonly panel: vscode.WebviewPanel;
 
-  private taxonomyObjects: TaxonomyAsObjects | null = null;
-
-  private definition: ttfCore.TemplateDefinition | null = null;
+  private definition: taxonomy.model.core.ITemplateDefinition | null = null;
 
   private disposed = false;
 
@@ -168,18 +163,17 @@ export class DefinitionPanel {
   }
 
   private async newDefinition(formulaId: any, name: string) {
-    const newTemplateDefinition = new ttfArtifact.NewTemplateDefinition();
-    newTemplateDefinition.setTemplateFormulaId(formulaId);
-    newTemplateDefinition.setTokenName(name);
-    const result: ttfCore.TemplateDefinition = await new Promise(
+    const newTemplateDefinition = taxonomy.model.artifact.NewTemplateDefinition.create();
+    newTemplateDefinition.templateFormulaId = formulaId;
+    newTemplateDefinition.tokenName = name;
+    const result: taxonomy.model.core.ITemplateDefinition = await new Promise(
       (resolve, reject) =>
         this.ttfConnection.createTemplateDefinition(
           newTemplateDefinition,
           (error, response) => (error && reject(error)) || resolve(response)
         )
     );
-    const newDefinitionId: string =
-      result.getArtifact()?.getArtifactSymbol()?.getId() || "";
+    const newDefinitionId: string = result.artifact?.artifactSymbol?.id || "";
     this.refreshDefinition(newDefinitionId);
   }
 
@@ -194,30 +188,30 @@ export class DefinitionPanel {
   private async onMessage(message: any) {
     if (message.e === definitionPanelEvents.Init) {
       this.panel.webview.postMessage({
-        definition: this.definition?.toObject(),
-        taxonomy: this.taxonomyObjects,
+        definition: this.definition,
+        taxonomy: this.ttfTaxonomy.taxonomy,
       });
     } else if (message.e === definitionPanelEvents.SetDefinitionName) {
       await this.setDefinitionName(message.name);
     }
   }
 
-  private packTemplateDefinition(definition: ttfCore.TemplateDefinition) {
-    const any = new protobufAny.Any();
-    any.pack(
-      definition.serializeBinary(),
-      "taxonomy.model.core.TemplateDefinition"
-    );
+  private packTemplateDefinition(
+    definition: taxonomy.model.core.ITemplateDefinition
+  ) {
+    const any = google.protobuf.Any.create();
+    any.value = taxonomy.model.core.TemplateDefinition.encode(
+      definition
+    ).finish();
+    any.typeUrl = "taxonomy.model.core.TemplateDefinition";
     return any;
   }
 
-  private async refreshDefinition(artifactId?: string) {
-    artifactId =
-      artifactId ||
-      this.definition?.getArtifact()?.getArtifactSymbol()?.getId();
+  private async refreshDefinition(artifactId?: string | null) {
+    artifactId = artifactId || this.definition?.artifact?.artifactSymbol?.id;
     if (artifactId) {
-      const existingArtifactSymbol = new ttfArtifact.ArtifactSymbol();
-      existingArtifactSymbol.setId(artifactId);
+      const existingArtifactSymbol = taxonomy.model.artifact.ArtifactSymbol.create();
+      existingArtifactSymbol.id = artifactId;
       this.definition = await new Promise((resolve, reject) =>
         this.ttfConnection.getTemplateDefinitionArtifact(
           existingArtifactSymbol,
@@ -228,7 +222,7 @@ export class DefinitionPanel {
       this.definition = null;
     }
     this.panel.webview.postMessage({
-      definition: this.definition?.toObject(),
+      definition: this.definition,
       formula: null,
     });
     this.panel.title = this.title;
@@ -238,8 +232,9 @@ export class DefinitionPanel {
 
   private async refreshTaxonomy() {
     if (!this.disposed) {
-      this.taxonomyObjects = this.ttfTaxonomy.asObjects();
-      this.panel.webview.postMessage({ taxonomy: this.taxonomyObjects });
+      this.panel.webview.postMessage({
+        taxonomy: this.ttfTaxonomy.taxonomy,
+      });
     }
   }
 
@@ -249,26 +244,24 @@ export class DefinitionPanel {
         // Saving and deleting (instead of updating) allows for artifact names
         // to be changed and prevents the gRPC server from creating version
         // subfolders.
-        const deleteSymbol = new ttfArtifact.ArtifactSymbol();
-        deleteSymbol.setType(ttfArtifact.ArtifactType.TEMPLATE_DEFINITION);
-        deleteSymbol.setTooling(
-          this.definition?.getArtifact()?.getArtifactSymbol()?.getTooling() ||
-            ""
-        );
-        const deleteRequest = new ttfArtifact.DeleteArtifactRequest();
-        deleteRequest.setArtifactSymbol(deleteSymbol);
+        const deleteSymbol = taxonomy.model.artifact.ArtifactSymbol.create();
+        deleteSymbol.type =
+          taxonomy.model.artifact.ArtifactType.TEMPLATE_DEFINITION;
+        deleteSymbol.tooling =
+          this.definition?.artifact?.artifactSymbol?.tooling || "";
+        const deleteRequest = taxonomy.model.artifact.DeleteArtifactRequest.create();
+        deleteRequest.artifactSymbol = deleteSymbol;
         await new Promise((resolve, reject) =>
           this.ttfConnection.deleteArtifact(
             deleteRequest,
             (error, response) => (error && reject(error)) || resolve(response)
           )
         );
-        const newArtifactRequest = new ttfArtifact.NewArtifactRequest();
-        newArtifactRequest.setType(
-          ttfArtifact.ArtifactType.TEMPLATE_DEFINITION
-        );
-        newArtifactRequest.setArtifact(
-          this.packTemplateDefinition(this.definition)
+        const newArtifactRequest = taxonomy.model.artifact.NewArtifactRequest.create();
+        newArtifactRequest.type =
+          taxonomy.model.artifact.ArtifactType.TEMPLATE_DEFINITION;
+        newArtifactRequest.artifact = this.packTemplateDefinition(
+          this.definition
         );
         await new Promise((resolve, reject) =>
           this.ttfConnection.createArtifact(
@@ -277,10 +270,11 @@ export class DefinitionPanel {
           )
         );
       } else {
-        const updateReqest = new ttfArtifact.UpdateArtifactRequest();
-        updateReqest.setType(ttfArtifact.ArtifactType.TEMPLATE_DEFINITION);
-        updateReqest.setArtifactTypeObject(
-          this.packTemplateDefinition(this.definition)
+        const updateReqest = taxonomy.model.artifact.UpdateArtifactRequest.create();
+        updateReqest.type =
+          taxonomy.model.artifact.ArtifactType.TEMPLATE_DEFINITION;
+        updateReqest.artifactTypeObject = this.packTemplateDefinition(
+          this.definition
         );
         await new Promise((resolve, reject) =>
           this.ttfConnection.updateArtifact(
@@ -294,8 +288,8 @@ export class DefinitionPanel {
   }
 
   private async setDefinitionName(name: string) {
-    if (this.definition) {
-      this.definition.getArtifact()?.setName(name);
+    if (this.definition && this.definition.artifact) {
+      this.definition.artifact.name = name;
       await this.saveDefintion(true);
     }
   }

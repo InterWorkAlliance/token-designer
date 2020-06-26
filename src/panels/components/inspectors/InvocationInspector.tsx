@@ -1,9 +1,9 @@
 import React from "react";
 
-import { Invocation } from "../../../ttf/core_pb";
+import { taxonomy } from "../../../ttf/protobufs";
 
 type Props = {
-  invocation: Invocation.AsObject;
+  invocation: taxonomy.model.core.IInvocation;
 };
 
 export default function InvocationInspector({ invocation }: Props) {
@@ -31,8 +31,8 @@ export default function InvocationInspector({ invocation }: Props) {
             </tr>
             <tr>
               <td valign="top">
-                {invocation.request?.inputParametersList.map((_) => (
-                  <p key={_.name}>
+                {invocation.request?.inputParameters?.map((_) => (
+                  <p key={_.name || ""}>
                     <b>{_.name}</b>
                     <br />
                     <i>{_.valueDescription}</i>
@@ -40,8 +40,8 @@ export default function InvocationInspector({ invocation }: Props) {
                 ))}
               </td>
               <td valign="top">
-                {invocation.response?.outputParametersList.map((_) => (
-                  <p key={_.name}>
+                {invocation.response?.outputParameters?.map((_) => (
+                  <p key={_.name || ""}>
                     <b>{_.name}</b>
                     <br />
                     <i>{_.valueDescription}</i>

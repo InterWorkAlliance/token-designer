@@ -1,10 +1,9 @@
 import React from "react";
 
-import { PropertySetReference, PropertySet } from "../../../ttf/core_pb";
+import { taxonomy } from "../../../ttf/protobufs";
 
 import ArtifactInspector from "./ArtifactInspector";
 import { getArtifactById } from "../../getArtifactById";
-import { TaxonomyAsObjects } from "../../taxonomyAsObjects";
 
 function thisOrThat<T>(p: string, primary: any, secondary: any): T {
   if (primary[p] === undefined || primary[p] === null) {
@@ -17,8 +16,8 @@ function thisOrThat<T>(p: string, primary: any, secondary: any): T {
 }
 
 type Props = {
-  taxonomy: TaxonomyAsObjects;
-  artifact: PropertySetReference.AsObject;
+  taxonomy: taxonomy.model.ITaxonomy;
+  artifact: taxonomy.model.core.IPropertySetReference;
 };
 
 export default function PropertySetReferenceInspector({
@@ -30,9 +29,9 @@ export default function PropertySetReferenceInspector({
     poachFrom = getArtifactById(taxonomy, artifact.reference.id) || {};
   }
 
-  let mergedBehavior: PropertySet.AsObject | undefined = {
+  let mergedBehavior: taxonomy.model.core.IPropertySet | undefined = {
     artifact: thisOrThat("artifact", artifact, poachFrom),
-    propertiesList: thisOrThat("propertiesList", artifact, poachFrom),
+    properties: thisOrThat("properties", artifact, poachFrom),
   };
 
   return (

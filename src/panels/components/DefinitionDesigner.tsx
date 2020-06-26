@@ -1,23 +1,17 @@
 import React, { useState } from "react";
 
-import {
-  TemplateDefinition,
-  PropertySet,
-  BehaviorGroup,
-  Behavior,
-} from "../../ttf/core_pb";
+import { taxonomy } from "../../ttf/protobufs";
 
 import AnyArtifact from "./AnyArtifact";
 import ArtifactType from "./ArtifactType";
 import Canvas from "./Canvas";
 import CanvasPane from "./CanvasPane";
 import DefinitionInspector from "./inspectors/DefinitionInspector";
-import { TaxonomyAsObjects } from "../taxonomyAsObjects";
 import ToolPane from "./ToolPane";
 
 type Props = {
-  taxonomy: TaxonomyAsObjects;
-  definition: TemplateDefinition.AsObject;
+  taxonomy: taxonomy.model.ITaxonomy;
+  definition: taxonomy.model.core.ITemplateDefinition;
   setDefinitionName: (name: string) => void;
 };
 
@@ -30,33 +24,24 @@ export default function DefinitionDesigner({
     [AnyArtifact, ArtifactType] | undefined
   >(undefined);
 
-  const tokenBase = taxonomy?.baseTokenTypes.find(
-    (_) =>
-      _.artifact?.artifactSymbol?.id === definition.tokenBase?.reference?.id
-  );
+  const tokenBase = (taxonomy?.baseTokenTypes || {})[
+    definition.tokenBase?.reference?.id || ""
+  ];
 
-  const propertySets = definition.propertySetsList
-    .map((_) => _.reference?.id)
-    .map((id) =>
-      taxonomy?.propertySets.find((_) => _.artifact?.artifactSymbol?.id === id)
-    )
-    .filter((_) => !!_) as PropertySet.AsObject[];
+  const propertySets = definition.propertySets
+    ?.map((_) => _.reference?.id)
+    .map((id) => (taxonomy?.propertySets || {})[id || ""])
+    .filter((_) => !!_) as taxonomy.model.core.IPropertySet[];
 
-  const behaviorGroups = definition.behaviorGroupsList
-    .map((_) => _.reference?.id)
-    .map((id) =>
-      taxonomy?.behaviorGroups.find(
-        (_) => _.artifact?.artifactSymbol?.id === id
-      )
-    )
-    .filter((_) => !!_) as BehaviorGroup.AsObject[];
+  const behaviorGroups = definition.behaviorGroups
+    ?.map((_) => _.reference?.id)
+    .map((id) => (taxonomy?.behaviorGroups || {})[id || ""])
+    .filter((_) => !!_) as taxonomy.model.core.IBehaviorGroup[];
 
-  const behaviors = definition.behaviorsList
-    .map((_) => _.reference?.id)
-    .map((id) =>
-      taxonomy?.behaviors.find((_) => _.artifact?.artifactSymbol?.id === id)
-    )
-    .filter((_) => !!_) as Behavior.AsObject[];
+  const behaviors = definition.behaviors
+    ?.map((_) => _.reference?.id)
+    .map((id) => (taxonomy?.behaviors || {})[id || ""])
+    .filter((_) => !!_) as taxonomy.model.core.IBehavior[];
 
   const rightPaneWidth = "35vw";
 

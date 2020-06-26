@@ -1,22 +1,21 @@
 import React, { useEffect, useState } from "react";
 
-import { TemplateDefinition } from "../../../ttf/core_pb";
+import { taxonomy } from "../../../ttf/protobufs";
 
 import DefinitionDesigner from "../DefinitionDesigner";
 
 import { definitionPanelEvents } from "../../definitionPanelEvents";
-import { TaxonomyAsObjects } from "../../taxonomyAsObjects";
 
 type Props = {
   postMessage: (message: any) => void;
 };
 
 export default function DefinitionPanel({ postMessage }: Props) {
-  const [taxonomy, setTaxonomy] = useState<TaxonomyAsObjects | null>(null);
+  const [taxonomy, setTaxonomy] = useState<taxonomy.model.ITaxonomy | null>(null);
   const [
     definition,
     setDefinition,
-  ] = useState<TemplateDefinition.AsObject | null>(null);
+  ] = useState<taxonomy.model.core.ITemplateDefinition | null>(null);
 
   const handleMessage = (message: any) => {
     if (message.taxonomy) {

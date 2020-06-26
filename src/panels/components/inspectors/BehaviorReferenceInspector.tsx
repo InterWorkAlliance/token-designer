@@ -1,17 +1,16 @@
 import React from "react";
 
-import { BehaviorReference, Behavior } from "../../../ttf/core_pb";
+import { taxonomy } from "../../../ttf/protobufs";
 
 import ArtifactInspector from "./ArtifactInspector";
 import ArtifactReference from "../ArtifactReference";
 import ArtifactSymbolBox from "../ArtifactSymbolBox";
 import { getArtifactById } from "../../getArtifactById";
 import InvocationInspector from "./InvocationInspector";
-import { TaxonomyAsObjects } from "../../taxonomyAsObjects";
 
 type Props = {
-  taxonomy: TaxonomyAsObjects;
-  artifact: BehaviorReference.AsObject;
+  taxonomy: taxonomy.model.ITaxonomy;
+  artifact: taxonomy.model.core.IBehaviorReference;
 };
 
 export default function BehaviorReferenceInspector({
@@ -23,23 +22,23 @@ export default function BehaviorReferenceInspector({
     poachFrom = getArtifactById(taxonomy, artifact.reference.id) || {};
   }
 
-  let mergedBehavior: Behavior.AsObject | undefined = {
+  let mergedBehavior: taxonomy.model.core.IBehavior | undefined = {
     constructorType: artifact.constructorType || poachFrom.constructorType,
-    invocationsList: artifact.invocationsList.length
-      ? artifact.invocationsList
-      : poachFrom.invocationsList,
+    invocations: artifact.invocations?.length
+      ? artifact.invocations
+      : poachFrom.invocations,
     isExternal:
       artifact.isExternal === undefined
         ? poachFrom.isExternal
         : artifact.isExternal,
-    propertiesList: artifact.propertiesList.length
-      ? artifact.propertiesList
-      : poachFrom.propertiesList,
+    properties: artifact.properties?.length
+      ? artifact.properties
+      : poachFrom.properties,
     artifact: poachFrom.artifact,
-    constructor: artifact.constructor || poachFrom.constructor,
+    constructor_: artifact.constructor_ || poachFrom.constructor_,
   };
 
-  if (!mergedBehavior.invocationsList || !mergedBehavior.propertiesList) {
+  if (!mergedBehavior.invocations || !mergedBehavior.properties) {
     mergedBehavior = undefined;
   }
 
@@ -53,31 +52,30 @@ export default function BehaviorReferenceInspector({
           <i>Note:</i> {artifact.reference.referenceNotes}
         </p>
       )}
-      {!!artifact.appliesToList.length && (
+      {!!artifact.appliesTo?.length && (
         <>
           <p>
             <u>Applies to:</u>
           </p>
           <p>
-            {artifact.appliesToList.map((_) => (
-              <ArtifactSymbolBox key={_.id} symbol={_} />
+            {artifact.appliesTo?.map((_) => (
+              <ArtifactSymbolBox key={_.id||""} symbol={_} />
             ))}
           </p>
           <br style={{ clear: "both" }} />
         </>
       )}
-      {!!artifact.influenceBindingsList.length && (
+      {!!artifact.influenceBindings?.length && (
         <>
           <p>
             <u>Influence bindings:</u>
           </p>
           <ul>
-            {artifact.influenceBindingsList.map((_) => (
-              <li key={_.influencedId}>
+            {artifact.influenceBindings?.map((_) => (
+              <li key={_.influencedId||""}>
                 <b>
-                  {["Intercept", "Override"][_.influenceType] ||
-                    "Unknown influence on"}{" "}
-                  {"invocation " + _.influencedInvocation?.name ||
+                  {(_.influenceType||"Unknonw influence on")}
+                  {" invocation " + _.influencedInvocation?.name ||
                     "unknown invocation"}
                 </b>{" "}
                 (from{" "}

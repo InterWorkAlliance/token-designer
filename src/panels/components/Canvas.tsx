@@ -1,16 +1,16 @@
 import React, { useState } from "react";
 
-import { Base, PropertySet, BehaviorGroup, Behavior } from "../../ttf/core_pb";
+import { taxonomy } from "../../ttf/protobufs";
 
 import AnyArtifact from "./AnyArtifact";
 import ArtifactIcon from "./ArtifactIcon";
 import ArtifactType from "./ArtifactType";
 
 type Props = {
-  tokenBase?: Base.AsObject;
-  propertySets?: PropertySet.AsObject[];
-  behaviorGroups?: BehaviorGroup.AsObject[];
-  behaviors?: Behavior.AsObject[];
+  tokenBase?: taxonomy.model.core.IBase;
+  propertySets?: taxonomy.model.core.IPropertySet[];
+  behaviorGroups?: taxonomy.model.core.IBehaviorGroup[];
+  behaviors?: taxonomy.model.core.IBehavior[];
   incompatabilities?: any;
   selectedArtifact?: [AnyArtifact, ArtifactType];
   artifactBeingDraggedOn?: [AnyArtifact, ArtifactType];
@@ -73,7 +73,7 @@ export default function Canvas({
       }
     }
   };
-  const errorText = (id?: string) => {
+  const errorText = (id?: string | null) => {
     if (incompatabilities && id && incompatabilities[id]?.length) {
       return "Incompatible with " + incompatabilities[id].join(", ");
     }
@@ -103,7 +103,7 @@ export default function Canvas({
             />
             {(propertySets || []).map((_) => (
               <ArtifactIcon
-                key={_.artifact?.artifactSymbol?.id}
+                key={_.artifact?.artifactSymbol?.id || ""}
                 artifact={_}
                 type="property-set"
                 selected={
@@ -120,7 +120,7 @@ export default function Canvas({
           <div style={{ width: "var(--iconWidth)" }}>
             {(behaviorGroups || []).map((_) => (
               <ArtifactIcon
-                key={_.artifact?.artifactSymbol?.id}
+                key={_.artifact?.artifactSymbol?.id || ""}
                 artifact={_}
                 type="behavior-group"
                 selected={
@@ -135,7 +135,7 @@ export default function Canvas({
             ))}
             {(behaviors || []).map((_) => (
               <ArtifactIcon
-                key={_.artifact?.artifactSymbol?.id}
+                key={_.artifact?.artifactSymbol?.id || ""}
                 artifact={_}
                 type="behavior"
                 selected={

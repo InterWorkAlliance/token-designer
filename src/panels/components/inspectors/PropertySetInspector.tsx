@@ -1,25 +1,28 @@
 import React from "react";
 
-import { PropertySet } from "../../../ttf/core_pb";
+import { taxonomy } from "../../../ttf/protobufs";
 
-import { TaxonomyAsObjects } from "../../taxonomyAsObjects";
 import PropertyInspector from "./PropertyInspector";
 
 type Props = {
-  taxonomy: TaxonomyAsObjects;
-  artifact: PropertySet.AsObject;
+  taxonomy: taxonomy.model.ITaxonomy;
+  artifact: taxonomy.model.core.IPropertySet;
 };
 
 export default function PropertySetInspector({ taxonomy, artifact }: Props) {
   return (
     <>
-      {!!artifact.propertiesList.length && (
+      {!!artifact.properties?.length && (
         <>
           <p>
             <u>Properties</u>
           </p>
-          {artifact.propertiesList.map((_) => (
-            <PropertyInspector key={_.name} taxonomy={taxonomy} artifact={_} />
+          {artifact.properties.map((_) => (
+            <PropertyInspector
+              key={_.name || ""}
+              taxonomy={taxonomy}
+              artifact={_}
+            />
           ))}
         </>
       )}
