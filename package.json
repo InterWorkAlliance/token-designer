@@ -180,8 +180,8 @@
     }
   },
   "scripts": {
-    "compile": "node scripts/compile.js",
-    "watch": "node scripts/compile.js -w",
+    "compile": "node --unhandled-rejections=strict scripts/compile.js",
+    "watch": "node --unhandled-rejections=strict scripts/compile.js -w",
     "package": "vsce package",
     "setversion": "gulp setversion"
   },
