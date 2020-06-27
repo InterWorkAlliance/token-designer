@@ -61,6 +61,7 @@ function createIfNotExists(folder) {
     createIfNotExists('out/panels');
     createIfNotExists('out/panels/bundles');
     await compileProtos();
+    await run('node_modules/.bin/tsc', [ '-v' ]);
     await run('node_modules/.bin/tsc', [ '-p',  './' ]);
     await run('node_modules/.bin/tsc', [ '-p',  './src/panels' ]);
     await forAllFiles('src/panels', '.scss', file => run('node-sass', [ file, '-o', 'out/panels' ]));
