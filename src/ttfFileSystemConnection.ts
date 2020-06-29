@@ -204,11 +204,21 @@ export class TtfFileSystemConnection implements ITtfInterface {
         const template = new ttfCore.TokenTemplate();
         template.setDefinition(definition);
         template.setFormula(formula);
-        // TODO: Put in correct place ion hierarchy:
-        hierarchy
-          .getHybrids()
-          ?.getFungible()
-          ?.getFractional()
+        let topBranch = hierarchy.getFungibles();
+        const baseName = this.taxonomy
+          .getBaseTokenTypesMap()
+          .get(baseTokenId || "")
+          ?.getArtifact()
+          ?.getName()
+          .toLowerCase();
+        if (baseName?.indexOf("non-fungible") !== -1) {
+          topBranch = hierarchy.getNonFungibles();
+        }
+        let insertationPoint = topBranch?.getWhole();
+        if (baseName?.indexOf("fractional") !== -1) {
+          insertationPoint = topBranch?.getFractional();
+        }
+        insertationPoint
           ?.getTemplates()
           ?.getTemplateMap()
           .set(definitionId, template);
