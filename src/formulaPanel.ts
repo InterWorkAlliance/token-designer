@@ -1,5 +1,3 @@
-import * as fs from "fs";
-import * as path from "path";
 import * as ttfArtifact from "./ttf/artifact_pb";
 import * as ttfCore from "./ttf/core_pb";
 import * as uuid from "uuid";
@@ -8,47 +6,17 @@ import * as protobufAny from "google-protobuf/google/protobuf/any_pb";
 
 import { formulaPanelEvents } from "./panels/formulaPanelEvents";
 import { ITtfInterface } from "./ttfInterface";
+import { PanelBase } from "./panelBase";
 import { TaxonomyAsObjects } from "./panels/taxonomyAsObjects";
 import { TokenTaxonomy } from "./tokenTaxonomy";
 
-const JavascriptHrefPlaceholder: string = "[JAVASCRIPT_HREF]";
-const CssHrefPlaceholder: string = "[CSS_HREF]";
-const BaseHrefPlaceholder: string = "[BASE_HREF]";
-
-export class FormulaPanel {
-  get title() {
-    const suffix = " - " + this.environment;
-    if (this.formula) {
-      return (
-        (this.formula.getArtifact()?.getName() || "New formula") +
-        " - Token Formula" +
-        suffix
-      );
-    } else {
-      return "Token Designer" + suffix;
-    }
-  }
-
-  get iconPath() {
-    return vscode.Uri.file(
-      path.join(
-        this.extensionPath,
-        "resources",
-        "token-designer",
-        "unknown.svg"
-      )
-    );
-  }
-
-  private readonly panel: vscode.WebviewPanel;
-
+export class FormulaPanel extends PanelBase {
+  
   private taxonomyObjects: TaxonomyAsObjects | null = null;
 
   private formula: ttfCore.TemplateFormula | null = null;
 
   private incompatabilities: any = {};
-
-  private disposed = false;
 
   static async openNewFormula(
     ttfConnection: ITtfInterface,
@@ -95,34 +63,49 @@ export class FormulaPanel {
     private readonly ttfConnection: ITtfInterface,
     private readonly environment: string,
     private readonly ttfTaxonomy: TokenTaxonomy,
-    private readonly extensionPath: string,
+    extensionPath: string,
     disposables: vscode.Disposable[],
     panelReloadEvent: vscode.Event<void>
   ) {
-    this.panel = vscode.window.createWebviewPanel(
+    super(
       "formulaPanel",
-      this.title,
-      vscode.ViewColumn.Active,
-      { enableScripts: true }
+      "formulaPanel.main.js",
+      extensionPath,
+      disposables,
+      panelReloadEvent
     );
-    this.panel.iconPath = this.iconPath;
-    this.panel.onDidDispose(this.onClose, this, disposables);
-    this.panel.webview.onDidReceiveMessage(this.onMessage, this, disposables);
-    this.panel.webview.html = this.getPanelHtml();
-
+    this.setTitle(this.title(), "unknown.svg");
     this.refreshTaxonomy();
     this.ttfTaxonomy.onRefresh(this.refreshTaxonomy, this);
-
-    panelReloadEvent((_) => {
-      if (!this.disposed) {
-        this.panel.webview.html = this.getPanelHtml();
-      }
-    });
   }
 
-  dispose() {
-    this.disposed = true;
-    this.panel.dispose();
+  async onMessage(message: any) {
+    if (message.e === formulaPanelEvents.Init) {
+      this.postMessage({
+        formula: this.formula?.toObject(),
+        taxonomy: this.taxonomyObjects,
+        incompatabilities: this.incompatabilities,
+      });
+    } else if (message.e === formulaPanelEvents.Add) {
+      await this.addArtifact(message.id);
+    } else if (message.e === formulaPanelEvents.Remove) {
+      await this.removeArtifact(message.id);
+    } else if (message.e === formulaPanelEvents.SetFormulaDescription) {
+      await this.setFormulaDescription(message.description);
+    }
+  }
+
+  private title() {
+    const suffix = " - " + this.environment;
+    if (this.formula) {
+      return (
+        (this.formula.getArtifact()?.getName() || "New formula") +
+        " - Token Formula" +
+        suffix
+      );
+    } else {
+      return "Token Designer" + suffix;
+    }
   }
 
   private async addArtifact(id: string) {
@@ -162,43 +145,6 @@ export class FormulaPanel {
     }
   }
 
-  private getPanelHtml() {
-    const htmlFileContents = fs.readFileSync(
-      path.join(this.extensionPath, "src", "panels", "panel.html"),
-      { encoding: "utf8" }
-    );
-    const javascriptHref: string =
-      this.panel.webview.asWebviewUri(
-        vscode.Uri.file(
-          path.join(
-            this.extensionPath,
-            "out",
-            "panels",
-            "bundles",
-            "formulaPanel.main.js"
-          )
-        )
-      ) +
-      "?" +
-      Math.random();
-    const cssHref: string =
-      this.panel.webview.asWebviewUri(
-        vscode.Uri.file(
-          path.join(this.extensionPath, "out", "panels", "panel.css")
-        )
-      ) +
-      "?" +
-      Math.random();
-    const baseHref: string =
-      this.panel.webview.asWebviewUri(
-        vscode.Uri.file(path.join(this.extensionPath, "resources"))
-      ) + "/";
-    return htmlFileContents
-      .replace(JavascriptHrefPlaceholder, javascriptHref)
-      .replace(CssHrefPlaceholder, cssHref)
-      .replace(BaseHrefPlaceholder, baseHref);
-  }
-
   private async newFormula() {
     const id = uuid.v1();
     const temporaryTooling = id;
@@ -235,26 +181,6 @@ export class FormulaPanel {
     this.refreshFormula(symbol);
   }
 
-  private onClose() {
-    this.dispose();
-  }
-
-  private async onMessage(message: any) {
-    if (message.e === formulaPanelEvents.Init) {
-      this.panel.webview.postMessage({
-        formula: this.formula?.toObject(),
-        taxonomy: this.taxonomyObjects,
-        incompatabilities: this.incompatabilities,
-      });
-    } else if (message.e === formulaPanelEvents.Add) {
-      await this.addArtifact(message.id);
-    } else if (message.e === formulaPanelEvents.Remove) {
-      await this.removeArtifact(message.id);
-    } else if (message.e === formulaPanelEvents.SetFormulaDescription) {
-      await this.setFormulaDescription(message.description);
-    }
-  }
-
   private packTemplateFormula(formula: ttfCore.TemplateFormula) {
     const any = new protobufAny.Any();
     any.pack(formula.serializeBinary(), "taxonomy.model.core.TemplateFormula");
@@ -277,21 +203,18 @@ export class FormulaPanel {
       this.formula = null;
     }
     this.updateIncompatibilities();
-    this.panel.webview.postMessage({
+    this.postMessage({
       definition: null,
       formula: this.formula?.toObject() || null,
       incompatabilities: this.incompatabilities,
     });
-    this.panel.title = this.title;
-    this.panel.iconPath = this.iconPath;
+    this.setTitle(this.title());
     await this.ttfTaxonomy.refresh();
   }
 
   private async refreshTaxonomy() {
-    if (!this.disposed) {
-      this.taxonomyObjects = this.ttfTaxonomy.asObjects();
-      this.panel.webview.postMessage({ taxonomy: this.taxonomyObjects });
-    }
+    this.taxonomyObjects = this.ttfTaxonomy.asObjects();
+    this.postMessage({ taxonomy: this.taxonomyObjects });
   }
 
   private async removeArtifact(id: string, save: boolean = true) {

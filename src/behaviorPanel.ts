@@ -38,12 +38,12 @@ export class BehaviorPanel extends ArtifactPanelBase<ttfCore.Behavior> {
     panelReloadEvent: vscode.Event<void>
   ) {
     super(
+      environment,
+      ttfTaxonomy,
       "Behavior",
       "behavior.svg",
       "behaviorPanel",
       "behaviorPanel.main.js",
-      environment,
-      ttfTaxonomy,
       extensionPath,
       disposables,
       panelReloadEvent

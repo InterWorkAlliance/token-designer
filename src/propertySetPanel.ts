@@ -38,12 +38,12 @@ export class PropertySetPanel extends ArtifactPanelBase<ttfCore.PropertySet> {
     panelReloadEvent: vscode.Event<void>
   ) {
     super(
+      environment,
+      ttfTaxonomy,
       "Property Set",
       "property-set.svg",
       "propertySetPanel",
       "propertySetPanel.main.js",
-      environment,
-      ttfTaxonomy,
       extensionPath,
       disposables,
       panelReloadEvent

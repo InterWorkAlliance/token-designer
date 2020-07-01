@@ -38,12 +38,12 @@ export class TokenBasePanel extends ArtifactPanelBase<ttfCore.Base> {
     panelReloadEvent: vscode.Event<void>
   ) {
     super(
+      environment,
+      ttfTaxonomy,
       "Token Base",
       "token-base.svg",
       "tokenBasePanel",
       "tokenBasePanel.main.js",
-      environment,
-      ttfTaxonomy,
       extensionPath,
       disposables,
       panelReloadEvent
