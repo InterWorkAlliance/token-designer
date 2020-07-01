@@ -40,6 +40,9 @@ export default function CanvasPane({
     left: "calc(2*var(--padding))",
     width: "50%",
     border: "var(--borderWidth) solid var(--vscode-editor-background)",
+    backgroundColor: "var(--vscode-editor-background)",
+    color: "var(--vscode-editor-foreground)",
+    fontFamily: "sans-serif",
     height: "3em",
     fontSize: "1.25em",
   };
@@ -49,6 +52,9 @@ export default function CanvasPane({
     left: "calc(2*var(--padding))",
     width: "50%",
     border: "var(--borderWidth) solid var(--vscode-editor-background)",
+    backgroundColor: "var(--vscode-editor-background)",
+    color: "var(--vscode-editor-foreground)",
+    fontFamily: "sans-serif",
     fontSize: "2em",
   };
   return (
