@@ -65,7 +65,7 @@ export abstract class PanelBase {
         if (!this.panel.visible) {
           // JavaScript is not expected to run within panels that are not visible
           this.lastPing = millisecondTimestamp();
-        } else if (millisecondTimestamp() - this.lastPing > 2500) {
+        } else if (millisecondTimestamp() - this.lastPing > 1000) {
           console.error(`Reloading unresponsivle panel ${this.panelId}`);
           this.lastPing = millisecondTimestamp();
           const [currentTitle, currentIconPath] = [
@@ -81,7 +81,7 @@ export abstract class PanelBase {
           this.panel.iconPath = currentIconPath;
         }
       }
-    }, 500);
+    }, 300);
   }
 
   dispose() {

@@ -7,7 +7,7 @@ type Props = {
 
 export default function PanelWatchdog({ postMessage, children }: Props) {
   useEffect(() => {
-    const intervalId = setInterval(() => postMessage({ ping: true }), 500);
+    const intervalId = setInterval(() => postMessage({ ping: true }), 300);
     return () => clearInterval(intervalId);
   });
   return children;
