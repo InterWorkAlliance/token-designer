@@ -9,13 +9,15 @@ const BaseHrefPlaceholder: string = "[BASE_HREF]";
 const millisecondTimestamp = () => new Date().getTime();
 
 export abstract class PanelBase {
-  private readonly panel: vscode.WebviewPanel;
+  private panel: vscode.WebviewPanel;
 
   private disposed = false;
 
   private lastPing: number;
 
   private watchdogInterval: NodeJS.Timeout;
+
+  private panelCloseWatcher: vscode.Disposable | undefined;
 
   protected constructor(
     private readonly panelId: string,
@@ -24,20 +26,30 @@ export abstract class PanelBase {
     disposables: vscode.Disposable[],
     panelReloadEvent: vscode.Event<void>
   ) {
-    this.panel = vscode.window.createWebviewPanel(
-      this.panelId,
-      "Loading...",
-      vscode.ViewColumn.Active,
-      { enableScripts: true }
-    );
-    this.panel.iconPath = this.iconPath("unknown.svg");
-    this.panel.onDidDispose(this.onClose, this, disposables);
-    this.panel.webview.onDidReceiveMessage(
-      this.onMessageInternal,
-      this,
-      disposables
-    );
-    this.panel.webview.html = this.getPanelHtml();
+    const createPanel = () => {
+      this.panel = vscode.window.createWebviewPanel(
+        this.panelId,
+        "Loading...",
+        vscode.ViewColumn.Active,
+        { enableScripts: true }
+      );
+      this.panel.iconPath = this.iconPath("unknown.svg");
+      this.panelCloseWatcher = this.panel.onDidDispose(
+        this.onClose,
+        this,
+        disposables
+      );
+      this.panel.webview.onDidReceiveMessage(
+        this.onMessageInternal,
+        this,
+        disposables
+      );
+      this.panel.webview.html = this.getPanelHtml();
+      return this.panel;
+    };
+
+    this.panel = createPanel();
+
     panelReloadEvent((_) => {
       if (!this.disposed) {
         this.panel.webview.html = this.getPanelHtml();
@@ -56,7 +68,17 @@ export abstract class PanelBase {
         } else if (millisecondTimestamp() - this.lastPing > 2500) {
           console.error(`Reloading unresponsivle panel ${this.panelId}`);
           this.lastPing = millisecondTimestamp();
-          this.panel.webview.html = this.getPanelHtml();
+          const [currentTitle, currentIconPath] = [
+            this.panel.title,
+            this.panel.iconPath,
+          ];
+          if (this.panelCloseWatcher) {
+            this.panelCloseWatcher.dispose();
+          }
+          this.panel.dispose();
+          createPanel();
+          this.panel.title = currentTitle;
+          this.panel.iconPath = currentIconPath;
         }
       }
     }, 500);
