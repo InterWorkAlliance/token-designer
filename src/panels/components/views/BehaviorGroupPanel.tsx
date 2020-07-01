@@ -3,8 +3,6 @@ import React, { useEffect, useState } from "react";
 import { BehaviorGroup } from "../../../ttf/core_pb";
 
 import ArtifactInspector from "../inspectors/ArtifactInspector";
-import CanvasPane from "../CanvasPane";
-import ToolPane from "../ToolPane";
 import ToolBoxTitle from "../ToolBoxTitle";
 
 import { behaviorGroupPanelEvents } from "../../behaviorGroupPanelEvents";

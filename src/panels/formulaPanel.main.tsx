@@ -1,7 +1,8 @@
-import React from 'react';
-import ReactDOM from 'react-dom';
+import React from "react";
+import ReactDOM from "react-dom";
 
-import FormulaPanel from './components/views/FormulaPanel';
+import FormulaPanel from "./components/views/FormulaPanel";
+import PanelWatchdog from "./components/PanelWatchdog";
 
 declare var acquireVsCodeApi: any;
 
@@ -9,9 +10,11 @@ function initialize() {
   const vsCodePostMessage = acquireVsCodeApi().postMessage;
   ReactDOM.render(
     <React.StrictMode>
-      <FormulaPanel postMessage={vsCodePostMessage} />
+      <PanelWatchdog postMessage={vsCodePostMessage}>
+        <FormulaPanel postMessage={vsCodePostMessage} />
+      </PanelWatchdog>
     </React.StrictMode>,
-    document.getElementById('root')
+    document.getElementById("root")
   );
 }
 

@@ -6,10 +6,16 @@ const JavascriptHrefPlaceholder: string = "[JAVASCRIPT_HREF]";
 const CssHrefPlaceholder: string = "[CSS_HREF]";
 const BaseHrefPlaceholder: string = "[BASE_HREF]";
 
+const millisecondTimestamp = () => new Date().getTime();
+
 export abstract class PanelBase {
   private readonly panel: vscode.WebviewPanel;
 
   private disposed = false;
+
+  private lastPing: number;
+
+  private watchdogInterval: NodeJS.Timeout;
 
   protected constructor(
     private readonly panelId: string,
@@ -26,17 +32,39 @@ export abstract class PanelBase {
     );
     this.panel.iconPath = this.iconPath("unknown.svg");
     this.panel.onDidDispose(this.onClose, this, disposables);
-    this.panel.webview.onDidReceiveMessage(this.onMessage, this, disposables);
+    this.panel.webview.onDidReceiveMessage(
+      this.onMessageInternal,
+      this,
+      disposables
+    );
     this.panel.webview.html = this.getPanelHtml();
     panelReloadEvent((_) => {
       if (!this.disposed) {
         this.panel.webview.html = this.getPanelHtml();
       }
     });
+
+    // Panels are expected to be wrapped inside a <PanelWatchdog /> component, which will send
+    // a "ping" message once every 500ms when the panel is visible and responding. If the panel
+    // is visible but a ping has not been received for more than 2.5s, we refresh the panel.
+    this.lastPing = millisecondTimestamp();
+    this.watchdogInterval = setInterval(() => {
+      if (!this.disposed) {
+        if (!this.panel.visible) {
+          // JavaScript is not expected to run within panels that are not visible
+          this.lastPing = millisecondTimestamp();
+        } else if (millisecondTimestamp() - this.lastPing > 2500) {
+          console.error(`Reloading unresponsivle panel ${this.panelId}`);
+          this.lastPing = millisecondTimestamp();
+          this.panel.webview.html = this.getPanelHtml();
+        }
+      }
+    }, 500);
   }
 
   dispose() {
     this.disposed = true;
+    clearInterval(this.watchdogInterval);
     this.panel.dispose();
   }
 
@@ -54,6 +82,14 @@ export abstract class PanelBase {
   protected postMessage(message: any) {
     if (!this.disposed) {
       this.panel.webview.postMessage(message);
+    }
+  }
+
+  private async onMessageInternal(message: any) {
+    if (message.ping) {
+      this.lastPing = millisecondTimestamp();
+    } else {
+      this.onMessage(message);
     }
   }
 

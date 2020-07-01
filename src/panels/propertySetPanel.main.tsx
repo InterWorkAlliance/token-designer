@@ -1,7 +1,8 @@
-import React from 'react';
-import ReactDOM from 'react-dom';
+import React from "react";
+import ReactDOM from "react-dom";
 
-import PropertySetPanel from './components/views/PropertySetPanel';
+import PanelWatchdog from "./components/PanelWatchdog";
+import PropertySetPanel from "./components/views/PropertySetPanel";
 
 declare var acquireVsCodeApi: any;
 
@@ -9,9 +10,11 @@ function initialize() {
   const vsCodePostMessage = acquireVsCodeApi().postMessage;
   ReactDOM.render(
     <React.StrictMode>
-      <PropertySetPanel postMessage={vsCodePostMessage} />
+      <PanelWatchdog postMessage={vsCodePostMessage}>
+        <PropertySetPanel postMessage={vsCodePostMessage} />
+      </PanelWatchdog>
     </React.StrictMode>,
-    document.getElementById('root')
+    document.getElementById("root")
   );
 }
 

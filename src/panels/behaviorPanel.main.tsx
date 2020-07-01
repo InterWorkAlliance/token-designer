@@ -1,7 +1,8 @@
-import React from 'react';
-import ReactDOM from 'react-dom';
+import React from "react";
+import ReactDOM from "react-dom";
 
-import BehaviorPanel from './components/views/BehaviorPanel';
+import BehaviorPanel from "./components/views/BehaviorPanel";
+import PanelWatchdog from "./components/PanelWatchdog";
 
 declare var acquireVsCodeApi: any;
 
@@ -9,9 +10,11 @@ function initialize() {
   const vsCodePostMessage = acquireVsCodeApi().postMessage;
   ReactDOM.render(
     <React.StrictMode>
-      <BehaviorPanel postMessage={vsCodePostMessage} />
+      <PanelWatchdog postMessage={vsCodePostMessage}>
+        <BehaviorPanel postMessage={vsCodePostMessage} />
+      </PanelWatchdog>
     </React.StrictMode>,
-    document.getElementById('root')
+    document.getElementById("root")
   );
 }
 

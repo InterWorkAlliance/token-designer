@@ -1,7 +1,8 @@
-import React from 'react';
-import ReactDOM from 'react-dom';
+import React from "react";
+import ReactDOM from "react-dom";
 
-import TokenBasePanel from './components/views/TokenBasePanel';
+import PanelWatchdog from "./components/PanelWatchdog";
+import TokenBasePanel from "./components/views/TokenBasePanel";
 
 declare var acquireVsCodeApi: any;
 
@@ -9,9 +10,11 @@ function initialize() {
   const vsCodePostMessage = acquireVsCodeApi().postMessage;
   ReactDOM.render(
     <React.StrictMode>
-      <TokenBasePanel postMessage={vsCodePostMessage} />
+      <PanelWatchdog postMessage={vsCodePostMessage}>
+        <TokenBasePanel postMessage={vsCodePostMessage} />
+      </PanelWatchdog>
     </React.StrictMode>,
-    document.getElementById('root')
+    document.getElementById("root")
   );
 }
 
