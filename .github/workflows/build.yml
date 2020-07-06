@@ -78,6 +78,11 @@ jobs:
       with:
         token: ${{ secrets.GITHUB_TOKEN }}
         expire-in: 24 hours
+    - name: 🌎 Publish Artifact
+      uses: actions/upload-artifact@v2
+      with:
+        name: vsix
+        path: visual-token-designer-*.vsix
     - name: 🌎 Release
       uses: djnicholson/release-action@v2.4
       with:
