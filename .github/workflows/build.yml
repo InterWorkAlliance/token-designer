@@ -38,7 +38,7 @@ jobs:
         path: node_modules/grpc/src/node/extension_binary/*electron*/**/*
   
   buildextension:
-    runs-on: ubuntu-18.04
+    runs-on: windows-2019
     needs: buildgrpc
     steps:
     - name: ⏳ Checkout
