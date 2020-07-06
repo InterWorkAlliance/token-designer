@@ -2,9 +2,13 @@ name: Build
 
 on:
   push:
-    branches: [ master ]
+    branches: 
+    - master
+    - release/v*
   pull_request:
-    branches: [ master ]
+    branches:
+    - master
+    - release/v*
 
 jobs:
 
