@@ -8,6 +8,7 @@ src/**
 **/*.ts
 gulpfile.ts
 *.yml
+Directory.Build.props
 version.json
 scripts/**
 screenshots/**
