@@ -43,6 +43,9 @@ jobs:
     steps:
     - name: ⏳ Checkout
       uses: actions/checkout@v2
+      # fetch-depth 0 needed due to https://github.com/dotnet/Nerdbank.GitVersioning/issues/423
+      with:
+        fetch-depth: 0
     - name: 💿 Setup NodeJS
       uses: actions/setup-node@v1
       with:
