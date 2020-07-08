@@ -155,6 +155,7 @@ export class TokenDefinitionIdentifier {
           )
         )
       : vscode.ThemeIcon.Folder;
+    result.tooltip = this.artifact?.artifactDefinition?.businessDescription;
     if (this.artifact) {
       result.command = {
         title: "Open definition",

@@ -22,7 +22,7 @@ export class TokenFormulaIdentifier {
         "unknown.svg"
       )
     );
-    result.description = this.description;
+    result.tooltip = this.description;
     result.command = {
       title: "Open formula",
       command: "visual-token-designer.openTokenFormula",

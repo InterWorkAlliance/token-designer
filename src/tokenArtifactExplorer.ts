@@ -31,7 +31,7 @@ export class LeafIdentifier {
         this.type + ".svg"
       )
     );
-    result.description = this.description;
+    result.tooltip = this.description;
     if (this.type === "behavior") {
       result.command = {
         title: "Open behavior",
