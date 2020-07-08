@@ -79,8 +79,8 @@
         "category": "Token Taxonomy Framework"
       },
       {
-        "command": "visual-token-designer.deleteTokenFormula",
-        "title": "Delete formula",
+        "command": "visual-token-designer.deleteArtifact",
+        "title": "Delete artifact",
         "category": "Token Taxonomy Framework"
       },
       {
@@ -161,8 +161,16 @@
           "when": "view == visual-token-designer.tokenFormulaExplorer"
         },
         {
-          "command": "visual-token-designer.deleteTokenFormula",
+          "command": "visual-token-designer.deleteArtifact",
+          "when": "view == visual-token-designer.tokenArtifactExplorer"
+        },
+        {
+          "command": "visual-token-designer.deleteArtifact",
           "when": "view == visual-token-designer.tokenFormulaExplorer"
+        },
+        {
+          "command": "visual-token-designer.deleteArtifact",
+          "when": "view == visual-token-designer.tokenDefinitionExplorer"
         },
         {
           "command": "visual-token-designer.createSmartContractEth",
@@ -183,7 +191,7 @@
           "when": "false"
         },
         {
-          "command": "visual-token-designer.deleteTokenFormula",
+          "command": "visual-token-designer.deleteArtifact",
           "when": "false"
         },
         {
