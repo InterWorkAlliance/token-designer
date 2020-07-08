@@ -1,5 +1,6 @@
 import * as grpc from "grpc";
 import * as path from "path";
+import * as ttfArtifact from "./ttf/artifact_pb";
 import * as ttfClient from "./ttf/service_grpc_pb";
 import * as vscode from "vscode";
 
@@ -135,6 +136,34 @@ export async function activate(context: vscode.ExtensionContext) {
     }
   );
 
+  const deleteTokenDefinitionCommand = vscode.commands.registerCommand(
+    "visual-token-designer.deleteTokenFormula",
+    async (commandContext) => {
+      if (
+        commandContext?.id &&
+        (await vscode.window.showWarningMessage(
+          "Do you really want to delete this formula?",
+          "Yes",
+          "No"
+        )) === "Yes"
+      ) {
+        const deleteSymbol = new ttfArtifact.ArtifactSymbol();
+        deleteSymbol.setType(ttfArtifact.ArtifactType.TEMPLATE_FORMULA);
+        deleteSymbol.setId(commandContext?.id);
+        const deleteRequest = new ttfArtifact.DeleteArtifactRequest();
+        deleteRequest.setArtifactSymbol(deleteSymbol);
+        ttfConnection.deleteArtifact(deleteRequest, (err) => {
+          if (err) {
+            vscode.window.showErrorMessage(
+              "There was a problem deleting this formula: " + err
+            );
+          }
+          ttfTaxonomy.refresh();
+        });
+      }
+    }
+  );
+
   const createSmartContractEthCommand = vscode.commands.registerCommand(
     "visual-token-designer.createSmartContractEth",
     async (commandContext) => {
@@ -263,6 +292,7 @@ export async function activate(context: vscode.ExtensionContext) {
   context.subscriptions.push(createTokenFormulaCommand);
   context.subscriptions.push(openTokenFormulaCommand);
   context.subscriptions.push(createTokenDefinitionCommand);
+  context.subscriptions.push(deleteTokenDefinitionCommand);
   context.subscriptions.push(createSmartContractEthCommand);
   context.subscriptions.push(createSmartContractNeoCommand);
   context.subscriptions.push(openTokenDefinitionCommand);

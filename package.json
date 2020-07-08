@@ -31,7 +31,6 @@
   "activationEvents": [
     "onCommand:visual-token-designer.changeEnvironment",
     "onCommand:visual-token-designer.createTokenFormula",
-    "onCommand:visual-token-designer.createTokenDefinition",
     "onView:visual-token-designer.tokenArtifactExplorer",
     "onView:visual-token-designer.tokenFormulaExplorer",
     "onView:visual-token-designer.tokenDefinitionExplorer"
@@ -77,6 +76,11 @@
       {
         "command": "visual-token-designer.createTokenDefinition",
         "title": "Create token definition",
+        "category": "Token Taxonomy Framework"
+      },
+      {
+        "command": "visual-token-designer.deleteTokenFormula",
+        "title": "Delete formula",
         "category": "Token Taxonomy Framework"
       },
       {
@@ -157,6 +161,10 @@
           "when": "view == visual-token-designer.tokenFormulaExplorer"
         },
         {
+          "command": "visual-token-designer.deleteTokenFormula",
+          "when": "view == visual-token-designer.tokenFormulaExplorer"
+        },
+        {
           "command": "visual-token-designer.createSmartContractEth",
           "when": "view == visual-token-designer.tokenDefinitionExplorer"
         },
@@ -172,6 +180,10 @@
         },
         {
           "command": "visual-token-designer.createTokenDefinition",
+          "when": "false"
+        },
+        {
+          "command": "visual-token-designer.deleteTokenFormula",
           "when": "false"
         },
         {
