@@ -4,6 +4,7 @@
   "displayName": "Visual Token Designer",
   "description": "VS Code extension that facilitates manipulation of artifacts in the Token Taxonomy Framework",
   "version": "0.0.0",
+  "preview": true,
   "icon": "resources/icon.png",
   "galleryBanner": {
     "color": "#242424",
