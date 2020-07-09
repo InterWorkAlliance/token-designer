@@ -147,7 +147,7 @@ export class FormulaPanel extends PanelBase {
 
   private async newFormula() {
     const id = uuid.v1();
-    const temporaryTooling = id;
+    const temporaryTooling = "Untitled";
     const newArtifactSymbol = new ttfArtifact.ArtifactSymbol();
     newArtifactSymbol.setId(id);
     newArtifactSymbol.setTooling(temporaryTooling);

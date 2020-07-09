@@ -94,7 +94,22 @@ export default function ArtifactIcon({
       onClick={dispatchOnClick}
       onDragStart={dispatchOnDragStart}
     >
-      <img src={imgSrc} style={imgStyle} draggable={false} />
+      <span style={{ position: "relative" }}>
+        <img src={imgSrc} style={imgStyle} draggable={false} />
+        {error && (
+          <span
+            style={{
+              position: "absolute",
+              bottom: 5,
+              right: 5,
+              fontSize: "1.75em",
+              textShadow: "1px 1px",
+            }}
+          >
+            ❗
+          </span>
+        )}
+      </span>
       <div style={titleStyle}>{title}</div>
     </span>
   );

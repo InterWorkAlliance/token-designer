@@ -238,9 +238,112 @@ export class TtfFileSystemConnection implements ITtfInterface {
     const type = symbol?.getType();
     const id = symbol?.getId();
     switch (type) {
+      case ttfArtifact.ArtifactType.BASE:
+        if (id) {
+          this.taxonomy.getBaseTokenTypesMap().del(id);
+          done = true;
+          callback(null, {});
+        }
+        break;
+      case ttfArtifact.ArtifactType.BEHAVIOR:
+        if (id) {
+          this.taxonomy.getBehaviorsMap().del(id);
+          done = true;
+          callback(null, {});
+        }
+        break;
+      case ttfArtifact.ArtifactType.BEHAVIOR_GROUP:
+        if (id) {
+          this.taxonomy.getBehaviorGroupsMap().del(id);
+          done = true;
+          callback(null, {});
+        }
+        break;
+      case ttfArtifact.ArtifactType.PROPERTY_SET:
+        if (id) {
+          this.taxonomy.getPropertySetsMap().del(id);
+          done = true;
+          callback(null, {});
+        }
+        break;
       case ttfArtifact.ArtifactType.TEMPLATE_DEFINITION:
         if (id) {
           this.taxonomy.getTemplateDefinitionsMap().del(id);
+          this.taxonomy
+            .getTokenTemplateHierarchy()
+            ?.getFungibles()
+            ?.getFractional()
+            ?.getTemplates()
+            ?.getTemplateMap()
+            .del(id);
+          this.taxonomy
+            .getTokenTemplateHierarchy()
+            ?.getFungibles()
+            ?.getWhole()
+            ?.getTemplates()
+            ?.getTemplateMap()
+            .del(id);
+          this.taxonomy
+            .getTokenTemplateHierarchy()
+            ?.getHybrids()
+            ?.getFungible()
+            ?.getFractional()
+            ?.getTemplates()
+            ?.getTemplateMap()
+            .del(id);
+          this.taxonomy
+            .getTokenTemplateHierarchy()
+            ?.getHybrids()
+            ?.getFungible()
+            ?.getWhole()
+            ?.getTemplates()
+            ?.getTemplateMap()
+            .del(id);
+          this.taxonomy
+            .getTokenTemplateHierarchy()
+            ?.getHybrids()
+            ?.getNonFungible()
+            ?.getFractional()
+            ?.getTemplates()
+            ?.getTemplateMap()
+            .del(id);
+          this.taxonomy
+            .getTokenTemplateHierarchy()
+            ?.getHybrids()
+            ?.getNonFungible()
+            ?.getSingleton()
+            ?.getTemplates()
+            ?.getTemplateMap()
+            .del(id);
+          this.taxonomy
+            .getTokenTemplateHierarchy()
+            ?.getHybrids()
+            ?.getNonFungible()
+            ?.getWhole()
+            ?.getTemplates()
+            ?.getTemplateMap()
+            .del(id);
+          this.taxonomy
+            .getTokenTemplateHierarchy()
+            ?.getNonFungibles()
+            ?.getFractional()
+            ?.getTemplates()
+            ?.getTemplateMap()
+            .del(id);
+          this.taxonomy
+            .getTokenTemplateHierarchy()
+            ?.getNonFungibles()
+            ?.getSingleton()
+            ?.getTemplates()
+            ?.getTemplateMap()
+            .del(id);
+          this.taxonomy
+            .getTokenTemplateHierarchy()
+            ?.getNonFungibles()
+            ?.getWhole()
+            ?.getTemplates()
+            ?.getTemplateMap()
+            .del(id);
           done = true;
           callback(null, {});
         }

@@ -32,7 +32,6 @@
   "activationEvents": [
     "onCommand:visual-token-designer.changeEnvironment",
     "onCommand:visual-token-designer.createTokenFormula",
-    "onCommand:visual-token-designer.createTokenDefinition",
     "onView:visual-token-designer.tokenArtifactExplorer",
     "onView:visual-token-designer.tokenFormulaExplorer",
     "onView:visual-token-designer.tokenDefinitionExplorer"
@@ -68,7 +67,11 @@
       {
         "command": "visual-token-designer.createTokenFormula",
         "title": "Create token formula",
-        "category": "Token Taxonomy Framework"
+        "category": "Token Taxonomy Framework",
+        "icon": {
+          "light": "resources/light/add.svg",
+          "dark": "resources/dark/add.svg"
+        }
       },
       {
         "command": "visual-token-designer.openTokenFormula",
@@ -78,6 +81,11 @@
       {
         "command": "visual-token-designer.createTokenDefinition",
         "title": "Create token definition",
+        "category": "Token Taxonomy Framework"
+      },
+      {
+        "command": "visual-token-designer.deleteArtifact",
+        "title": "Delete artifact",
         "category": "Token Taxonomy Framework"
       },
       {
@@ -149,13 +157,26 @@
         },
         {
           "command": "visual-token-designer.createTokenFormula",
-          "when": "view == visual-token-designer.tokenFormulaExplorer"
+          "when": "view == visual-token-designer.tokenFormulaExplorer",
+          "group": "navigation"
         }
       ],
       "view/item/context": [
         {
           "command": "visual-token-designer.createTokenDefinition",
           "when": "view == visual-token-designer.tokenFormulaExplorer"
+        },
+        {
+          "command": "visual-token-designer.deleteArtifact",
+          "when": "view == visual-token-designer.tokenArtifactExplorer"
+        },
+        {
+          "command": "visual-token-designer.deleteArtifact",
+          "when": "view == visual-token-designer.tokenFormulaExplorer"
+        },
+        {
+          "command": "visual-token-designer.deleteArtifact",
+          "when": "view == visual-token-designer.tokenDefinitionExplorer"
         },
         {
           "command": "visual-token-designer.createSmartContractEth",
@@ -173,6 +194,10 @@
         },
         {
           "command": "visual-token-designer.createTokenDefinition",
+          "when": "false"
+        },
+        {
+          "command": "visual-token-designer.deleteArtifact",
           "when": "false"
         },
         {

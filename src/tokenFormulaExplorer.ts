@@ -1,9 +1,12 @@
 import * as path from "path";
+import * as ttfArtifact from "./ttf/artifact_pb";
 import * as vscode from "vscode";
 
 import { TokenTaxonomy } from "./tokenTaxonomy";
 
 export class TokenFormulaIdentifier {
+  public readonly type = ttfArtifact.ArtifactType.TEMPLATE_FORMULA;
+
   constructor(
     public readonly extensionPath: string,
     public readonly toolingSymbol: string,
@@ -22,7 +25,7 @@ export class TokenFormulaIdentifier {
         "unknown.svg"
       )
     );
-    result.description = this.description;
+    result.tooltip = this.description;
     result.command = {
       title: "Open formula",
       command: "visual-token-designer.openTokenFormula",

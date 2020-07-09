@@ -131,12 +131,18 @@ export class TokenDefinitionIdentifier {
 
   children: TokenDefinitionIdentifier[] = [];
 
+  public readonly type = ttfArtifact.ArtifactType.TEMPLATE_DEFINITION;
+
+  public readonly id: string;
+
   private constructor(
     public readonly extensionPath: string,
     public readonly label: string,
     public readonly parent: TokenDefinitionIdentifier | undefined,
     public readonly artifact?: ttfArtifact.Artifact.AsObject
-  ) {}
+  ) {
+    this.id = artifact?.artifactSymbol?.id || "";
+  }
 
   public asTreeItem(): vscode.TreeItem {
     const result = new vscode.TreeItem(
@@ -155,6 +161,7 @@ export class TokenDefinitionIdentifier {
           )
         )
       : vscode.ThemeIcon.Folder;
+    result.tooltip = this.artifact?.artifactDefinition?.businessDescription;
     if (this.artifact) {
       result.command = {
         title: "Open definition",

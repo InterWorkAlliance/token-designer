@@ -1,5 +1,6 @@
 import * as grpc from "grpc";
 import * as path from "path";
+import * as ttfArtifact from "./ttf/artifact_pb";
 import * as ttfClient from "./ttf/service_grpc_pb";
 import * as vscode from "vscode";
 
@@ -135,6 +136,60 @@ export async function activate(context: vscode.ExtensionContext) {
     }
   );
 
+  const deleteArtifactCommand = vscode.commands.registerCommand(
+    "visual-token-designer.deleteArtifact",
+    async (commandContext) => {
+      let typeAsString = "artifact";
+      if (commandContext?.type === ttfArtifact.ArtifactType.BASE) {
+        typeAsString = "token base";
+      } else if (commandContext?.type === ttfArtifact.ArtifactType.BEHAVIOR) {
+        typeAsString = "behavior";
+      } else if (
+        commandContext?.type === ttfArtifact.ArtifactType.BEHAVIOR_GROUP
+      ) {
+        typeAsString = "behavior group";
+      } else if (
+        commandContext?.type === ttfArtifact.ArtifactType.PROPERTY_SET
+      ) {
+        typeAsString = "property set";
+      } else if (
+        commandContext?.type === ttfArtifact.ArtifactType.TEMPLATE_DEFINITION
+      ) {
+        typeAsString = "token definition";
+      } else if (
+        commandContext?.type === ttfArtifact.ArtifactType.TEMPLATE_FORMULA
+      ) {
+        typeAsString = "token formula";
+      } else if (
+        commandContext?.type === ttfArtifact.ArtifactType.TOKEN_TEMPLATE
+      ) {
+        typeAsString = "token template";
+      }
+      if (
+        commandContext?.id &&
+        (await vscode.window.showWarningMessage(
+          `Do you really want to delete this ${typeAsString}?`,
+          "Yes",
+          "No"
+        )) === "Yes"
+      ) {
+        const deleteSymbol = new ttfArtifact.ArtifactSymbol();
+        deleteSymbol.setType(commandContext?.type);
+        deleteSymbol.setId(commandContext?.id);
+        const deleteRequest = new ttfArtifact.DeleteArtifactRequest();
+        deleteRequest.setArtifactSymbol(deleteSymbol);
+        ttfConnection.deleteArtifact(deleteRequest, (err) => {
+          if (err) {
+            vscode.window.showErrorMessage(
+              `There was a problem deleting this ${typeAsString}: ${err}`
+            );
+          }
+          ttfTaxonomy.refresh();
+        });
+      }
+    }
+  );
+
   const createSmartContractEthCommand = vscode.commands.registerCommand(
     "visual-token-designer.createSmartContractEth",
     async (commandContext) => {
@@ -263,6 +318,7 @@ export async function activate(context: vscode.ExtensionContext) {
   context.subscriptions.push(createTokenFormulaCommand);
   context.subscriptions.push(openTokenFormulaCommand);
   context.subscriptions.push(createTokenDefinitionCommand);
+  context.subscriptions.push(deleteArtifactCommand);
   context.subscriptions.push(createSmartContractEthCommand);
   context.subscriptions.push(createSmartContractNeoCommand);
   context.subscriptions.push(openTokenDefinitionCommand);

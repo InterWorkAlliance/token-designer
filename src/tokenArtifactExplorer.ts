@@ -1,14 +1,9 @@
 import * as path from "path";
+import * as ttfArtifact from "./ttf/artifact_pb";
 import * as ttfCore from "./ttf/core_pb";
 import * as vscode from "vscode";
 
 import { TokenTaxonomy } from "./tokenTaxonomy";
-
-type ArtifactType =
-  | "behavior-group"
-  | "behavior"
-  | "property-set"
-  | "token-base";
 
 export class LeafIdentifier {
   constructor(
@@ -18,39 +13,47 @@ export class LeafIdentifier {
     public readonly label: string,
     public readonly description: string,
     public readonly id: string,
-    public readonly type: ArtifactType
+    public readonly type: ttfArtifact.ArtifactType
   ) {}
 
   public asTreeItem(): vscode.TreeItem {
     const result = new vscode.TreeItem(this.label);
+    let iconPath = "token-base.svg";
+    if (this.type === ttfArtifact.ArtifactType.BEHAVIOR) {
+      iconPath = "behavior.svg";
+    } else if (this.type === ttfArtifact.ArtifactType.BEHAVIOR_GROUP) {
+      iconPath = "behavior-group.svg";
+    } else if (this.type === ttfArtifact.ArtifactType.PROPERTY_SET) {
+      iconPath = "property-set.svg";
+    }
     result.iconPath = vscode.Uri.file(
       path.join(
         this.extensionPath,
         "resources",
         "token-designer",
-        this.type + ".svg"
+        iconPath
       )
     );
-    result.description = this.description;
-    if (this.type === "behavior") {
+    result.tooltip = this.description;
+    if (this.type === ttfArtifact.ArtifactType.BEHAVIOR) {
       result.command = {
         title: "Open behavior",
         command: "visual-token-designer.openBehavior",
         arguments: [this.id],
       };
-    } else if (this.type === "behavior-group") {
+    } else if (this.type === ttfArtifact.ArtifactType.BEHAVIOR_GROUP) {
       result.command = {
         title: "Open behavior group",
         command: "visual-token-designer.openBehaviorGroup",
         arguments: [this.id],
       };
-    } else if (this.type === "property-set") {
+    } else if (this.type === ttfArtifact.ArtifactType.PROPERTY_SET) {
       result.command = {
         title: "Open property set",
         command: "visual-token-designer.openPropertySet",
         arguments: [this.id],
       };
-    } else if (this.type === "token-base") {
+    } else if (this.type === ttfArtifact.ArtifactType.BASE) {
       result.command = {
         title: "Open token base",
         command: "visual-token-designer.openTokenBase",
@@ -140,7 +143,7 @@ export class TokenArtifactExplorer
 
   private createRootItem(
     nodeName: string,
-    childType: ArtifactType,
+    childType: ttfArtifact.ArtifactType,
     childArtifacts: (
       | ttfCore.Behavior.AsObject
       | ttfCore.BehaviorGroup.AsObject
@@ -178,22 +181,22 @@ export class TokenArtifactExplorer
       this.rootItems = [
         this.createRootItem(
           "Token Bases",
-          "token-base",
+          ttfArtifact.ArtifactType.BASE,
           taxonomyObject.baseTokenTypesMap.map((_) => _[1])
         ),
         this.createRootItem(
           "Behaviors",
-          "behavior",
+          ttfArtifact.ArtifactType.BEHAVIOR,
           taxonomyObject.behaviorsMap.map((_) => _[1])
         ),
         this.createRootItem(
           "Behaviors Groups",
-          "behavior-group",
+          ttfArtifact.ArtifactType.BEHAVIOR_GROUP,
           taxonomyObject.behaviorGroupsMap.map((_) => _[1])
         ),
         this.createRootItem(
           "Property Sets",
-          "property-set",
+          ttfArtifact.ArtifactType.PROPERTY_SET,
           taxonomyObject.propertySetsMap.map((_) => _[1])
         ),
       ];
