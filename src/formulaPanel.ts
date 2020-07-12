@@ -11,7 +11,6 @@ import { TaxonomyAsObjects } from "./panels/taxonomyAsObjects";
 import { TokenTaxonomy } from "./tokenTaxonomy";
 
 export class FormulaPanel extends PanelBase {
-  
   private taxonomyObjects: TaxonomyAsObjects | null = null;
 
   private formula: ttfCore.TemplateFormula | null = null;
@@ -160,7 +159,8 @@ export class FormulaPanel extends PanelBase {
       "Enter a business description here"
     );
     const newArtifact = new ttfArtifact.Artifact();
-    newArtifact.setName("Untitled");
+    // The leading space is a hack to make the new item appear first alphabetically in the explorer:
+    newArtifact.setName(" Untitled");
     newArtifact.setArtifactDefinition(newArtifactDefinition);
     newArtifact.setArtifactSymbol(newArtifactSymbol);
     const newFormula = new ttfCore.TemplateFormula();
