@@ -14,6 +14,7 @@ type Props = {
   artifact?: AnyArtifact;
   artifactType?: ArtifactType;
   definition: TemplateDefinition.AsObject;
+  setDefinitionProperty: (path: string, name: string) => void;
 };
 
 export default function DefinitionInspector({
@@ -21,6 +22,7 @@ export default function DefinitionInspector({
   artifact,
   artifactType,
   definition,
+  setDefinitionProperty,
 }: Props) {
   const descriptionAreaStyle: React.CSSProperties = {
     height: "70vh",
@@ -48,7 +50,11 @@ export default function DefinitionInspector({
         title={`${definition.artifact?.name || "Definition"} properties`}
       />
       <div style={propertiesAreaStyle}>
-        <AllPropertiesInspector taxonomy={taxonomy} definition={definition} />
+        <AllPropertiesInspector
+          taxonomy={taxonomy}
+          definition={definition}
+          setDefinitionProperty={setDefinitionProperty}
+        />
       </div>
     </>
   );

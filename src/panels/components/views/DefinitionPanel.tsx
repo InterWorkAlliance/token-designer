@@ -38,12 +38,17 @@ export default function DefinitionPanel({ postMessage }: Props) {
     postMessage({ e: definitionPanelEvents.SetDefinitionName, name });
   };
 
+  const setDefinitionProperty = (path: string, name: string) => {
+    postMessage({ e: definitionPanelEvents.SetProperty, path, name });
+  };
+
   if (taxonomy && definition) {
     return (
       <DefinitionDesigner
         taxonomy={taxonomy}
         definition={definition}
         setDefinitionName={setDefinitionName}
+        setDefinitionProperty={setDefinitionProperty}
       />
     );
   } else {
