@@ -19,12 +19,14 @@ type Props = {
   taxonomy: TaxonomyAsObjects;
   definition: TemplateDefinition.AsObject;
   setDefinitionName: (name: string) => void;
+  setDefinitionProperty: (path: string, name: string) => void;
 };
 
 export default function DefinitionDesigner({
   taxonomy,
   definition,
   setDefinitionName,
+  setDefinitionProperty,
 }: Props) {
   const [selectedArtifact, setSelectedArtifact] = useState<
     [AnyArtifact, ArtifactType] | undefined
@@ -85,6 +87,7 @@ export default function DefinitionDesigner({
           artifactType={
             selectedArtifact ? selectedArtifact[1] : "template-definition"
           }
+          setDefinitionProperty={setDefinitionProperty}
         />
       </ToolPane>
     </>

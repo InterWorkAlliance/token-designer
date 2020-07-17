@@ -10,7 +10,6 @@ import { TaxonomyAsObjects } from "./panels/taxonomyAsObjects";
 import { TokenTaxonomy } from "./tokenTaxonomy";
 
 export class DefinitionPanel extends PanelBase {
-
   private taxonomyObjects: TaxonomyAsObjects | null = null;
 
   private definition: ttfCore.TemplateDefinition | null = null;
@@ -92,6 +91,8 @@ export class DefinitionPanel extends PanelBase {
       });
     } else if (message.e === definitionPanelEvents.SetDefinitionName) {
       await this.setDefinitionName(message.name);
+    } else if (message.e === definitionPanelEvents.SetProperty) {
+      await this.setDefinitionProperty(message.path, message.name);
     }
   }
 
@@ -174,9 +175,8 @@ export class DefinitionPanel extends PanelBase {
         // subfolders.
         const deleteSymbol = new ttfArtifact.ArtifactSymbol();
         deleteSymbol.setType(ttfArtifact.ArtifactType.TEMPLATE_DEFINITION);
-        deleteSymbol.setTooling(
-          this.definition?.getArtifact()?.getArtifactSymbol()?.getTooling() ||
-            ""
+        deleteSymbol.setId(
+          this.definition?.getArtifact()?.getArtifactSymbol()?.getId() || ""
         );
         const deleteRequest = new ttfArtifact.DeleteArtifactRequest();
         deleteRequest.setArtifactSymbol(deleteSymbol);
@@ -221,5 +221,63 @@ export class DefinitionPanel extends PanelBase {
       this.definition.getArtifact()?.setName(name);
       await this.saveDefintion(true);
     }
+  }
+
+  private async setDefinitionProperty(path: string, name: string) {
+    let pathComponents = path.split("/");
+    const reference = pathComponents[0];
+    pathComponents = pathComponents.slice(1);
+    if (!reference) {
+      console.warn("Invalid property path", path, name);
+      return;
+    }
+    if (!this.definition) {
+      console.warn("Definition not loaded", path, name);
+      return;
+    }
+    let behaviors = this.definition.getBehaviorsList();
+    for (const behaviorGroup of this.definition.getBehaviorGroupsList()) {
+      behaviors = [...behaviors, ...behaviorGroup.getBehaviorArtifactsList()];
+    }
+    const parent =
+      behaviors.find((_) => _.getReference()?.getId() === reference) ||
+      this.definition
+        .getPropertySetsList()
+        .find((_) => _.getReference()?.getId() === reference);
+    if (parent) {
+      let properties:
+        | ttfCore.Property[]
+        | undefined = parent.getPropertiesList();
+      while (pathComponents.length) {
+        properties = properties
+          ?.find((_) => _.getName() === pathComponents[0])
+          ?.getPropertiesList();
+        pathComponents = pathComponents.slice(1);
+      }
+      if (properties) {
+        const property = properties.find((_) => _.getName() === name);
+        if (property) {
+          const newValue = await vscode.window.showInputBox({
+            prompt: "Enter a new value for " + name,
+            value: property.getTemplateValue(),
+          });
+          if (newValue) {
+            property.setTemplateValue(newValue);
+          } else {
+            console.warn("User canceled property change", path, name);
+            return;
+          }
+        } else {
+          console.warn("Could not find property", path, name);
+        }
+      } else {
+        console.warn("Could not find nested property", path, name);
+        return;
+      }
+    } else {
+      console.warn("Could not find reference", path, name);
+      return;
+    }
+    await this.saveDefintion(true);
   }
 }

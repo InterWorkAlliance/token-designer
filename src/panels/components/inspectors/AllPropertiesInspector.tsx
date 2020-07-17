@@ -12,7 +12,6 @@ type PropertyTree = {
     name: string;
     templateValue: string;
     valueDescription: string;
-    invocations: Invocation.AsObject[];
     children?: PropertyTree;
   }[];
 };
@@ -26,14 +25,19 @@ const extractProperties = (
     name: _.name,
     templateValue: _.templateValue,
     valueDescription: _.valueDescription,
-    invocations: _.propertyInvocationsList,
     children: _.propertiesList.length
       ? extractProperties(`${path}/${_.name}`, _.propertiesList)
       : undefined,
   })),
 });
 
-function AllPropertiesInspector({ tree }: { tree: PropertyTree }) {
+function AllPropertiesInspectorInner({
+  tree,
+  setDefinitionProperty,
+}: {
+  tree: PropertyTree;
+  setDefinitionProperty: (path: string, name: string) => void;
+}) {
   return (
     <ul>
       {tree.properties.map((_) => (
@@ -47,11 +51,21 @@ function AllPropertiesInspector({ tree }: { tree: PropertyTree }) {
                   <>
                     = <em>(not set)</em>
                   </>
-                )}
+                )}{" "}
+                <button
+                  onClick={() => setDefinitionProperty(tree.path, _.name)}
+                >
+                  Change{" "}
+                </button>
               </div>
             </>
           )}
-          {_.children && <AllPropertiesInspector tree={_.children} />}
+          {_.children && (
+            <AllPropertiesInspectorInner
+              tree={_.children}
+              setDefinitionProperty={setDefinitionProperty}
+            />
+          )}
         </li>
       ))}
     </ul>
@@ -61,9 +75,14 @@ function AllPropertiesInspector({ tree }: { tree: PropertyTree }) {
 type Props = {
   taxonomy: TaxonomyAsObjects;
   definition: TemplateDefinition.AsObject;
+  setDefinitionProperty: (path: string, name: string) => void;
 };
 
-export default function PropertyInspector({ taxonomy, definition }: Props) {
+export default function AllPropertiesInspector({
+  taxonomy,
+  definition,
+  setDefinitionProperty,
+}: Props) {
   const properties = [
     ...definition.behaviorGroupsList.map((_) => _.behaviorArtifactsList).flat(),
     ...definition.behaviorsList,
@@ -84,7 +103,10 @@ export default function PropertyInspector({ taxonomy, definition }: Props) {
               properties:
             </b>
           </div>
-          <AllPropertiesInspector tree={tree} />
+          <AllPropertiesInspectorInner
+            tree={tree}
+            setDefinitionProperty={setDefinitionProperty}
+          />
         </Fragment>
       ))}
     </>

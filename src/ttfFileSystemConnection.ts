@@ -36,6 +36,15 @@ export class TtfFileSystemConnection implements ITtfInterface {
           const id = definition?.getArtifact()?.getArtifactSymbol()?.getId();
           if (definition && id) {
             this.taxonomy.getTemplateDefinitionsMap().set(id, definition);
+            const formula = this.taxonomy
+              .getTemplateFormulasMap()
+              .get(definition.getFormulaReference()?.getId() || "");
+            this.insertIntoHierarchy(
+              definition,
+              formula,
+              definition.getTokenBase()?.getReference()?.getId(),
+              id
+            );
             done = true;
             callback(null, new ttfArtifact.NewArtifactResponse());
           }
@@ -199,30 +208,7 @@ export class TtfFileSystemConnection implements ITtfInterface {
       }
 
       this.taxonomy.getTemplateDefinitionsMap().set(definitionId, definition);
-      const hierarchy = this.taxonomy.getTokenTemplateHierarchy();
-      if (hierarchy) {
-        const template = new ttfCore.TokenTemplate();
-        template.setDefinition(definition);
-        template.setFormula(formula);
-        let topBranch = hierarchy.getFungibles();
-        const baseName = this.taxonomy
-          .getBaseTokenTypesMap()
-          .get(baseTokenId || "")
-          ?.getArtifact()
-          ?.getName()
-          .toLowerCase();
-        if (baseName?.indexOf("non-fungible") !== -1) {
-          topBranch = hierarchy.getNonFungibles();
-        }
-        let insertationPoint = topBranch?.getWhole();
-        if (baseName?.indexOf("fractional") !== -1) {
-          insertationPoint = topBranch?.getFractional();
-        }
-        insertationPoint
-          ?.getTemplates()
-          ?.getTemplateMap()
-          .set(definitionId, template);
-      }
+      this.insertIntoHierarchy(definition, formula, baseTokenId, definitionId);
       callback(null, definition);
     } else {
       callback(`Formula ${formulaId} not found`, definition);
@@ -535,6 +521,38 @@ export class TtfFileSystemConnection implements ITtfInterface {
     });
     if (!success) {
       callback(`Behavior not found: ${id}`, defaultValue);
+    }
+  }
+
+  private insertIntoHierarchy(
+    definition: ttfCore.TemplateDefinition,
+    formula: ttfCore.TemplateFormula | undefined,
+    baseTokenId: string | undefined,
+    definitionId: string
+  ) {
+    const hierarchy = this.taxonomy.getTokenTemplateHierarchy();
+    if (hierarchy) {
+      const template = new ttfCore.TokenTemplate();
+      template.setDefinition(definition);
+      template.setFormula(formula);
+      let topBranch = hierarchy.getFungibles();
+      const baseName = this.taxonomy
+        .getBaseTokenTypesMap()
+        .get(baseTokenId || "")
+        ?.getArtifact()
+        ?.getName()
+        .toLowerCase();
+      if (baseName?.indexOf("non-fungible") !== -1) {
+        topBranch = hierarchy.getNonFungibles();
+      }
+      let insertationPoint = topBranch?.getWhole();
+      if (baseName?.indexOf("fractional") !== -1) {
+        insertationPoint = topBranch?.getFractional();
+      }
+      insertationPoint
+        ?.getTemplates()
+        ?.getTemplateMap()
+        .set(definitionId, template);
     }
   }
 }

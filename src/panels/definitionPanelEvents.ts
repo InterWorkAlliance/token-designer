@@ -3,6 +3,7 @@
 const definitionPanelEvents = {
   Init: "init",
   SetDefinitionName: "setName",
+  SetProperty: "setProperty",
 };
 
 export { definitionPanelEvents };
