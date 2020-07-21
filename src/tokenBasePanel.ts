@@ -30,7 +30,7 @@ export class TokenBasePanel extends ArtifactPanelBase<ttfCore.Base> {
   }
 
   private constructor(
-    private readonly ttfConnection: ITtfInterface,
+    ttfConnection: ITtfInterface,
     environment: string,
     ttfTaxonomy: TokenTaxonomy,
     extensionPath: string,
@@ -38,6 +38,8 @@ export class TokenBasePanel extends ArtifactPanelBase<ttfCore.Base> {
     panelReloadEvent: vscode.Event<void>
   ) {
     super(
+      ttfConnection,
+      "taxonomy.model.core.Base",
       environment,
       ttfTaxonomy,
       "Token Base",

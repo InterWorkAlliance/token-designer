@@ -2,6 +2,7 @@
 
 const artifactPanelBaseEvents = {
   Init: "init",
+  Rename: "rename",
 };
 
 export { artifactPanelBaseEvents };

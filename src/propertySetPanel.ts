@@ -30,7 +30,7 @@ export class PropertySetPanel extends ArtifactPanelBase<ttfCore.PropertySet> {
   }
 
   private constructor(
-    private readonly ttfConnection: ITtfInterface,
+    ttfConnection: ITtfInterface,
     environment: string,
     ttfTaxonomy: TokenTaxonomy,
     extensionPath: string,
@@ -38,6 +38,8 @@ export class PropertySetPanel extends ArtifactPanelBase<ttfCore.PropertySet> {
     panelReloadEvent: vscode.Event<void>
   ) {
     super(
+      ttfConnection,
+      "taxonomy.model.core.PropertySet",
       environment,
       ttfTaxonomy,
       "Property Set",

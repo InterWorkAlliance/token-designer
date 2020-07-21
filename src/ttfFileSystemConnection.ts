@@ -489,6 +489,55 @@ export class TtfFileSystemConnection implements ITtfInterface {
             done = true;
           }
           break;
+        case ttfArtifact.ArtifactType.BEHAVIOR:
+          const behavior = ttfCore.Behavior.deserializeBinary(
+            packed.serializeBinary()
+          );
+          const behaviorId = behavior
+            .getArtifact()
+            ?.getArtifactSymbol()
+            ?.getId();
+          if (behaviorId) {
+            this.taxonomy.getBehaviorsMap().set(behaviorId, behavior);
+            done = true;
+          }
+          break;
+        case ttfArtifact.ArtifactType.BEHAVIOR_GROUP:
+          const behaviorGroup = ttfCore.BehaviorGroup.deserializeBinary(
+            packed.serializeBinary()
+          );
+          const behaviorGroupId = behaviorGroup
+            .getArtifact()
+            ?.getArtifactSymbol()
+            ?.getId();
+          if (behaviorGroupId) {
+            this.taxonomy
+              .getBehaviorGroupsMap()
+              .set(behaviorGroupId, behaviorGroup);
+            done = true;
+          }
+          break;
+        case ttfArtifact.ArtifactType.BASE:
+          const base = ttfCore.Base.deserializeBinary(packed.serializeBinary());
+          const baseId = base.getArtifact()?.getArtifactSymbol()?.getId();
+          if (baseId) {
+            this.taxonomy.getBaseTokenTypesMap().set(baseId, base);
+            done = true;
+          }
+          break;
+        case ttfArtifact.ArtifactType.PROPERTY_SET:
+          const propertySet = ttfCore.PropertySet.deserializeBinary(
+            packed.serializeBinary()
+          );
+          const propertySetId = propertySet
+            .getArtifact()
+            ?.getArtifactSymbol()
+            ?.getId();
+          if (propertySetId) {
+            this.taxonomy.getPropertySetsMap().set(propertySetId, propertySet);
+            done = true;
+          }
+          break;
         default:
           done = true;
           callback(`Artifact type not supported: ${type}`, {});

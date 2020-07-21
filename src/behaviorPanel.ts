@@ -30,7 +30,7 @@ export class BehaviorPanel extends ArtifactPanelBase<ttfCore.Behavior> {
   }
 
   private constructor(
-    private readonly ttfConnection: ITtfInterface,
+    ttfConnection: ITtfInterface,
     environment: string,
     ttfTaxonomy: TokenTaxonomy,
     extensionPath: string,
@@ -38,6 +38,8 @@ export class BehaviorPanel extends ArtifactPanelBase<ttfCore.Behavior> {
     panelReloadEvent: vscode.Event<void>
   ) {
     super(
+      ttfConnection,
+      "taxonomy.model.core.Behavior",
       environment,
       ttfTaxonomy,
       "Behavior",

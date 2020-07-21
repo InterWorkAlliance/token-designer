@@ -35,7 +35,10 @@ export default function PropertySetPanel({ postMessage }: Props) {
   if (artifact && taxonomy) {
     return (
       <>
-        <ToolBoxTitle title={artifact.artifact?.name || ""} />
+        <ToolBoxTitle
+          title={artifact.artifact?.name || ""}
+          onRename={() => postMessage({ e: artifactPanelBaseEvents.Rename })}
+        />
         <div style={{ margin: "var(--padding)", padding: "var(--padding)" }}>
           <ArtifactInspector
             taxonomy={taxonomy}
