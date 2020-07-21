@@ -5,6 +5,7 @@ import { BehaviorGroup } from "../../../ttf/core_pb";
 import ArtifactInspector from "../inspectors/ArtifactInspector";
 import ToolBoxTitle from "../ToolBoxTitle";
 
+import { artifactPanelBaseEvents } from "../../artifactPanelBaseEvents";
 import { behaviorGroupPanelEvents } from "../../behaviorGroupPanelEvents";
 import { TaxonomyAsObjects } from "../../taxonomyAsObjects";
 
@@ -29,7 +30,7 @@ export default function BehaviorGroupPanel({ postMessage }: Props) {
 
   useEffect(() => {
     window.addEventListener("message", (msg) => handleMessage(msg.data));
-    postMessage({ e: behaviorGroupPanelEvents.Init });
+    postMessage({ e: artifactPanelBaseEvents.Init });
   }, []);
 
   if (artifact && taxonomy) {

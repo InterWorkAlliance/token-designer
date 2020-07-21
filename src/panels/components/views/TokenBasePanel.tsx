@@ -3,12 +3,10 @@ import React, { useEffect, useState } from "react";
 import { Base } from "../../../ttf/core_pb";
 
 import ArtifactInspector from "../inspectors/ArtifactInspector";
-import CanvasPane from "../CanvasPane";
-import ToolPane from "../ToolPane";
-import ToolBoxTitle from "../ToolBoxTitle";
-
-import { tokenBasePanelEvents } from "../../tokenBasePanelEvents";
+import { artifactPanelBaseEvents } from "../../artifactPanelBaseEvents";
 import { TaxonomyAsObjects } from "../../taxonomyAsObjects";
+import { tokenBasePanelEvents } from "../../tokenBasePanelEvents";
+import ToolBoxTitle from "../ToolBoxTitle";
 
 type Props = {
   postMessage: (message: any) => void;
@@ -31,7 +29,7 @@ export default function TokenBasePanel({ postMessage }: Props) {
 
   useEffect(() => {
     window.addEventListener("message", (msg) => handleMessage(msg.data));
-    postMessage({ e: tokenBasePanelEvents.Init });
+    postMessage({ e: artifactPanelBaseEvents.Init });
   }, []);
 
   if (artifact && taxonomy) {

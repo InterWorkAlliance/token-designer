@@ -3,12 +3,10 @@ import React, { useEffect, useState } from "react";
 import { PropertySet } from "../../../ttf/core_pb";
 
 import ArtifactInspector from "../inspectors/ArtifactInspector";
-import CanvasPane from "../CanvasPane";
-import ToolPane from "../ToolPane";
-import ToolBoxTitle from "../ToolBoxTitle";
-
+import { artifactPanelBaseEvents } from "../../artifactPanelBaseEvents";
 import { propertySetPanelEvents } from "../../propertySetPanelEvents";
 import { TaxonomyAsObjects } from "../../taxonomyAsObjects";
+import ToolBoxTitle from "../ToolBoxTitle";
 
 type Props = {
   postMessage: (message: any) => void;
@@ -31,7 +29,7 @@ export default function PropertySetPanel({ postMessage }: Props) {
 
   useEffect(() => {
     window.addEventListener("message", (msg) => handleMessage(msg.data));
-    postMessage({ e: propertySetPanelEvents.Init });
+    postMessage({ e: artifactPanelBaseEvents.Init });
   }, []);
 
   if (artifact && taxonomy) {

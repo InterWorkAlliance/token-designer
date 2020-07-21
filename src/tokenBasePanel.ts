@@ -50,10 +50,7 @@ export class TokenBasePanel extends ArtifactPanelBase<ttfCore.Base> {
     );
   }
 
-  protected async onMessage(message: any) {
-    if (message.e === tokenBasePanelEvents.Init) {
-      this.postCurrentState();
-    }
+  protected async onUnhandledMessage(message: any) {
   }
 
   protected async getArtifact(

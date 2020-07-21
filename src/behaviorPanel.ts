@@ -50,10 +50,7 @@ export class BehaviorPanel extends ArtifactPanelBase<ttfCore.Behavior> {
     );
   }
 
-  protected async onMessage(message: any) {
-    if (message.e === behaviorPanelEvents.Init) {
-      this.postCurrentState();
-    }
+  protected async onUnhandledMessage(message: any) {
   }
 
   protected async getArtifact(

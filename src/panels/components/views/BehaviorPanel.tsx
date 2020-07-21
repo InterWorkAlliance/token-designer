@@ -3,11 +3,9 @@ import React, { useEffect, useState } from "react";
 import { Behavior } from "../../../ttf/core_pb";
 
 import ArtifactInspector from "../inspectors/ArtifactInspector";
-
+import { artifactPanelBaseEvents } from "../../artifactPanelBaseEvents";
 import { behaviorPanelEvents } from "../../behaviorPanelEvents";
 import { TaxonomyAsObjects } from "../../taxonomyAsObjects";
-import CanvasPane from "../CanvasPane";
-import ToolPane from "../ToolPane";
 import ToolBoxTitle from "../ToolBoxTitle";
 
 type Props = {
@@ -31,7 +29,7 @@ export default function BehaviorPanel({ postMessage }: Props) {
 
   useEffect(() => {
     window.addEventListener("message", (msg) => handleMessage(msg.data));
-    postMessage({ e: behaviorPanelEvents.Init });
+    postMessage({ e: artifactPanelBaseEvents.Init });
   }, []);
 
   if (artifact && taxonomy) {

@@ -50,10 +50,7 @@ export class PropertySetPanel extends ArtifactPanelBase<ttfCore.PropertySet> {
     );
   }
 
-  protected async onMessage(message: any) {
-    if (message.e === propertySetPanelEvents.Init) {
-      this.postCurrentState();
-    }
+  protected async onUnhandledMessage(message: any) {
   }
 
   protected async getArtifact(

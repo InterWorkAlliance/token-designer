@@ -1,6 +1,7 @@
 import * as ttfArtifact from "./ttf/artifact_pb";
 import * as vscode from "vscode";
 
+import { artifactPanelBaseEvents } from "./panels/artifactPanelBaseEvents";
 import { PanelBase } from "./panelBase";
 import { TaxonomyAsObjects } from "./panels/taxonomyAsObjects";
 import { TokenTaxonomy } from "./tokenTaxonomy";
@@ -42,7 +43,7 @@ export abstract class ArtifactPanelBase<
     this.ttfTaxonomy.onRefresh(this.refreshTaxonomy, this);
   }
 
-  protected abstract async onMessage(message: any): Promise<void>;
+  protected abstract async onUnhandledMessage(message: any): Promise<void>;
 
   protected abstract async getArtifact(
     symbol: ttfArtifact.ArtifactSymbol
@@ -57,6 +58,14 @@ export abstract class ArtifactPanelBase<
       artifact: this.artifact?.toObject(),
       taxonomy: this.taxonomyObjects,
     });
+  }
+
+  protected async onMessage(message: any) {
+    if (message.e === artifactPanelBaseEvents.Init) {
+      this.postCurrentState();
+    } else {
+      await this.onUnhandledMessage(message);
+    }
   }
 
   private async refreshArtifact(artifactId: string) {
