@@ -108,7 +108,7 @@ export abstract class ArtifactPanelBase<
         (error, response) => (error && reject(error)) || resolve(response)
       )
     );
-    this.refreshArtifact(symbol.getId());
+    await this.refreshArtifact(symbol.getId());
   }
 
   private async refreshArtifact(artifactId: string) {
@@ -118,9 +118,10 @@ export abstract class ArtifactPanelBase<
     this.postCurrentState();
     this.setTitle(this.title);
     await this.ttfTaxonomy.refresh();
+    this.refreshTaxonomy();
   }
 
-  private async refreshTaxonomy() {
+  private refreshTaxonomy() {
     this.taxonomyObjects = this.ttfTaxonomy.asObjects();
     this.postMessage({ taxonomy: this.taxonomyObjects });
   }

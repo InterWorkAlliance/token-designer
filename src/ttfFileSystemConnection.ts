@@ -490,27 +490,29 @@ export class TtfFileSystemConnection implements ITtfInterface {
           }
           break;
         case ttfArtifact.ArtifactType.BEHAVIOR:
-          const behavior = ttfCore.Behavior.deserializeBinary(
-            packed.serializeBinary()
+          const behavior = packed.unpack(
+            ttfCore.Behavior.deserializeBinary,
+            packed.getTypeName()
           );
           const behaviorId = behavior
-            .getArtifact()
+            ?.getArtifact()
             ?.getArtifactSymbol()
             ?.getId();
-          if (behaviorId) {
+          if (behavior && behaviorId) {
             this.taxonomy.getBehaviorsMap().set(behaviorId, behavior);
             done = true;
           }
           break;
         case ttfArtifact.ArtifactType.BEHAVIOR_GROUP:
-          const behaviorGroup = ttfCore.BehaviorGroup.deserializeBinary(
-            packed.serializeBinary()
+          const behaviorGroup = packed.unpack(
+            ttfCore.BehaviorGroup.deserializeBinary,
+            packed.getTypeName()
           );
           const behaviorGroupId = behaviorGroup
-            .getArtifact()
+            ?.getArtifact()
             ?.getArtifactSymbol()
             ?.getId();
-          if (behaviorGroupId) {
+          if (behaviorGroup && behaviorGroupId) {
             this.taxonomy
               .getBehaviorGroupsMap()
               .set(behaviorGroupId, behaviorGroup);
@@ -518,22 +520,26 @@ export class TtfFileSystemConnection implements ITtfInterface {
           }
           break;
         case ttfArtifact.ArtifactType.BASE:
-          const base = ttfCore.Base.deserializeBinary(packed.serializeBinary());
-          const baseId = base.getArtifact()?.getArtifactSymbol()?.getId();
-          if (baseId) {
+          const base = packed.unpack(
+            ttfCore.Base.deserializeBinary,
+            packed.getTypeName()
+          );
+          const baseId = base?.getArtifact()?.getArtifactSymbol()?.getId();
+          if (base && baseId) {
             this.taxonomy.getBaseTokenTypesMap().set(baseId, base);
             done = true;
           }
           break;
         case ttfArtifact.ArtifactType.PROPERTY_SET:
-          const propertySet = ttfCore.PropertySet.deserializeBinary(
-            packed.serializeBinary()
+          const propertySet = packed.unpack(
+            ttfCore.PropertySet.deserializeBinary,
+            packed.getTypeName()
           );
           const propertySetId = propertySet
-            .getArtifact()
+            ?.getArtifact()
             ?.getArtifactSymbol()
             ?.getId();
-          if (propertySetId) {
+          if (propertySet && propertySetId) {
             this.taxonomy.getPropertySetsMap().set(propertySetId, propertySet);
             done = true;
           }
@@ -544,7 +550,9 @@ export class TtfFileSystemConnection implements ITtfInterface {
           break;
       }
     }
-    if (!done) {
+    if (done) {
+      callback(null, {});
+    } else {
       callback("Artifact could not be updated", {});
     }
   }
