@@ -9,10 +9,11 @@ import { TaxonomyAsObjects } from "../../taxonomyAsObjects";
 import ToolBoxTitle from "../ToolBoxTitle";
 
 type Props = {
+  editMode: boolean;
   postMessage: (message: any) => void;
 };
 
-export default function PropertySetPanel({ postMessage }: Props) {
+export default function PropertySetPanel({ editMode, postMessage }: Props) {
   const [taxonomy, setTaxonomy] = useState<TaxonomyAsObjects | null>(null);
   const [artifact, setArtifact] = useState<PropertySet.AsObject | null>(null);
 
@@ -37,7 +38,11 @@ export default function PropertySetPanel({ postMessage }: Props) {
       <>
         <ToolBoxTitle
           title={artifact.artifact?.name || ""}
-          onRename={() => postMessage({ e: artifactPanelBaseEvents.Rename })}
+          onRename={
+            editMode
+              ? () => postMessage({ e: artifactPanelBaseEvents.Rename })
+              : undefined
+          }
         />
         <div style={{ margin: "var(--padding)", padding: "var(--padding)" }}>
           <ArtifactInspector

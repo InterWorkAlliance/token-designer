@@ -9,10 +9,11 @@ import { tokenBasePanelEvents } from "../../tokenBasePanelEvents";
 import ToolBoxTitle from "../ToolBoxTitle";
 
 type Props = {
+  editMode: boolean;
   postMessage: (message: any) => void;
 };
 
-export default function TokenBasePanel({ postMessage }: Props) {
+export default function TokenBasePanel({ editMode, postMessage }: Props) {
   const [taxonomy, setTaxonomy] = useState<TaxonomyAsObjects | null>(null);
   const [artifact, setArtifact] = useState<Base.AsObject | null>(null);
 
@@ -37,7 +38,11 @@ export default function TokenBasePanel({ postMessage }: Props) {
       <>
         <ToolBoxTitle
           title={artifact.artifact?.name || ""}
-          onRename={() => postMessage({ e: artifactPanelBaseEvents.Rename })}
+          onRename={
+            editMode
+              ? () => postMessage({ e: artifactPanelBaseEvents.Rename })
+              : undefined
+          }
         />
         <div style={{ margin: "var(--padding)", padding: "var(--padding)" }}>
           <ArtifactInspector

@@ -11,7 +11,7 @@ function initialize() {
   ReactDOM.render(
     <React.StrictMode>
       <PanelWatchdog postMessage={vsCodePostMessage}>
-        <BehaviorGroupPanel postMessage={vsCodePostMessage} />
+        <BehaviorGroupPanel editMode={true} postMessage={vsCodePostMessage} />
       </PanelWatchdog>
     </React.StrictMode>,
     document.getElementById("root")

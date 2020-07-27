@@ -10,10 +10,11 @@ import { behaviorGroupPanelEvents } from "../../behaviorGroupPanelEvents";
 import { TaxonomyAsObjects } from "../../taxonomyAsObjects";
 
 type Props = {
+  editMode: boolean;
   postMessage: (message: any) => void;
 };
 
-export default function BehaviorGroupPanel({ postMessage }: Props) {
+export default function BehaviorGroupPanel({ editMode, postMessage }: Props) {
   const [taxonomy, setTaxonomy] = useState<TaxonomyAsObjects | null>(null);
   const [artifact, setArtifact] = useState<BehaviorGroup.AsObject | null>(null);
 
@@ -38,7 +39,11 @@ export default function BehaviorGroupPanel({ postMessage }: Props) {
       <>
         <ToolBoxTitle
           title={artifact.artifact?.name || ""}
-          onRename={() => postMessage({ e: artifactPanelBaseEvents.Rename })}
+          onRename={
+            editMode
+              ? () => postMessage({ e: artifactPanelBaseEvents.Rename })
+              : undefined
+          }
         />
         <div style={{ margin: "var(--padding)", padding: "var(--padding)" }}>
           <ArtifactInspector
