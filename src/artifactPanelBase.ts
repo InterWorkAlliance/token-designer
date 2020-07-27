@@ -145,7 +145,7 @@ export abstract class ArtifactPanelBase<
         await this.updateAdd(update.type, this.resolvelist(update.type));
         break;
       case "delete":
-        // TODO
+        await this.updateDelete(this.resolvelist(update.type), update.existing);
         break;
       case "edit":
         await this.updateEdit(this.resolvelist(update.type), update.existing);
@@ -184,5 +184,19 @@ export abstract class ArtifactPanelBase<
         return;
       }
     }
+  }
+
+  private async updateDelete(list?: string[], existing?: string) {
+    if (!list || !existing) {
+      return;
+    }
+    const startAt = list.indexOf(existing);
+    if (startAt === -1) {
+      return;
+    }
+    for (let i = startAt; i < list.length - 1; i++) {
+      list[i] = list[i + 1];
+    }
+    list.length--;
   }
 }

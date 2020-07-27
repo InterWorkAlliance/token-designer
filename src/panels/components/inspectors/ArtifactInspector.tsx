@@ -16,6 +16,7 @@ import ArtifactType from "../ArtifactType";
 import ArtifactUpdate from "../../artifactUpdate";
 import BehaviorGroupInspector from "./BehaviorGroupInspector";
 import BehaviorInspector from "./BehaviorInspector";
+import DeleteLink from "../links/DeleteLink";
 import EditLink from "../links/EditLink";
 import PropertySetInspector from "./PropertySetInspector";
 import { TaxonomyAsObjects } from "../../taxonomyAsObjects";
@@ -92,11 +93,26 @@ export default function ArtifactInspector({
               <>
                 {alias}
                 {!!update && (
-                  <EditLink
-                    onClick={() =>
-                      update({ action: "edit", type: "alias", existing: alias })
-                    }
-                  />
+                  <>
+                    <EditLink
+                      onClick={() =>
+                        update({
+                          action: "edit",
+                          type: "alias",
+                          existing: alias,
+                        })
+                      }
+                    />
+                    <DeleteLink
+                      onClick={() =>
+                        update({
+                          action: "delete",
+                          type: "alias",
+                          existing: alias,
+                        })
+                      }
+                    />
+                  </>
                 )}
                 {i !== core.aliasesList.length - 1 && <>, </>}
               </>
