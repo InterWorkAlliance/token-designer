@@ -1,6 +1,6 @@
 import React from "react";
 
-import EditLink from "./EditLink";
+import EditLink from "./links/EditLink";
 
 type Props = {
   title: string;

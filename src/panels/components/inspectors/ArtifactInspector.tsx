@@ -8,7 +8,7 @@ import {
   TemplateDefinition,
 } from "../../../ttf/core_pb";
 
-import AddLink from "../AddLink";
+import AddLink from "../links/AddLink";
 import AnyArtifact from "../AnyArtifact";
 import ArtifactReference from "../ArtifactReference";
 import ArtifactSymbolBox from "../ArtifactSymbolBox";
@@ -16,7 +16,7 @@ import ArtifactType from "../ArtifactType";
 import ArtifactUpdate from "../../artifactUpdate";
 import BehaviorGroupInspector from "./BehaviorGroupInspector";
 import BehaviorInspector from "./BehaviorInspector";
-import EditLink from "../EditLink";
+import EditLink from "../links/EditLink";
 import PropertySetInspector from "./PropertySetInspector";
 import { TaxonomyAsObjects } from "../../taxonomyAsObjects";
 import TemplateDefinitionInspector from "./TemplateDefinitionInspector";
