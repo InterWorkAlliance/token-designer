@@ -128,6 +128,12 @@ export abstract class ArtifactPanelBase<
             ?.getArtifact()
             ?.getArtifactDefinition()
             ?.setBusinessDescription(_);
+      case "businessExample":
+        return (_) =>
+          this.artifact
+            ?.getArtifact()
+            ?.getArtifactDefinition()
+            ?.setBusinessExample(_);
     }
   }
 

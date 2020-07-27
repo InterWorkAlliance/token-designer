@@ -163,7 +163,6 @@ export default function ArtifactInspector({
               update({
                 action: "editString",
                 type: "businessDescription",
-                existing: core.artifactDefinition?.businessDescription,
               })
             }
           />
@@ -172,6 +171,30 @@ export default function ArtifactInspector({
       {core.artifactDefinition?.businessExample && (
         <p>
           For example: <i>{core.artifactDefinition?.businessExample}</i>
+          {!!update && (
+            <EditLink
+              onClick={() =>
+                update({
+                  action: "editString",
+                  type: "businessExample",
+                  existing: core.artifactDefinition?.businessExample,
+                })
+              }
+            />
+          )}
+        </p>
+      )}
+      {!!update && !core.artifactDefinition?.businessExample && (
+        <p>
+          <i>No business example</i>
+          <AddLink
+            onClick={() =>
+              update({
+                action: "editString",
+                type: "businessExample",
+              })
+            }
+          />
         </p>
       )}
       {core.artifactDefinition?.comments && (
