@@ -122,6 +122,12 @@ export abstract class ArtifactPanelBase<
       case "symbol":
         return (_) =>
           this.artifact?.getArtifact()?.getArtifactSymbol()?.setTooling(_);
+      case "businessDescription":
+        return (_) =>
+          this.artifact
+            ?.getArtifact()
+            ?.getArtifactDefinition()
+            ?.setBusinessDescription(_);
     }
   }
 
@@ -190,7 +196,7 @@ export abstract class ArtifactPanelBase<
     }
     const newValue = await vscode.window.showInputBox({
       value: existing,
-      prompt: "Enter the new name for " + existing,
+      prompt: "Enter the new value",
     });
     if (!newValue) {
       return;
@@ -212,9 +218,9 @@ export abstract class ArtifactPanelBase<
     }
     const newValue = await vscode.window.showInputBox({
       value: existing,
-      prompt: "Enter the new name for " + existing,
+      prompt: "Enter the new value",
     });
-    if (!newValue) {
+    if (!newValue && newValue !== "") {
       return;
     }
     setter(newValue);

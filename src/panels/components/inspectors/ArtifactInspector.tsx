@@ -140,7 +140,34 @@ export default function ArtifactInspector({
         />
       )}
       {core.artifactDefinition?.businessDescription && (
-        <p>{core.artifactDefinition?.businessDescription}</p>
+        <p>
+          {core.artifactDefinition?.businessDescription}
+          {!!update && (
+            <EditLink
+              onClick={() =>
+                update({
+                  action: "editString",
+                  type: "businessDescription",
+                  existing: core.artifactDefinition?.businessDescription,
+                })
+              }
+            />
+          )}
+        </p>
+      )}
+      {!!update && !core.artifactDefinition?.businessDescription && (
+        <p>
+          <i>No business description</i>
+          <AddLink
+            onClick={() =>
+              update({
+                action: "editString",
+                type: "businessDescription",
+                existing: core.artifactDefinition?.businessDescription,
+              })
+            }
+          />
+        </p>
       )}
       {core.artifactDefinition?.businessExample && (
         <p>
