@@ -46,6 +46,7 @@ export default function TokenBasePanel({ editMode, postMessage }: Props) {
         />
         <div style={{ margin: "var(--padding)", padding: "var(--padding)" }}>
           <ArtifactInspector
+            editMode={editMode}
             taxonomy={taxonomy}
             artifact={artifact}
             artifactType="token-base"

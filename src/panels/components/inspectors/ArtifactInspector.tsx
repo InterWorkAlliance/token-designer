@@ -20,12 +20,14 @@ import TemplateDefinitionInspector from "./TemplateDefinitionInspector";
 import TokenBaseInspector from "./TokenBaseInspector";
 
 type Props = {
+  editMode: boolean;
   taxonomy: TaxonomyAsObjects;
   artifact?: AnyArtifact;
   artifactType?: ArtifactType;
 };
 
 export default function ArtifactInspector({
+  editMode,
   taxonomy,
   artifact,
   artifactType,

@@ -47,6 +47,7 @@ export default function BehaviorGroupPanel({ editMode, postMessage }: Props) {
         />
         <div style={{ margin: "var(--padding)", padding: "var(--padding)" }}>
           <ArtifactInspector
+            editMode={editMode}
             taxonomy={taxonomy}
             artifact={artifact}
             artifactType="behavior-group"

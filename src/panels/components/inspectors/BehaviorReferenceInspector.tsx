@@ -106,6 +106,7 @@ export default function BehaviorReferenceInspector({
           </p>
           <div style={{ marginLeft: 25 }}>
             <ArtifactInspector
+              editMode={false}
               artifactType="behavior"
               artifact={mergedBehavior}
               taxonomy={taxonomy}

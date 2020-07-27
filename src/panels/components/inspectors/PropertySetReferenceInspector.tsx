@@ -52,6 +52,7 @@ export default function PropertySetReferenceInspector({
           </p>
           <div style={{ marginLeft: 25 }}>
             <ArtifactInspector
+              editMode={false}
               artifactType="property-set"
               artifact={mergedBehavior}
               taxonomy={taxonomy}

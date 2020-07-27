@@ -61,6 +61,7 @@ export default function BaseReferenceInspector({ taxonomy, artifact }: Props) {
           </p>
           <div style={{ marginLeft: 25 }}>
             <ArtifactInspector
+              editMode={false}
               artifactType="token-base"
               artifact={mergedBehavior}
               taxonomy={taxonomy}
