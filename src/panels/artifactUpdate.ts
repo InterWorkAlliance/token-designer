@@ -1,6 +1,6 @@
 type ArtifactUpdate = {
-    action: "edit" | "add" | "delete",
-    type: "alias",
+    action: "editListItem" | "editString" | "add" | "delete",
+    type: "alias" | "symbol",
     existing?: string,
 };
 

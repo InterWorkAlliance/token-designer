@@ -97,7 +97,7 @@ export default function ArtifactInspector({
                     <EditLink
                       onClick={() =>
                         update({
-                          action: "edit",
+                          action: "editListItem",
                           type: "alias",
                           existing: alias,
                         })
@@ -125,7 +125,19 @@ export default function ArtifactInspector({
       )}
       {!update && !core.aliasesList?.length && <p></p>}
       {!!core.artifactSymbol && (
-        <ArtifactSymbolBox symbol={core.artifactSymbol} />
+        <ArtifactSymbolBox
+          symbol={core.artifactSymbol}
+          edit={
+            update
+              ? () =>
+                  update({
+                    action: "editString",
+                    type: "symbol",
+                    existing: core.artifactSymbol?.tooling,
+                  })
+              : undefined
+          }
+        />
       )}
       {core.artifactDefinition?.businessDescription && (
         <p>{core.artifactDefinition?.businessDescription}</p>

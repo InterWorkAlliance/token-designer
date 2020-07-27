@@ -1,12 +1,14 @@
 import React from "react";
 
 import { ArtifactSymbol } from "../../ttf/artifact_pb";
+import EditLink from "./links/EditLink";
 
 type Props = {
   symbol: ArtifactSymbol.AsObject;
+  edit?: () => void;
 };
 
-export default function ArtifactSymbolBox({ symbol }: Props) {
+export default function ArtifactSymbolBox({ symbol, edit }: Props) {
   const badgeStyle: React.CSSProperties = {
     backgroundColor: "var(--vscode-editor-background)",
     color: "var(--vscode-editor-foreground)",
@@ -22,5 +24,10 @@ export default function ArtifactSymbolBox({ symbol }: Props) {
     float: "left",
   };
 
-  return <span style={badgeStyle}>{symbol.tooling || "?"}</span>;
+  return (
+    <span style={badgeStyle}>
+      {symbol.tooling || "?"}
+      {!!edit && <EditLink onClick={edit} />}
+    </span>
+  );
 }

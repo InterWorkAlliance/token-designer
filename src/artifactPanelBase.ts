@@ -110,10 +110,18 @@ export abstract class ArtifactPanelBase<
     }
   }
 
-  private resolvelist(field: string): string[] | undefined {
+  private resolveList(field: string): string[] | undefined {
     switch (field) {
       case "alias":
         return this.artifact?.getArtifact()?.getAliasesList();
+    }
+  }
+
+  private resolveSetter(field: string): ((value: string) => void) | undefined {
+    switch (field) {
+      case "symbol":
+        return (_) =>
+          this.artifact?.getArtifact()?.getArtifactSymbol()?.setTooling(_);
     }
   }
 
@@ -142,13 +150,22 @@ export abstract class ArtifactPanelBase<
     }
     switch (update.action) {
       case "add":
-        await this.updateAdd(update.type, this.resolvelist(update.type));
+        await this.updateAdd(update.type, this.resolveList(update.type));
         break;
       case "delete":
-        await this.updateDelete(this.resolvelist(update.type), update.existing);
+        await this.updateDelete(this.resolveList(update.type), update.existing);
         break;
-      case "edit":
-        await this.updateEdit(this.resolvelist(update.type), update.existing);
+      case "editListItem":
+        await this.updateEditListItem(
+          this.resolveList(update.type),
+          update.existing
+        );
+        break;
+      case "editString":
+        await this.updateEditString(
+          this.resolveSetter(update.type),
+          update.existing
+        );
         break;
     }
     await this.saveChanges();
@@ -167,7 +184,7 @@ export abstract class ArtifactPanelBase<
     list.push(newValue);
   }
 
-  private async updateEdit(list?: string[], existing?: string) {
+  private async updateEditListItem(list?: string[], existing?: string) {
     if (!list || !existing || list.indexOf(existing) === -1) {
       return;
     }
@@ -184,6 +201,23 @@ export abstract class ArtifactPanelBase<
         return;
       }
     }
+  }
+
+  private async updateEditString(
+    setter?: (value: string) => void,
+    existing?: string
+  ) {
+    if (!setter) {
+      return;
+    }
+    const newValue = await vscode.window.showInputBox({
+      value: existing,
+      prompt: "Enter the new name for " + existing,
+    });
+    if (!newValue) {
+      return;
+    }
+    setter(newValue);
   }
 
   private async updateDelete(list?: string[], existing?: string) {
