@@ -134,6 +134,9 @@ export abstract class ArtifactPanelBase<
             ?.getArtifact()
             ?.getArtifactDefinition()
             ?.setBusinessExample(_);
+      case "comments":
+        return (_) =>
+          this.artifact?.getArtifact()?.getArtifactDefinition()?.setComments(_);
     }
   }
 

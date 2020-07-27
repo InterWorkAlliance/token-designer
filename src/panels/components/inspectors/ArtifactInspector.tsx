@@ -200,6 +200,30 @@ export default function ArtifactInspector({
       {core.artifactDefinition?.comments && (
         <p>
           <i>Note:</i> {core.artifactDefinition?.comments}
+          {!!update && (
+            <EditLink
+              onClick={() =>
+                update({
+                  action: "editString",
+                  type: "comments",
+                  existing: core.artifactDefinition?.comments,
+                })
+              }
+            />
+          )}
+        </p>
+      )}
+      {!!update && !core.artifactDefinition?.comments && (
+        <p>
+          <i>No comments</i>
+          <AddLink
+            onClick={() =>
+              update({
+                action: "editString",
+                type: "comments",
+              })
+            }
+          />
         </p>
       )}
       {!!core.artifactDefinition?.analogiesList?.length && (
