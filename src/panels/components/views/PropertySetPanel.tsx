@@ -46,10 +46,15 @@ export default function PropertySetPanel({ editMode, postMessage }: Props) {
         />
         <div style={{ margin: "var(--padding)", padding: "var(--padding)" }}>
           <ArtifactInspector
-            editMode={editMode}
             taxonomy={taxonomy}
             artifact={artifact}
             artifactType="property-set"
+            update={
+              editMode
+                ? (update) =>
+                    postMessage({ e: artifactPanelBaseEvents.Update, update })
+                : undefined
+            }
           />
         </div>
       </>

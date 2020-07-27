@@ -12,6 +12,7 @@ import AnyArtifact from "../AnyArtifact";
 import ArtifactReference from "../ArtifactReference";
 import ArtifactSymbolBox from "../ArtifactSymbolBox";
 import ArtifactType from "../ArtifactType";
+import ArtifactUpdate from "../../artifactUpdate";
 import BehaviorGroupInspector from "./BehaviorGroupInspector";
 import BehaviorInspector from "./BehaviorInspector";
 import PropertySetInspector from "./PropertySetInspector";
@@ -20,17 +21,17 @@ import TemplateDefinitionInspector from "./TemplateDefinitionInspector";
 import TokenBaseInspector from "./TokenBaseInspector";
 
 type Props = {
-  editMode: boolean;
   taxonomy: TaxonomyAsObjects;
   artifact?: AnyArtifact;
   artifactType?: ArtifactType;
+  update?: (update: ArtifactUpdate) => void;
 };
 
 export default function ArtifactInspector({
-  editMode,
   taxonomy,
   artifact,
   artifactType,
+  update,
 }: Props) {
   if (!artifact || !artifact.artifact) {
     return <></>;
@@ -81,12 +82,20 @@ export default function ArtifactInspector({
   const core = artifact.artifact;
   return (
     <>
-      {!!core.aliasesList?.length && (
+      {(!!update || !!core.aliasesList?.length) && (
         <p>
           <b>Aliases: {core.aliasesList.join(", ")}</b>
+          {!!update && (
+            <span
+              style={{ cursor: "pointer", marginLeft: 5 }}
+              onClick={() => update({ action: "add", type: "alias" })}
+            >
+              +
+            </span>
+          )}
         </p>
       )}
-      {!core.aliasesList?.length && <p></p>}
+      {!update && !core.aliasesList?.length && <p></p>}
       {!!core.artifactSymbol && (
         <ArtifactSymbolBox symbol={core.artifactSymbol} />
       )}

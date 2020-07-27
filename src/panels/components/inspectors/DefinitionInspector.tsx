@@ -41,7 +41,6 @@ export default function DefinitionInspector({
       <ToolBoxTitle title={artifact?.artifact?.name || ""} />
       <div style={descriptionAreaStyle}>
         <ArtifactInspector
-          editMode={false}
           taxonomy={taxonomy}
           artifact={artifact}
           artifactType={artifactType}

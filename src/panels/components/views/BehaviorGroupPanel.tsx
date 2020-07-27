@@ -47,10 +47,15 @@ export default function BehaviorGroupPanel({ editMode, postMessage }: Props) {
         />
         <div style={{ margin: "var(--padding)", padding: "var(--padding)" }}>
           <ArtifactInspector
-            editMode={editMode}
             taxonomy={taxonomy}
             artifact={artifact}
             artifactType="behavior-group"
+            update={
+              editMode
+                ? (update) =>
+                    postMessage({ e: artifactPanelBaseEvents.Update, update })
+                : undefined
+            }
           />
         </div>
       </>

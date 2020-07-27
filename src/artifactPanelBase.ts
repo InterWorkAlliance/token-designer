@@ -3,10 +3,11 @@ import * as vscode from "vscode";
 import * as protobufAny from "google-protobuf/google/protobuf/any_pb";
 
 import { artifactPanelBaseEvents } from "./panels/artifactPanelBaseEvents";
+import ArtifactUpdate from "./panels/artifactUpdate";
+import { ITtfInterface } from "./ttfInterface";
 import { PanelBase } from "./panelBase";
 import { TaxonomyAsObjects } from "./panels/taxonomyAsObjects";
 import { TokenTaxonomy } from "./tokenTaxonomy";
-import { ITtfInterface } from "./ttfInterface";
 
 export abstract class ArtifactPanelBase<
   T extends {
@@ -73,9 +74,26 @@ export abstract class ArtifactPanelBase<
       this.postCurrentState();
     } else if (message.e === artifactPanelBaseEvents.Rename) {
       await this.rename();
+    } else if (message.e === artifactPanelBaseEvents.Update) {
+      await this.update(message.update);
     } else {
       await this.onUnhandledMessage(message);
     }
+  }
+
+  private async refreshArtifact(artifactId: string) {
+    const existingArtifactSymbol = new ttfArtifact.ArtifactSymbol();
+    existingArtifactSymbol.setId(artifactId);
+    this.artifact = await this.getArtifact(existingArtifactSymbol);
+    this.postCurrentState();
+    this.setTitle(this.title);
+    await this.ttfTaxonomy.refresh();
+    this.refreshTaxonomy();
+  }
+
+  private refreshTaxonomy() {
+    this.taxonomyObjects = this.ttfTaxonomy.asObjects();
+    this.postMessage({ taxonomy: this.taxonomyObjects });
   }
 
   private async rename() {
@@ -89,6 +107,13 @@ export abstract class ArtifactPanelBase<
       }
       this.artifact.getArtifact()?.setName(newName);
       await this.saveChanges();
+    }
+  }
+
+  private resolvelist(field: string): string[] | undefined {
+    switch (field) {
+      case "alias":
+        return this.artifact?.getArtifact()?.getAliasesList();
     }
   }
 
@@ -111,18 +136,34 @@ export abstract class ArtifactPanelBase<
     await this.refreshArtifact(symbol.getId());
   }
 
-  private async refreshArtifact(artifactId: string) {
-    const existingArtifactSymbol = new ttfArtifact.ArtifactSymbol();
-    existingArtifactSymbol.setId(artifactId);
-    this.artifact = await this.getArtifact(existingArtifactSymbol);
-    this.postCurrentState();
-    this.setTitle(this.title);
-    await this.ttfTaxonomy.refresh();
-    this.refreshTaxonomy();
+  private async update(update: ArtifactUpdate) {
+    if (!this.artifact) {
+      return;
+    }
+    switch (update.action) {
+      case "add":
+        await this.updateAdd(update.type, this.resolvelist(update.type));
+        break;
+      case "delete":
+        // TODO
+        break;
+      case "edit":
+        // TODO
+        break;
+    }
+    await this.saveChanges();
   }
 
-  private refreshTaxonomy() {
-    this.taxonomyObjects = this.ttfTaxonomy.asObjects();
-    this.postMessage({ taxonomy: this.taxonomyObjects });
+  private async updateAdd(description: string, list?: string[]) {
+    if (!list) {
+      return;
+    }
+    const newValue = await vscode.window.showInputBox({
+      prompt: "Enter the new " + description,
+    });
+    if (!newValue) {
+      return;
+    }
+    list.push(newValue);
   }
 }

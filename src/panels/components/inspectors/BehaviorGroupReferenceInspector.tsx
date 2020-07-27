@@ -57,7 +57,6 @@ export default function BehaviorGroupReferenceInspector({
           </p>
           <div style={{ marginLeft: 25 }}>
             <ArtifactInspector
-              editMode={false}
               artifactType="behavior-group"
               artifact={mergedBehavior}
               taxonomy={taxonomy}
