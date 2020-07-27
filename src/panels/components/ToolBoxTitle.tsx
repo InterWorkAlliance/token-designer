@@ -1,5 +1,7 @@
 import React from "react";
 
+import EditLink from "./EditLink";
+
 type Props = {
   title: string;
   onRename?: () => void;
@@ -18,14 +20,7 @@ export default function ToolBoxTitle({ title, onRename }: Props) {
   return (
     <h1 style={style}>
       {title}
-      {!!onRename && (
-        <span
-          style={{ cursor: "pointer", marginLeft: 5 }}
-          onClick={onRename}
-        >
-          ✎
-        </span>
-      )}
+      {!!onRename && <EditLink onClick={onRename} />}
     </h1>
   );
 }

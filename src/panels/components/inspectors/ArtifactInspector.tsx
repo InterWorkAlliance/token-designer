@@ -8,6 +8,7 @@ import {
   TemplateDefinition,
 } from "../../../ttf/core_pb";
 
+import AddLink from "../AddLink";
 import AnyArtifact from "../AnyArtifact";
 import ArtifactReference from "../ArtifactReference";
 import ArtifactSymbolBox from "../ArtifactSymbolBox";
@@ -86,12 +87,7 @@ export default function ArtifactInspector({
         <p>
           <b>Aliases: {core.aliasesList.join(", ")}</b>
           {!!update && (
-            <span
-              style={{ cursor: "pointer", marginLeft: 5 }}
-              onClick={() => update({ action: "add", type: "alias" })}
-            >
-              +
-            </span>
+            <AddLink onClick={() => update({ action: "add", type: "alias" })} />
           )}
         </p>
       )}
