@@ -148,7 +148,7 @@ export abstract class ArtifactPanelBase<
         // TODO
         break;
       case "edit":
-        // TODO
+        await this.updateEdit(this.resolvelist(update.type), update.existing);
         break;
     }
     await this.saveChanges();
@@ -165,5 +165,24 @@ export abstract class ArtifactPanelBase<
       return;
     }
     list.push(newValue);
+  }
+
+  private async updateEdit(list?: string[], existing?: string) {
+    if (!list || !existing || list.indexOf(existing) === -1) {
+      return;
+    }
+    const newValue = await vscode.window.showInputBox({
+      value: existing,
+      prompt: "Enter the new name for " + existing,
+    });
+    if (!newValue) {
+      return;
+    }
+    for (let i = 0; i < list.length; i++) {
+      if (list[i] === existing) {
+        list[i] = newValue;
+        return;
+      }
+    }
   }
 }

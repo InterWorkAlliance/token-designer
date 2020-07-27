@@ -16,6 +16,7 @@ import ArtifactType from "../ArtifactType";
 import ArtifactUpdate from "../../artifactUpdate";
 import BehaviorGroupInspector from "./BehaviorGroupInspector";
 import BehaviorInspector from "./BehaviorInspector";
+import EditLink from "../EditLink";
 import PropertySetInspector from "./PropertySetInspector";
 import { TaxonomyAsObjects } from "../../taxonomyAsObjects";
 import TemplateDefinitionInspector from "./TemplateDefinitionInspector";
@@ -85,7 +86,22 @@ export default function ArtifactInspector({
     <>
       {(!!update || !!core.aliasesList?.length) && (
         <p>
-          <b>Aliases: {core.aliasesList.join(", ")}</b>
+          <b>
+            Aliases:{" "}
+            {core.aliasesList.map((alias, i) => (
+              <>
+                {alias}
+                {!!update && (
+                  <EditLink
+                    onClick={() =>
+                      update({ action: "edit", type: "alias", existing: alias })
+                    }
+                  />
+                )}
+                {i !== core.aliasesList.length - 1 && <>, </>}
+              </>
+            ))}
+          </b>
           {!!update && (
             <AddLink onClick={() => update({ action: "add", type: "alias" })} />
           )}
