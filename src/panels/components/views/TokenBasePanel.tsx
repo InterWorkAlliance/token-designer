@@ -9,13 +9,13 @@ import { tokenBasePanelEvents } from "../../tokenBasePanelEvents";
 import ToolBoxTitle from "../ToolBoxTitle";
 
 type Props = {
-  editMode: boolean;
   postMessage: (message: any) => void;
 };
 
-export default function TokenBasePanel({ editMode, postMessage }: Props) {
+export default function TokenBasePanel({ postMessage }: Props) {
   const [taxonomy, setTaxonomy] = useState<TaxonomyAsObjects | null>(null);
   const [artifact, setArtifact] = useState<Base.AsObject | null>(null);
+  const [editMode, setEditMode] = useState(false);
 
   const handleMessage = (message: any) => {
     if (message.taxonomy) {
@@ -38,6 +38,8 @@ export default function TokenBasePanel({ editMode, postMessage }: Props) {
       <>
         <ToolBoxTitle
           title={artifact.artifact?.name || ""}
+          editMode={editMode}
+          setEditMode={setEditMode}
           onRename={
             editMode
               ? () => postMessage({ e: artifactPanelBaseEvents.Rename })
