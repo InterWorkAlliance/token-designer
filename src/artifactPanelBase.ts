@@ -152,7 +152,14 @@ export abstract class ArtifactPanelBase<
       case "analogy.name":
         return analogies && index !== undefined
           ? (_) => analogies[index].setName(_)
-          : undefined;
+          : (_) => {
+              const analogy = new ttfArtifact.ArtifactAnalogy();
+              analogy.setName(_);
+              this.artifact
+                ?.getArtifact()
+                ?.getArtifactDefinition()
+                ?.addAnalogies(analogy);
+            };
       case "analogy.description":
         return analogies && index !== undefined
           ? (_) => analogies[index].setDescription(_)
@@ -210,7 +217,7 @@ export abstract class ArtifactPanelBase<
     await this.saveChanges();
   }
 
-  private async updateAdd(description: string, list?: string[]) {
+  private async updateAdd(description: string, list?: any[]) {
     if (!list) {
       return;
     }
