@@ -230,11 +230,37 @@ export default function ArtifactInspector({
         <div>
           <u>Analogies:</u>
           <ul>
-            {core.artifactDefinition?.analogiesList.map((_) => (
+            {core.artifactDefinition?.analogiesList.map((_, i) => (
               <li key={JSON.stringify(_)}>
-                {_.name}
+                {_.name}{" "}
+                {!!update && (
+                  <EditLink
+                    onClick={() =>
+                      update({
+                        action: "editString",
+                        type: "analogy.name",
+                        existing: _.name,
+                        index: i,
+                      })
+                    }
+                  />
+                )}
                 <ul>
-                  <li>{_.description}</li>
+                  <li>
+                    {_.description}{" "}
+                    {!!update && (
+                      <EditLink
+                        onClick={() =>
+                          update({
+                            action: "editString",
+                            type: "analogy.description",
+                            existing: _.description,
+                            index: i,
+                          })
+                        }
+                      />
+                    )}
+                  </li>
                 </ul>
               </li>
             ))}

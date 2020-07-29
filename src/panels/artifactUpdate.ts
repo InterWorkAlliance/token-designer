@@ -5,8 +5,11 @@ type ArtifactUpdate = {
     | "symbol"
     | "businessDescription"
     | "businessExample"
-    | "comments";
+    | "comments"
+    | "analogy.name"
+    | "analogy.description";
   existing?: string;
+  index?: number;
 };
 
 export default ArtifactUpdate;

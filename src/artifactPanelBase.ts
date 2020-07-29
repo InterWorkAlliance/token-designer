@@ -117,7 +117,14 @@ export abstract class ArtifactPanelBase<
     }
   }
 
-  private resolveSetter(field: string): ((value: string) => void) | undefined {
+  private resolveSetter(
+    field: string,
+    index?: number
+  ): ((value: string) => void) | undefined {
+    const analogies = this.artifact
+      ?.getArtifact()
+      ?.getArtifactDefinition()
+      ?.getAnalogiesList();
     switch (field) {
       case "symbol":
         return (_) =>
@@ -137,6 +144,14 @@ export abstract class ArtifactPanelBase<
       case "comments":
         return (_) =>
           this.artifact?.getArtifact()?.getArtifactDefinition()?.setComments(_);
+      case "analogy.name":
+        return analogies && index !== undefined
+          ? (_) => analogies[index].setName(_)
+          : undefined;
+      case "analogy.description":
+        return analogies && index !== undefined
+          ? (_) => analogies[index].setDescription(_)
+          : undefined;
     }
   }
 
@@ -178,7 +193,7 @@ export abstract class ArtifactPanelBase<
         break;
       case "editString":
         await this.updateEditString(
-          this.resolveSetter(update.type),
+          this.resolveSetter(update.type, update.index),
           update.existing
         );
         break;
