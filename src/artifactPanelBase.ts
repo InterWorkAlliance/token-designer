@@ -110,10 +110,15 @@ export abstract class ArtifactPanelBase<
     }
   }
 
-  private resolveList(field: string): string[] | undefined {
+  private resolveList(field: string): any[] | undefined {
     switch (field) {
       case "alias":
         return this.artifact?.getArtifact()?.getAliasesList();
+      case "analogy.name":
+        return this.artifact
+          ?.getArtifact()
+          ?.getArtifactDefinition()
+          ?.getAnalogiesList();
     }
   }
 
@@ -183,7 +188,11 @@ export abstract class ArtifactPanelBase<
         await this.updateAdd(update.type, this.resolveList(update.type));
         break;
       case "delete":
-        await this.updateDelete(this.resolveList(update.type), update.existing);
+        await this.updateDelete(
+          this.resolveList(update.type),
+          update.existing,
+          update.index
+        );
         break;
       case "editListItem":
         await this.updateEditListItem(
@@ -250,11 +259,16 @@ export abstract class ArtifactPanelBase<
     setter(newValue);
   }
 
-  private async updateDelete(list?: string[], existing?: string) {
-    if (!list || !existing) {
+  private async updateDelete(
+    list?: string[],
+    existing?: string,
+    index?: number
+  ) {
+    if (!list || (!existing && index === undefined)) {
       return;
     }
-    const startAt = list.indexOf(existing);
+    const startAt =
+      index !== undefined ? index : list.indexOf(existing as string);
     if (startAt === -1) {
       return;
     }

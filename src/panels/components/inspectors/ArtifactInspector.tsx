@@ -234,16 +234,27 @@ export default function ArtifactInspector({
               <li key={JSON.stringify(_)}>
                 {_.name}{" "}
                 {!!update && (
-                  <EditLink
-                    onClick={() =>
-                      update({
-                        action: "editString",
-                        type: "analogy.name",
-                        existing: _.name,
-                        index: i,
-                      })
-                    }
-                  />
+                  <>
+                    <EditLink
+                      onClick={() =>
+                        update({
+                          action: "editString",
+                          type: "analogy.name",
+                          existing: _.name,
+                          index: i,
+                        })
+                      }
+                    />
+                    <DeleteLink
+                      onClick={() =>
+                        update({
+                          action: "delete",
+                          type: "analogy.name",
+                          index: i,
+                        })
+                      }
+                    />
+                  </>
                 )}
                 <ul>
                   <li>
