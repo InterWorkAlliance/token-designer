@@ -288,15 +288,65 @@ export default function ArtifactInspector({
           </ul>
         </div>
       )}
-      {!!core.contributorsList?.length && (
+      {(!!update || !!core.contributorsList?.length) && (
         <div>
-          <u>Contributors:</u>
+          <u>Contributors:</u>{" "}
+          {!!update && (
+            <AddLink
+              onClick={() =>
+                update({
+                  action: "editString",
+                  type: "contributor.name",
+                })
+              }
+            />
+          )}
           <ul>
-            {core.contributorsList.map((_) => (
+            {core.contributorsList.map((_, i) => (
               <li key={JSON.stringify(_)}>
                 {_.name}
+                {!!update && (
+                  <>
+                    {" "}
+                    <EditLink
+                      onClick={() =>
+                        update({
+                          action: "editString",
+                          type: "contributor.name",
+                          existing: _.name,
+                          index: i,
+                        })
+                      }
+                    />{" "}
+                  </>
+                )}
                 {_.name && _.organization && <>, </>}
-                <i>{_.organization}</i>
+                <i>
+                  {_.organization || (!!update && "Organization not set")}
+                </i>{" "}
+                {!!update && (
+                  <>
+                    <EditLink
+                      onClick={() =>
+                        update({
+                          action: "editString",
+                          type: "contributor.organization",
+                          existing: _.organization,
+                          index: i,
+                        })
+                      }
+                    />
+                    <DeleteLink
+                      onClick={() =>
+                        update({
+                          action: "delete",
+                          type: "contributor.name",
+                          index: i,
+                        })
+                      }
+                    />
+                  </>
+                )}
               </li>
             ))}
           </ul>

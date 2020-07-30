@@ -119,6 +119,8 @@ export abstract class ArtifactPanelBase<
           ?.getArtifact()
           ?.getArtifactDefinition()
           ?.getAnalogiesList();
+      case "contributor.name":
+        return this.artifact?.getArtifact()?.getContributorsList();
     }
   }
 
@@ -130,6 +132,7 @@ export abstract class ArtifactPanelBase<
       ?.getArtifact()
       ?.getArtifactDefinition()
       ?.getAnalogiesList();
+    const contributors = this.artifact?.getArtifact()?.getContributorsList();
     switch (field) {
       case "symbol":
         return (_) =>
@@ -163,6 +166,18 @@ export abstract class ArtifactPanelBase<
       case "analogy.description":
         return analogies && index !== undefined
           ? (_) => analogies[index].setDescription(_)
+          : undefined;
+      case "contributor.name":
+        return contributors && index !== undefined
+          ? (_) => contributors[index].setName(_)
+          : (_) => {
+              const contributor = new ttfArtifact.Contributor();
+              contributor.setName(_);
+              this.artifact?.getArtifact()?.addContributors(contributor);
+            };
+      case "contributor.organization":
+        return contributors && index !== undefined
+          ? (_) => contributors[index].setOrganization(_)
           : undefined;
     }
   }

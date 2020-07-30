@@ -7,7 +7,9 @@ type ArtifactUpdate = {
     | "businessExample"
     | "comments"
     | "analogy.name"
-    | "analogy.description";
+    | "analogy.description"
+    | "contributor.name"
+    | "contributor.organization";
   existing?: string;
   index?: number;
 };
