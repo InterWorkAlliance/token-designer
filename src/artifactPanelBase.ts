@@ -209,6 +209,9 @@ export abstract class ArtifactPanelBase<
       case "add":
         await this.updateAdd(update.type, this.resolveList(update.type));
         break;
+      case "addRef":
+        await this.updateAddRef(update.type);
+        break;
       case "delete":
         await this.updateDelete(
           this.resolveList(update.type),
@@ -243,6 +246,87 @@ export abstract class ArtifactPanelBase<
       return;
     }
     list.push(newValue);
+  }
+
+  private async updateAddRef(field: string) {
+    const taxonomy = this.ttfTaxonomy.asObjects();
+    if (!taxonomy) {
+      return;
+    }
+
+    let adder:
+      | ((dep: ttfArtifact.SymbolDependency) => void)
+      | undefined = undefined;
+    switch (field) {
+      case "dependency":
+        adder = (_) => this.artifact?.getArtifact()?.addDependencies(_);
+    }
+    if (!adder) {
+      return;
+    }
+
+    const quickPickItems = [
+      ...taxonomy.baseTokenTypes,
+      ...taxonomy.behaviorGroups,
+      ...taxonomy.behaviors,
+      ...taxonomy.propertySets,
+    ]
+      .filter(
+        (_) =>
+          !!_.artifact &&
+          !!_.artifact.artifactSymbol &&
+          !!_.artifact.artifactSymbol.id
+      )
+      .map(
+        (_) =>
+          ({
+            symbol: _.artifact?.artifactSymbol,
+            label: _.artifact?.name || "",
+            description: _.artifact?.artifactSymbol?.id,
+            detail: _.artifact?.artifactDefinition?.businessDescription,
+          } as vscode.QuickPickItem & {
+            symbol: ttfArtifact.ArtifactSymbol.AsObject;
+          })
+      );
+
+    const quickPick = vscode.window.createQuickPick();
+    quickPick.items = quickPickItems;
+    quickPick.canSelectMany = false;
+    const item = await new Promise<
+      vscode.QuickPickItem & {
+        symbol: ttfArtifact.ArtifactSymbol.AsObject;
+      } | undefined
+    >((resolve) => {
+      quickPick.onDidAccept(() => {
+        const item = quickPick.selectedItems[0];
+        resolve(
+          item as vscode.QuickPickItem & {
+            symbol: ttfArtifact.ArtifactSymbol.AsObject;
+          }
+        );
+      });
+      quickPick.onDidHide((_) => resolve(undefined));
+      quickPick.show();
+    });
+    if (!item) {
+      return;
+    }
+
+    const description = await vscode.window.showInputBox({
+      prompt: "Describe the reference (optional)",
+    });
+    const dependencySymbol = new ttfArtifact.ArtifactSymbol();
+    dependencySymbol.setId(item.detail || "");
+    dependencySymbol.setTemplateValidated(item.symbol.templateValidated);
+    dependencySymbol.setTooling(item.symbol.tooling);
+    dependencySymbol.setType(item.symbol.type);
+    dependencySymbol.setVersion(item.symbol.version);
+    dependencySymbol.setVisual(item.symbol.visual);
+    const dependency = new ttfArtifact.SymbolDependency();
+    dependency.setSymbol(dependencySymbol);
+    dependency.setDescription(description || "");
+    
+    adder(dependency);
   }
 
   private async updateEditListItem(list?: string[], existing?: string) {

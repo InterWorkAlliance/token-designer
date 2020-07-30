@@ -1,5 +1,5 @@
 type ArtifactUpdate = {
-  action: "editListItem" | "editString" | "add" | "delete";
+  action: "editListItem" | "editString" | "add" | "addRef" | "delete";
   type:
     | "alias"
     | "symbol"
@@ -9,7 +9,8 @@ type ArtifactUpdate = {
     | "analogy.name"
     | "analogy.description"
     | "contributor.name"
-    | "contributor.organization";
+    | "contributor.organization"
+    | "dependency";
   existing?: string;
   index?: number;
 };

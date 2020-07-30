@@ -352,9 +352,19 @@ export default function ArtifactInspector({
           </ul>
         </div>
       )}
-      {!!core.dependenciesList?.length && (
+      {(!!update || !!core.dependenciesList?.length) && (
         <div>
-          <u>Dependencies:</u>
+          <u>Dependencies:</u>{" "}
+          {!!update && (
+            <AddLink
+              onClick={() =>
+                update({
+                  action: "addRef",
+                  type: "dependency",
+                })
+              }
+            />
+          )}
           <ul>
             {core.dependenciesList.map((_) => (
               <li key={JSON.stringify(_)}>
