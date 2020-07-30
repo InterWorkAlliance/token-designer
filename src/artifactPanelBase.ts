@@ -125,6 +125,8 @@ export abstract class ArtifactPanelBase<
         return this.artifact?.getArtifact()?.getDependenciesList();
       case "influencedBy":
         return this.artifact?.getArtifact()?.getInfluencedBySymbolsList();
+      case "incompatibleWith":
+        return this.artifact?.getArtifact()?.getIncompatibleWithSymbolsList();
     }
   }
 
@@ -263,6 +265,7 @@ export abstract class ArtifactPanelBase<
       | ttfArtifact.SymbolDependency
       | ttfArtifact.SymbolInfluence
       | undefined = undefined;
+    let promptForDescription = true;
     switch (field) {
       case "dependency":
         reference = new ttfArtifact.SymbolDependency();
@@ -277,6 +280,14 @@ export abstract class ArtifactPanelBase<
           this.artifact
             ?.getArtifact()
             ?.addInfluencedBySymbols(reference as ttfArtifact.SymbolInfluence);
+        break;
+      case "incompatibleWith":
+        reference = new ttfArtifact.SymbolDependency();
+        promptForDescription = false;
+        addReference = () =>
+          this.artifact
+            ?.getArtifact()
+            ?.addIncompatibleWithSymbols(reference?.getSymbol());
         break;
     }
     if (!addReference || !reference) {
@@ -323,6 +334,7 @@ export abstract class ArtifactPanelBase<
             symbol: ttfArtifact.ArtifactSymbol.AsObject;
           }
         );
+        quickPick.hide();
       });
       quickPick.onDidHide((_) => resolve(undefined));
       quickPick.show();
@@ -330,10 +342,7 @@ export abstract class ArtifactPanelBase<
     if (!item) {
       return;
     }
-
-    const description = await vscode.window.showInputBox({
-      prompt: "Describe the reference (optional)",
-    });
+    
     const dependencySymbol = new ttfArtifact.ArtifactSymbol();
     dependencySymbol.setId(item.detail || "");
     dependencySymbol.setTemplateValidated(item.symbol.templateValidated);
@@ -342,7 +351,13 @@ export abstract class ArtifactPanelBase<
     dependencySymbol.setVersion(item.symbol.version);
     dependencySymbol.setVisual(item.symbol.visual);
     reference.setSymbol(dependencySymbol);
-    reference.setDescription(description || "");
+    if (promptForDescription) {
+      const description = await vscode.window.showInputBox({
+        prompt: "Describe the reference (optional)",
+      });
+      reference.setDescription(description || "");
+    }
+
     addReference();
   }
 

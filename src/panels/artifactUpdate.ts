@@ -11,7 +11,8 @@ type ArtifactUpdate = {
     | "contributor.name"
     | "contributor.organization"
     | "dependency"
-    | "influencedBy";
+    | "influencedBy"
+    | "incompatibleWith";
   existing?: string;
   index?: number;
 };

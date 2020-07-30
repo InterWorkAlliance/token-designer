@@ -437,15 +437,37 @@ export default function ArtifactInspector({
       )}
       {(!!update || !!core.incompatibleWithSymbolsList?.length) && (
         <div>
-          <u>Incompatible with:</u>
+          <u>Incompatible with:</u>{" "}
+          {!!update && (
+            <AddLink
+              onClick={() =>
+                update({
+                  action: "addRef",
+                  type: "incompatibleWith",
+                })
+              }
+            />
+          )}
           <ul>
-            {core.incompatibleWithSymbolsList.map((_) => (
+            {core.incompatibleWithSymbolsList.map((_, i) => (
               <li key={JSON.stringify(_)}>
                 <ArtifactReference
                   taxonomy={taxonomy}
                   id={_.id}
                   tooling={_.tooling}
                 />
+                {" "}
+                {!!update && (
+                  <DeleteLink
+                    onClick={() =>
+                      update({
+                        action: "delete",
+                        type: "incompatibleWith",
+                        index: i,
+                      })
+                    }
+                  />
+                )}
               </li>
             ))}
           </ul>
