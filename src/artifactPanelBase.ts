@@ -123,6 +123,8 @@ export abstract class ArtifactPanelBase<
         return this.artifact?.getArtifact()?.getContributorsList();
       case "dependency":
         return this.artifact?.getArtifact()?.getDependenciesList();
+      case "influencedBy":
+        return this.artifact?.getArtifact()?.getInfluencedBySymbolsList();
     }
   }
 
@@ -256,14 +258,28 @@ export abstract class ArtifactPanelBase<
       return;
     }
 
-    let adder:
-      | ((dep: ttfArtifact.SymbolDependency) => void)
+    let addReference: (() => void) | undefined = undefined;
+    let reference:
+      | ttfArtifact.SymbolDependency
+      | ttfArtifact.SymbolInfluence
       | undefined = undefined;
     switch (field) {
       case "dependency":
-        adder = (_) => this.artifact?.getArtifact()?.addDependencies(_);
+        reference = new ttfArtifact.SymbolDependency();
+        addReference = () =>
+          this.artifact
+            ?.getArtifact()
+            ?.addDependencies(reference as ttfArtifact.SymbolDependency);
+        break;
+      case "influencedBy":
+        reference = new ttfArtifact.SymbolInfluence();
+        addReference = () =>
+          this.artifact
+            ?.getArtifact()
+            ?.addInfluencedBySymbols(reference as ttfArtifact.SymbolInfluence);
+        break;
     }
-    if (!adder) {
+    if (!addReference || !reference) {
       return;
     }
 
@@ -295,9 +311,10 @@ export abstract class ArtifactPanelBase<
     quickPick.items = quickPickItems;
     quickPick.canSelectMany = false;
     const item = await new Promise<
-      vscode.QuickPickItem & {
-        symbol: ttfArtifact.ArtifactSymbol.AsObject;
-      } | undefined
+      | (vscode.QuickPickItem & {
+          symbol: ttfArtifact.ArtifactSymbol.AsObject;
+        })
+      | undefined
     >((resolve) => {
       quickPick.onDidAccept(() => {
         const item = quickPick.selectedItems[0];
@@ -324,11 +341,9 @@ export abstract class ArtifactPanelBase<
     dependencySymbol.setType(item.symbol.type);
     dependencySymbol.setVersion(item.symbol.version);
     dependencySymbol.setVisual(item.symbol.visual);
-    const dependency = new ttfArtifact.SymbolDependency();
-    dependency.setSymbol(dependencySymbol);
-    dependency.setDescription(description || "");
-
-    adder(dependency);
+    reference.setSymbol(dependencySymbol);
+    reference.setDescription(description || "");
+    addReference();
   }
 
   private async updateEditListItem(list?: string[], existing?: string) {

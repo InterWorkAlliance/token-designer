@@ -390,11 +390,21 @@ export default function ArtifactInspector({
           </ul>
         </div>
       )}
-      {!!core.influencedBySymbolsList?.length && (
+      {(!!update || !!core.influencedBySymbolsList?.length) && (
         <div>
-          <u>Influenced by:</u>
+          <u>Influenced by:</u>{" "}
+          {!!update && (
+            <AddLink
+              onClick={() =>
+                update({
+                  action: "addRef",
+                  type: "influencedBy",
+                })
+              }
+            />
+          )}
           <ul>
-            {core.influencedBySymbolsList.map((_) => (
+            {core.influencedBySymbolsList.map((_, i) => (
               <li key={JSON.stringify(_)}>
                 <b>
                   <ArtifactReference
@@ -408,13 +418,24 @@ export default function ArtifactInspector({
                     <br />
                     {_.description}
                   </>
+                )}{" "}
+                {!!update && (
+                  <DeleteLink
+                    onClick={() =>
+                      update({
+                        action: "delete",
+                        type: "influencedBy",
+                        index: i,
+                      })
+                    }
+                  />
                 )}
               </li>
             ))}
           </ul>
         </div>
       )}
-      {!!core.incompatibleWithSymbolsList?.length && (
+      {(!!update || !!core.incompatibleWithSymbolsList?.length) && (
         <div>
           <u>Incompatible with:</u>
           <ul>

@@ -10,7 +10,8 @@ type ArtifactUpdate = {
     | "analogy.description"
     | "contributor.name"
     | "contributor.organization"
-    | "dependency";
+    | "dependency"
+    | "influencedBy";
   existing?: string;
   index?: number;
 };
