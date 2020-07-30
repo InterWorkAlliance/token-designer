@@ -366,14 +366,25 @@ export default function ArtifactInspector({
             />
           )}
           <ul>
-            {core.dependenciesList.map((_) => (
+            {core.dependenciesList.map((_, i) => (
               <li key={JSON.stringify(_)}>
                 <ArtifactReference
                   taxonomy={taxonomy}
                   id={_.symbol?.id}
                   tooling={_.symbol?.tooling}
                 />
-                {_.description && <> ({_.description})</>}
+                {_.description && <> ({_.description})</>}{" "}
+                {!!update && (
+                  <DeleteLink
+                    onClick={() =>
+                      update({
+                        action: "delete",
+                        type: "dependency",
+                        index: i,
+                      })
+                    }
+                  />
+                )}
               </li>
             ))}
           </ul>

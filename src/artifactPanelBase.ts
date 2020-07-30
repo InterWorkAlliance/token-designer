@@ -121,6 +121,8 @@ export abstract class ArtifactPanelBase<
           ?.getAnalogiesList();
       case "contributor.name":
         return this.artifact?.getArtifact()?.getContributorsList();
+      case "dependency":
+        return this.artifact?.getArtifact()?.getDependenciesList();
     }
   }
 
@@ -325,7 +327,7 @@ export abstract class ArtifactPanelBase<
     const dependency = new ttfArtifact.SymbolDependency();
     dependency.setSymbol(dependencySymbol);
     dependency.setDescription(description || "");
-    
+
     adder(dependency);
   }
 
