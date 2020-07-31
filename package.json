@@ -32,6 +32,7 @@
   "activationEvents": [
     "onCommand:visual-token-designer.changeEnvironment",
     "onCommand:visual-token-designer.createTokenFormula",
+    "onCommand:visual-token-designer.createBehaviorGroup",
     "onView:visual-token-designer.tokenArtifactExplorer",
     "onView:visual-token-designer.tokenFormulaExplorer",
     "onView:visual-token-designer.tokenDefinitionExplorer"
@@ -81,6 +82,11 @@
       {
         "command": "visual-token-designer.createTokenDefinition",
         "title": "Create token definition",
+        "category": "Token Taxonomy Framework"
+      },
+      {
+        "command": "visual-token-designer.createBehaviorGroup",
+        "title": "Create Behavior Group",
         "category": "Token Taxonomy Framework"
       },
       {
@@ -159,6 +165,10 @@
           "command": "visual-token-designer.createTokenFormula",
           "when": "view == visual-token-designer.tokenFormulaExplorer",
           "group": "navigation"
+        },
+        {
+          "command": "visual-token-designer.createBehaviorGroup",
+          "when": "view == visual-token-designer.tokenArtifactExplorer"
         }
       ],
       "view/item/context": [

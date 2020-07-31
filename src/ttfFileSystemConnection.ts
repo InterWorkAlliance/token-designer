@@ -64,6 +64,21 @@ export class TtfFileSystemConnection implements ITtfInterface {
             callback(null, new ttfArtifact.NewArtifactResponse());
           }
           break;
+        case ttfArtifact.ArtifactType.BEHAVIOR_GROUP:
+          const behaviorGroup = artifact.unpack(
+            ttfCore.BehaviorGroup.deserializeBinary,
+            "taxonomy.model.core.BehaviorGroup"
+          );
+          const groupId = behaviorGroup
+            ?.getArtifact()
+            ?.getArtifactSymbol()
+            ?.getId();
+          if (behaviorGroup && groupId) {
+            this.taxonomy.getBehaviorGroupsMap().set(groupId, behaviorGroup);
+            done = true;
+            callback(null, new ttfArtifact.NewArtifactResponse());
+          }
+          break;
         default:
           done = true;
           callback(
