@@ -95,16 +95,6 @@
         "category": "Token Taxonomy Framework"
       },
       {
-        "command": "visual-token-designer.createSmartContractEth",
-        "title": "Create smart contract (Ethereum)...",
-        "category": "Token Taxonomy Framework"
-      },
-      {
-        "command": "visual-token-designer.createSmartContractNeo",
-        "title": "Create smart contract (Neo)...",
-        "category": "Token Taxonomy Framework"
-      },
-      {
         "command": "visual-token-designer.openTokenDefinition",
         "title": "Open token definition",
         "category": "Token Taxonomy Framework"
@@ -187,14 +177,6 @@
         {
           "command": "visual-token-designer.deleteArtifact",
           "when": "view == visual-token-designer.tokenDefinitionExplorer"
-        },
-        {
-          "command": "visual-token-designer.createSmartContractEth",
-          "when": "view == visual-token-designer.tokenDefinitionExplorer"
-        },
-        {
-          "command": "visual-token-designer.createSmartContractNeo",
-          "when": "view == visual-token-designer.tokenDefinitionExplorer"
         }
       ],
       "commandPalette": [
@@ -208,14 +190,6 @@
         },
         {
           "command": "visual-token-designer.deleteArtifact",
-          "when": "false"
-        },
-        {
-          "command": "visual-token-designer.createSmartContractEth",
-          "when": "false"
-        },
-        {
-          "command": "visual-token-designer.createSmartContractNeo",
           "when": "false"
         },
         {

@@ -204,26 +204,6 @@ export async function activate(context: vscode.ExtensionContext) {
     }
   );
 
-  const createSmartContractEthCommand = vscode.commands.registerCommand(
-    "visual-token-designer.createSmartContractEth",
-    async (commandContext) => {
-      vscode.window.showInformationMessage(
-        "You are using a preview of the Visual Token Designer. Support for Ethereum smart contract " +
-          "generation will be provided in a later release."
-      );
-    }
-  );
-
-  const createSmartContractNeoCommand = vscode.commands.registerCommand(
-    "visual-token-designer.createSmartContractNeo",
-    async (commandContext) => {
-      vscode.window.showInformationMessage(
-        "You are using a preview of the Visual Token Designer. Support for Neo smart contract " +
-          "generation will be provided in a later release."
-      );
-    }
-  );
-
   const openTokenDefinitionCommand = vscode.commands.registerCommand(
     "visual-token-designer.openTokenDefinition",
     async (commandContext) => {
@@ -334,8 +314,6 @@ export async function activate(context: vscode.ExtensionContext) {
   context.subscriptions.push(openTokenFormulaCommand);
   context.subscriptions.push(createTokenDefinitionCommand);
   context.subscriptions.push(deleteArtifactCommand);
-  context.subscriptions.push(createSmartContractEthCommand);
-  context.subscriptions.push(createSmartContractNeoCommand);
   context.subscriptions.push(openTokenDefinitionCommand);
   context.subscriptions.push(openBehaviorCommand);
   context.subscriptions.push(openBehaviorGroupCommand);
