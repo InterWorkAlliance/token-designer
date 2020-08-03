@@ -136,10 +136,38 @@ export async function activate(context: vscode.ExtensionContext) {
     }
   );
 
+  const createBehaviorCommand = vscode.commands.registerCommand(
+    "visual-token-designer.createBehavior",
+    async () => {
+      const panel = await BehaviorPanel.createNewBehavior(
+        ttfConnection,
+        currentEnvironment,
+        ttfTaxonomy,
+        context.extensionPath,
+        context.subscriptions,
+        panelReloadEvent
+      );
+    }
+  );
+
   const createBehaviorGroupCommand = vscode.commands.registerCommand(
     "visual-token-designer.createBehaviorGroup",
     async () => {
       const panel = await BehaviorGroupPanel.createNewBehaviorGroup(
+        ttfConnection,
+        currentEnvironment,
+        ttfTaxonomy,
+        context.extensionPath,
+        context.subscriptions,
+        panelReloadEvent
+      );
+    }
+  );
+
+  const createPropertySetCommand = vscode.commands.registerCommand(
+    "visual-token-designer.createPropertySet",
+    async () => {
+      const panel = await PropertySetPanel.createNewPropertySet(
         ttfConnection,
         currentEnvironment,
         ttfTaxonomy,
@@ -310,7 +338,9 @@ export async function activate(context: vscode.ExtensionContext) {
 
   context.subscriptions.push(changeEnvironmentCommand);
   context.subscriptions.push(createTokenFormulaCommand);
+  context.subscriptions.push(createBehaviorCommand);
   context.subscriptions.push(createBehaviorGroupCommand);
+  context.subscriptions.push(createPropertySetCommand);
   context.subscriptions.push(openTokenFormulaCommand);
   context.subscriptions.push(createTokenDefinitionCommand);
   context.subscriptions.push(deleteArtifactCommand);

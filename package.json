@@ -32,7 +32,9 @@
   "activationEvents": [
     "onCommand:visual-token-designer.changeEnvironment",
     "onCommand:visual-token-designer.createTokenFormula",
+    "onCommand:visual-token-designer.createBehavior",
     "onCommand:visual-token-designer.createBehaviorGroup",
+    "onCommand:visual-token-designer.createPropertySet",
     "onView:visual-token-designer.tokenArtifactExplorer",
     "onView:visual-token-designer.tokenFormulaExplorer",
     "onView:visual-token-designer.tokenDefinitionExplorer"
@@ -85,8 +87,18 @@
         "category": "Token Taxonomy Framework"
       },
       {
+        "command": "visual-token-designer.createBehavior",
+        "title": "Create Behavior",
+        "category": "Token Taxonomy Framework"
+      },
+      {
         "command": "visual-token-designer.createBehaviorGroup",
         "title": "Create Behavior Group",
+        "category": "Token Taxonomy Framework"
+      },
+      {
+        "command": "visual-token-designer.createPropertySet",
+        "title": "Create Property Set",
         "category": "Token Taxonomy Framework"
       },
       {
@@ -157,7 +169,15 @@
           "group": "navigation"
         },
         {
+          "command": "visual-token-designer.createBehavior",
+          "when": "view == visual-token-designer.tokenArtifactExplorer"
+        },
+        {
           "command": "visual-token-designer.createBehaviorGroup",
+          "when": "view == visual-token-designer.tokenArtifactExplorer"
+        },
+        {
+          "command": "visual-token-designer.createPropertySet",
           "when": "view == visual-token-designer.tokenArtifactExplorer"
         }
       ],

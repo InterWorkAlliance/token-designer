@@ -8,6 +8,32 @@ import { propertySetPanelEvents } from "./panels/propertySetPanelEvents";
 import { TokenTaxonomy } from "./tokenTaxonomy";
 
 export class PropertySetPanel extends ArtifactPanelBase<ttfCore.PropertySet> {
+  static async createNewPropertySet(
+    ttfConnection: ITtfInterface,
+    environment: string,
+    ttfTaxonomy: TokenTaxonomy,
+    extensionPath: string,
+    disposables: vscode.Disposable[],
+    panelReloadEvent: vscode.Event<void>
+  ) {
+    const panel = new PropertySetPanel(
+      ttfConnection,
+      environment,
+      ttfTaxonomy,
+      extensionPath,
+      disposables,
+      panelReloadEvent
+    );
+    return await ArtifactPanelBase.createNew(
+      ttfConnection,
+      ttfTaxonomy,
+      panel,
+      new ttfCore.PropertySet(),
+      "taxonomy.model.core.PropertySet",
+      ttfArtifact.ArtifactType.PROPERTY_SET
+    );
+  }
+
   static async openExistingPropertySet(
     artifactId: string,
     ttfConnection: ITtfInterface,

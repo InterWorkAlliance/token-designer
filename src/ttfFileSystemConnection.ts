@@ -64,6 +64,21 @@ export class TtfFileSystemConnection implements ITtfInterface {
             callback(null, new ttfArtifact.NewArtifactResponse());
           }
           break;
+        case ttfArtifact.ArtifactType.BEHAVIOR:
+          const behavior = artifact.unpack(
+            ttfCore.Behavior.deserializeBinary,
+            "taxonomy.model.core.Behavior"
+          );
+          const behaviorId = behavior
+            ?.getArtifact()
+            ?.getArtifactSymbol()
+            ?.getId();
+          if (behavior && behaviorId) {
+            this.taxonomy.getBehaviorsMap().set(behaviorId, behavior);
+            done = true;
+            callback(null, new ttfArtifact.NewArtifactResponse());
+          }
+          break;
         case ttfArtifact.ArtifactType.BEHAVIOR_GROUP:
           const behaviorGroup = artifact.unpack(
             ttfCore.BehaviorGroup.deserializeBinary,
@@ -75,6 +90,21 @@ export class TtfFileSystemConnection implements ITtfInterface {
             ?.getId();
           if (behaviorGroup && groupId) {
             this.taxonomy.getBehaviorGroupsMap().set(groupId, behaviorGroup);
+            done = true;
+            callback(null, new ttfArtifact.NewArtifactResponse());
+          }
+          break;
+        case ttfArtifact.ArtifactType.PROPERTY_SET:
+          const propertySet = artifact.unpack(
+            ttfCore.PropertySet.deserializeBinary,
+            "taxonomy.model.core.PropertySet"
+          );
+          const setId = propertySet
+            ?.getArtifact()
+            ?.getArtifactSymbol()
+            ?.getId();
+          if (propertySet && setId) {
+            this.taxonomy.getPropertySetsMap().set(setId, propertySet);
             done = true;
             callback(null, new ttfArtifact.NewArtifactResponse());
           }

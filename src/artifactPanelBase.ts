@@ -1,4 +1,5 @@
 import * as ttfArtifact from "./ttf/artifact_pb";
+import * as uuid from "uuid";
 import * as vscode from "vscode";
 import * as protobufAny from "google-protobuf/google/protobuf/any_pb";
 
@@ -9,13 +10,46 @@ import { PanelBase } from "./panelBase";
 import { TaxonomyAsObjects } from "./panels/taxonomyAsObjects";
 import { TokenTaxonomy } from "./tokenTaxonomy";
 
+type ArtifactType = {
+  getArtifact(): ttfArtifact.Artifact | undefined;
+  toObject(): any;
+  serializeBinary(): Uint8Array;
+  setArtifact(artifact: ttfArtifact.Artifact): void;
+};
+
 export abstract class ArtifactPanelBase<
-  T extends {
-    getArtifact(): ttfArtifact.Artifact | undefined;
-    toObject(): any;
-    serializeBinary(): Uint8Array;
-  }
+  T extends ArtifactType
 > extends PanelBase {
+  static async createNew<T extends ArtifactType>(
+    ttfConnection: ITtfInterface,
+    ttfTaxonomy: TokenTaxonomy,
+    panel: ArtifactPanelBase<T>,
+    newObject: T,
+    ttfTypeString: string,
+    artifactType: ttfArtifact.ArtifactType
+  ) {
+    const newArtifactSymbol = new ttfArtifact.ArtifactSymbol();
+    newArtifactSymbol.setId(uuid.v1());
+    newArtifactSymbol.setTooling("U");
+    const newArtifact = new ttfArtifact.Artifact();
+    newArtifact.setName("Untitled");
+    newArtifact.setArtifactSymbol(newArtifactSymbol);
+    newObject.setArtifact(newArtifact);
+    const any = new protobufAny.Any();
+    any.pack(newObject.serializeBinary(), ttfTypeString);
+    const newArtifactRequest = new ttfArtifact.NewArtifactRequest();
+    newArtifactRequest.setArtifact(any);
+    newArtifactRequest.setType(artifactType);
+    await new Promise((resolve, reject) =>
+      ttfConnection.createArtifact(newArtifactRequest, (err) =>
+        err ? reject(err) : resolve()
+      )
+    );
+    await ttfTaxonomy.refresh();
+    await panel.openArtifact(newArtifactSymbol.getId());
+    return panel;
+  }
+
   get title() {
     const suffix = ` -  ${this.environment}`;
     if (this.artifact) {
@@ -342,7 +376,7 @@ export abstract class ArtifactPanelBase<
     if (!item) {
       return;
     }
-    
+
     const dependencySymbol = new ttfArtifact.ArtifactSymbol();
     dependencySymbol.setId(item.detail || "");
     dependencySymbol.setTemplateValidated(item.symbol.templateValidated);

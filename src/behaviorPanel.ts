@@ -8,6 +8,32 @@ import { ITtfInterface } from "./ttfInterface";
 import { TokenTaxonomy } from "./tokenTaxonomy";
 
 export class BehaviorPanel extends ArtifactPanelBase<ttfCore.Behavior> {
+  static async createNewBehavior(
+    ttfConnection: ITtfInterface,
+    environment: string,
+    ttfTaxonomy: TokenTaxonomy,
+    extensionPath: string,
+    disposables: vscode.Disposable[],
+    panelReloadEvent: vscode.Event<void>
+  ) {
+    const panel = new BehaviorPanel(
+      ttfConnection,
+      environment,
+      ttfTaxonomy,
+      extensionPath,
+      disposables,
+      panelReloadEvent
+    );
+    return await ArtifactPanelBase.createNew(
+      ttfConnection,
+      ttfTaxonomy,
+      panel,
+      new ttfCore.Behavior(),
+      "taxonomy.model.core.Behavior",
+      ttfArtifact.ArtifactType.BEHAVIOR
+    );
+  }
+
   static async openExistingBehavior(
     artifactId: string,
     ttfConnection: ITtfInterface,
