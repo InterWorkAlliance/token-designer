@@ -31,9 +31,11 @@ export abstract class ArtifactPanelBase<
     const newArtifactSymbol = new ttfArtifact.ArtifactSymbol();
     newArtifactSymbol.setId(uuid.v1());
     newArtifactSymbol.setTooling("U");
+    newArtifactSymbol.setType(artifactType);
     const newArtifact = new ttfArtifact.Artifact();
     newArtifact.setName("Untitled");
     newArtifact.setArtifactSymbol(newArtifactSymbol);
+    newArtifact.setArtifactDefinition(new ttfArtifact.ArtifactDefinition());
     newObject.setArtifact(newArtifact);
     const any = new protobufAny.Any();
     any.pack(newObject.serializeBinary(), ttfTypeString);
