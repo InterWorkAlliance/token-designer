@@ -28,6 +28,7 @@ type Props = {
   artifact?: AnyArtifact;
   artifactType?: ArtifactType;
   update?: (update: ArtifactUpdate) => void;
+  postMessage?: (message: any) => void;
 };
 
 export default function ArtifactInspector({
@@ -35,6 +36,7 @@ export default function ArtifactInspector({
   artifact,
   artifactType,
   update,
+  postMessage,
 }: Props) {
   if (!artifact || !artifact.artifact) {
     return <></>;
@@ -54,6 +56,7 @@ export default function ArtifactInspector({
         <BehaviorGroupInspector
           taxonomy={taxonomy}
           artifact={artifact as BehaviorGroup.AsObject}
+          postMessage={!!update ? postMessage : undefined}
         />
       );
       break;
@@ -455,8 +458,7 @@ export default function ArtifactInspector({
                   taxonomy={taxonomy}
                   id={_.id}
                   tooling={_.tooling}
-                />
-                {" "}
+                />{" "}
                 {!!update && (
                   <DeleteLink
                     onClick={() =>

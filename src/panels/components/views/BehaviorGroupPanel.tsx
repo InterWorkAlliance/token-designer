@@ -52,6 +52,7 @@ export default function BehaviorGroupPanel({ postMessage }: Props) {
             taxonomy={taxonomy}
             artifact={artifact}
             artifactType="behavior-group"
+            postMessage={postMessage}
             update={
               editMode
                 ? (update) =>

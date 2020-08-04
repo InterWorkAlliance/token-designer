@@ -66,13 +66,13 @@ export abstract class ArtifactPanelBase<
 
   private taxonomyObjects: TaxonomyAsObjects | null = null;
 
-  private artifact: T | null = null;
+  protected artifact: T | null = null;
 
   protected constructor(
     protected readonly ttfConnection: ITtfInterface,
     private readonly ttfClassName: string,
     private readonly environment: string,
-    private readonly ttfTaxonomy: TokenTaxonomy,
+    protected readonly ttfTaxonomy: TokenTaxonomy,
     private readonly artifactTypeString: string,
     iconSvg: string,
     panelId: string,
@@ -115,6 +115,25 @@ export abstract class ArtifactPanelBase<
     } else {
       await this.onUnhandledMessage(message);
     }
+  }
+
+  protected async saveChanges() {
+    const symbol = this.artifact?.getArtifact()?.getArtifactSymbol();
+    if (!this.artifact || !symbol) {
+      return;
+    }
+    const any = new protobufAny.Any();
+    any.pack(this.artifact.serializeBinary(), this.ttfClassName);
+    const updateReqest = new ttfArtifact.UpdateArtifactRequest();
+    updateReqest.setType(symbol.getType());
+    updateReqest.setArtifactTypeObject(any);
+    await new Promise((resolve, reject) =>
+      this.ttfConnection.updateArtifact(
+        updateReqest,
+        (error, response) => (error && reject(error)) || resolve(response)
+      )
+    );
+    await this.refreshArtifact(symbol.getId());
   }
 
   private async refreshArtifact(artifactId: string) {
@@ -222,25 +241,6 @@ export abstract class ArtifactPanelBase<
           ? (_) => contributors[index].setOrganization(_)
           : undefined;
     }
-  }
-
-  private async saveChanges() {
-    const symbol = this.artifact?.getArtifact()?.getArtifactSymbol();
-    if (!this.artifact || !symbol) {
-      return;
-    }
-    const any = new protobufAny.Any();
-    any.pack(this.artifact.serializeBinary(), this.ttfClassName);
-    const updateReqest = new ttfArtifact.UpdateArtifactRequest();
-    updateReqest.setType(symbol.getType());
-    updateReqest.setArtifactTypeObject(any);
-    await new Promise((resolve, reject) =>
-      this.ttfConnection.updateArtifact(
-        updateReqest,
-        (error, response) => (error && reject(error)) || resolve(response)
-      )
-    );
-    await this.refreshArtifact(symbol.getId());
   }
 
   private async update(update: ArtifactUpdate) {

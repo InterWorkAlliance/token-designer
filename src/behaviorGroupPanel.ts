@@ -80,7 +80,20 @@ export class BehaviorGroupPanel extends ArtifactPanelBase<
     );
   }
 
-  protected async onUnhandledMessage(message: any) {}
+  protected async onUnhandledMessage(message: any) {
+    if (message.e === behaviorGroupPanelEvents.Add) {
+      const newReference = await this.promptForBehaviorReference();
+      if (newReference) {
+        this.artifact?.addBehaviors(newReference);
+        await this.saveChanges();
+      }
+    } else if (message.e === behaviorGroupPanelEvents.Delete) {
+      this.artifact?.setBehaviorsList(
+        this.artifact?.getBehaviorsList().filter((_, i) => i !== message.i)
+      );
+      await this.saveChanges();
+    }
+  }
 
   protected async getArtifact(
     symbol: ttfArtifact.ArtifactSymbol
@@ -91,5 +104,60 @@ export class BehaviorGroupPanel extends ArtifactPanelBase<
         (error, response) => (error && reject(error)) || resolve(response)
       )
     );
+  }
+
+  private async promptForBehaviorReference() {
+    const quickPickItems = this.ttfTaxonomy
+      .asObjects()
+      ?.behaviors.filter(
+        (_) =>
+          !!_.artifact &&
+          !!_.artifact.artifactSymbol &&
+          !!_.artifact.artifactSymbol.id
+      )
+      .map(
+        (_) =>
+          ({
+            symbol: _.artifact?.artifactSymbol,
+            label: _.artifact?.name || "",
+            description: _.artifact?.artifactSymbol?.id,
+            detail: _.artifact?.artifactDefinition?.businessDescription,
+          } as vscode.QuickPickItem & {
+            symbol: ttfArtifact.ArtifactSymbol.AsObject;
+          })
+      );
+    if (!quickPickItems) {
+      return undefined;
+    }
+    const quickPick = vscode.window.createQuickPick();
+    quickPick.items = quickPickItems;
+    quickPick.canSelectMany = false;
+    const item = await new Promise<
+      | (vscode.QuickPickItem & {
+          symbol: ttfArtifact.ArtifactSymbol.AsObject;
+        })
+      | undefined
+    >((resolve) => {
+      quickPick.onDidAccept(() => {
+        const item = quickPick.selectedItems[0];
+        resolve(
+          item as vscode.QuickPickItem & {
+            symbol: ttfArtifact.ArtifactSymbol.AsObject;
+          }
+        );
+        quickPick.hide();
+      });
+      quickPick.onDidHide((_) => resolve(undefined));
+      quickPick.show();
+    });
+    if (!item?.symbol) {
+      return;
+    }
+    const reference = new ttfArtifact.ArtifactReference();
+    reference.setId(item.symbol.id);
+    reference.setType(ttfArtifact.ArtifactType.BEHAVIOR);
+    const result = new ttfCore.BehaviorReference();
+    result.setReference(reference);
+    return result;
   }
 }
