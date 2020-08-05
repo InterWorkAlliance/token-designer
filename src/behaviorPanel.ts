@@ -79,6 +79,16 @@ export class BehaviorPanel extends ArtifactPanelBase<ttfCore.Behavior> {
   }
 
   protected async onUnhandledMessage(message: any) {
+    if (message.e === behaviorPanelEvents.EditConstructorType) {
+      const newConstructorType = await vscode.window.showInputBox({
+        prompt: "Constructor type",
+        value: this.artifact?.getConstructorType(),
+      });
+      if (newConstructorType || (newConstructorType === "")) {
+        this.artifact?.setConstructorType(newConstructorType || "");
+        await this.saveChanges();
+      }
+    }
   }
 
   protected async getArtifact(

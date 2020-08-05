@@ -2,21 +2,39 @@ import React from "react";
 
 import { Behavior } from "../../../ttf/core_pb";
 
+import { behaviorPanelEvents } from "../../behaviorPanelEvents";
+import EditLink from "../links/EditLink";
 import InvocationInspector from "./InvocationInspector";
 import { TaxonomyAsObjects } from "../../taxonomyAsObjects";
 
 type Props = {
   taxonomy: TaxonomyAsObjects;
   artifact: Behavior.AsObject;
+  postMessage?: (message: any) => void;
 };
 
-export default function BehaviorInspector({ taxonomy, artifact }: Props) {
+export default function BehaviorInspector({
+  taxonomy,
+  artifact,
+  postMessage,
+}: Props) {
   return (
     <>
-      {!!artifact.constructorType && (
+      {(!!postMessage || !!artifact.constructorType) && (
         <div>
           <u>Constructor:</u>
-          <ul><li><b>{artifact.constructorType}</b></li></ul>
+          <ul>
+            <li>
+              <b>{artifact.constructorType}</b>{" "}
+              {!!postMessage && (
+                <EditLink
+                  onClick={() =>
+                    postMessage({ e: behaviorPanelEvents.EditConstructorType })
+                  }
+                />
+              )}
+            </li>
+          </ul>
         </div>
       )}
       {!!artifact.propertiesList.length && (

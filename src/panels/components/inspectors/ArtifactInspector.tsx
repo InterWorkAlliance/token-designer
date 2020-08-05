@@ -48,6 +48,7 @@ export default function ArtifactInspector({
         <BehaviorInspector
           taxonomy={taxonomy}
           artifact={artifact as Behavior.AsObject}
+          postMessage={!!update ? postMessage : undefined}
         />
       );
       break;
