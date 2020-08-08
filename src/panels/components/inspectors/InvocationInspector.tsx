@@ -1,15 +1,34 @@
-import React from "react";
+import React, { useState } from "react";
 
 import { Invocation } from "../../../ttf/core_pb";
 
+import EditLink from "../links/EditLink";
+import InvocationEditor from "../editors/InvocationEditor";
+
 type Props = {
   invocation: Invocation.AsObject;
+  onSave?: (invocation: Invocation.AsObject) => void;
 };
 
-export default function InvocationInspector({ invocation }: Props) {
+export default function InvocationInspector({ invocation, onSave }: Props) {
+  const [isEditing, setIsEditing] = useState(false);
   return (
     <>
+      {!!onSave && isEditing && (
+        <InvocationEditor
+          onSave={onSave}
+          hide={() => setIsEditing(false)}
+          initialValues={invocation}
+        />
+      )}
       <b>{invocation.name}</b>: {invocation.description}
+      {!!onSave && <EditLink onClick={() => setIsEditing(true)} />}
+      {!!invocation.id && (
+        <>
+          <br />
+          <em>({invocation.id})</em>
+        </>
+      )}
       {!!(invocation.request || invocation.response) && (
         <table cellPadding={5} cellSpacing={5} style={{ width: "100%" }}>
           <tbody>

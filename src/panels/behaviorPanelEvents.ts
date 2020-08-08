@@ -2,6 +2,7 @@
 
 const behaviorPanelEvents = {
   EditConstructorType: "editConstructorType",
+  EditInvocation: "editInvocation",
 };
 
 export { behaviorPanelEvents };

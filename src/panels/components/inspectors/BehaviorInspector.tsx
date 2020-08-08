@@ -1,9 +1,11 @@
-import React from "react";
+import React, { useState } from "react";
 
 import { Behavior } from "../../../ttf/core_pb";
 
+import AddLink from "../links/AddLink";
 import { behaviorPanelEvents } from "../../behaviorPanelEvents";
 import EditLink from "../links/EditLink";
+import InvocationEditor from "../editors/InvocationEditor";
 import InvocationInspector from "./InvocationInspector";
 import { TaxonomyAsObjects } from "../../taxonomyAsObjects";
 
@@ -18,6 +20,7 @@ export default function BehaviorInspector({
   artifact,
   postMessage,
 }: Props) {
+  const [addInvocationMode, setAddInvocationMode] = useState(false);
   return (
     <>
       {(!!postMessage || !!artifact.constructorType) && (
@@ -70,11 +73,39 @@ export default function BehaviorInspector({
       )}
       {!!artifact.invocationsList.length && (
         <div>
-          <u>Invocations:</u>
+          <u>Invocations:</u>{" "}
+          {!!postMessage && (
+            <AddLink onClick={() => setAddInvocationMode(true)} />
+          )}
+          {!!postMessage && addInvocationMode && (
+            <InvocationEditor
+              hide={() => setAddInvocationMode(false)}
+              onSave={(invocation) => {
+                postMessage({
+                  e: behaviorPanelEvents.EditInvocation,
+                  i: artifact.invocationsList.length,
+                  invocation,
+                });
+              }}
+            />
+          )}
           <ul>
-            {artifact.invocationsList.map((_) => (
-              <li key={_.id}>
-                <InvocationInspector invocation={_} />
+            {artifact.invocationsList.map((_, i) => (
+              <li key={i}>
+                <InvocationInspector
+                  invocation={_}
+                  onSave={
+                    !!postMessage
+                      ? (invocation) => {
+                          postMessage({
+                            e: behaviorPanelEvents.EditInvocation,
+                            i,
+                            invocation,
+                          });
+                        }
+                      : undefined
+                  }
+                />
               </li>
             ))}
           </ul>
