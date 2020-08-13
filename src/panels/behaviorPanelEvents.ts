@@ -2,6 +2,7 @@
 
 const behaviorPanelEvents = {
   DeleteInvocation: "deleteInvocation",
+  DeleteProperty: "deleteProperty",
   DeletePropertyInvocation: "deletePropertyInvocation",
   EditConstructorType: "editConstructorType",
   EditInvocation: "editInvocation",

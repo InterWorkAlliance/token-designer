@@ -4,6 +4,7 @@ import { Behavior } from "../../../ttf/core_pb";
 
 import AddLink from "../links/AddLink";
 import { behaviorPanelEvents } from "../../behaviorPanelEvents";
+import DeleteLink from "../links/DeleteLink";
 import EditLink from "../links/EditLink";
 import InvocationEditor from "../editors/InvocationEditor";
 import InvocationInspector from "./InvocationInspector";
@@ -43,7 +44,7 @@ export default function BehaviorInspector({
           </ul>
         </div>
       )}
-      {!!artifact.propertiesList.length && (
+      {(!!postMessage || !!artifact.propertiesList.length) && (
         <div>
           <u>Properties:</u>
           <ul>
@@ -51,14 +52,24 @@ export default function BehaviorInspector({
               <li key={JSON.stringify(_)}>
                 <b>{_.name || (!!postMessage && <em>(name not set)</em>)}</b>
                 {!!postMessage && (
-                  <EditLink
-                    onClick={() =>
-                      postMessage({
-                        e: behaviorPanelEvents.EditPropertyName,
-                        pi,
-                      })
-                    }
-                  />
+                  <>
+                    <EditLink
+                      onClick={() =>
+                        postMessage({
+                          e: behaviorPanelEvents.EditPropertyName,
+                          pi,
+                        })
+                      }
+                    />
+                    <DeleteLink
+                      onClick={() =>
+                        postMessage({
+                          e: behaviorPanelEvents.DeleteProperty,
+                          pi,
+                        })
+                      }
+                    />
+                  </>
                 )}
                 <b>:</b>
                 {!!(!!postMessage || _.templateValue || _.valueDescription) && (

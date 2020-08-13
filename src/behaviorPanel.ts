@@ -165,6 +165,11 @@ export class BehaviorPanel extends ArtifactPanelBase<ttfCore.Behavior> {
             ?.getPropertiesList()
             [message.pi]?.setTemplateValue(newValue)
       );
+    } else if (message.e === behaviorPanelEvents.DeleteProperty) {
+      this.artifact?.setPropertiesList(
+        this.artifact.getPropertiesList().filter((_, pi) => pi !== message.pi)
+      );
+      await this.saveChanges();
     }
   }
 
