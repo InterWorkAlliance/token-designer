@@ -204,7 +204,7 @@ export default function InvocationEditor({
                     <input
                       type="text"
                       value={_.name || ""}
-                      placeholder="Paramter name"
+                      placeholder="Parameter name"
                       onChange={(e) =>
                         updateState(
                           (_) =>
@@ -222,7 +222,7 @@ export default function InvocationEditor({
                         formData.request.inputParametersList[i]
                           .valueDescription || ""
                       }
-                      placeholder="Paramter description"
+                      placeholder="Parameter description"
                       onChange={(e) =>
                         updateState(
                           (_) =>
@@ -250,7 +250,7 @@ export default function InvocationEditor({
                     <input
                       type="text"
                       value={_.name || ""}
-                      placeholder="Paramter name"
+                      placeholder="Parameter name"
                       onChange={(e) =>
                         updateState(
                           (_) =>
@@ -268,7 +268,7 @@ export default function InvocationEditor({
                         formData.response.outputParametersList[i]
                           .valueDescription || ""
                       }
-                      placeholder="Paramter description"
+                      placeholder="Parameter description"
                       onChange={(e) =>
                         updateState(
                           (_) =>
