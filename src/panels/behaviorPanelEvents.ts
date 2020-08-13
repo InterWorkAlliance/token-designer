@@ -5,7 +5,10 @@ const behaviorPanelEvents = {
   DeletePropertyInvocation: "deletePropertyInvocation",
   EditConstructorType: "editConstructorType",
   EditInvocation: "editInvocation",
+  EditPropertyDescription: "editPropertyDescription",
   EditPropertyInvocation: "editPropertyInvocation",
+  EditPropertyName: "editPropertyName",
+  EditPropertyValue: "editPropertyValue",
 };
 
 export { behaviorPanelEvents };

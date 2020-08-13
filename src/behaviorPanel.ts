@@ -140,6 +140,31 @@ export class BehaviorPanel extends ArtifactPanelBase<ttfCore.Behavior> {
         property.getPropertyInvocationsList().filter((_, j) => j !== i)
       );
       await this.saveChanges();
+    } else if (message.e === behaviorPanelEvents.EditPropertyDescription) {
+      await this.editProperty(
+        "property description",
+        this.artifact?.getPropertiesList()[message.pi]?.getValueDescription(),
+        (newValue) =>
+          this.artifact
+            ?.getPropertiesList()
+            [message.pi]?.setValueDescription(newValue)
+      );
+    } else if (message.e === behaviorPanelEvents.EditPropertyName) {
+      await this.editProperty(
+        "property name",
+        this.artifact?.getPropertiesList()[message.pi]?.getName(),
+        (newValue) =>
+          this.artifact?.getPropertiesList()[message.pi]?.setName(newValue)
+      );
+    } else if (message.e === behaviorPanelEvents.EditPropertyValue) {
+      await this.editProperty(
+        "template value",
+        this.artifact?.getPropertiesList()[message.pi]?.getTemplateValue(),
+        (newValue) =>
+          this.artifact
+            ?.getPropertiesList()
+            [message.pi]?.setTemplateValue(newValue)
+      );
     }
   }
 
@@ -196,5 +221,24 @@ export class BehaviorPanel extends ArtifactPanelBase<ttfCore.Behavior> {
       newInvocation.setResponse(newResponse);
     }
     return newInvocation;
+  }
+
+  private async editProperty(
+    description: string,
+    value?: string,
+    setter?: (value: string) => void
+  ) {
+    if (!setter) {
+      return;
+    }
+    const newValue = await vscode.window.showInputBox({
+      prompt: "Enter a new " + description,
+      value,
+    });
+    if (!newValue && newValue !== "") {
+      return;
+    }
+    setter(newValue);
+    await this.saveChanges();
   }
 }

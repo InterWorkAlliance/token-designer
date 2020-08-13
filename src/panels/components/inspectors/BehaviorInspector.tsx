@@ -49,19 +49,52 @@ export default function BehaviorInspector({
           <ul>
             {artifact.propertiesList.map((_, pi) => (
               <li key={JSON.stringify(_)}>
-                <b>{_.name}:</b>
-                {!!(_.templateValue || _.valueDescription) && (
+                <b>{_.name || (!!postMessage && <em>(name not set)</em>)}</b>
+                {!!postMessage && (
+                  <EditLink
+                    onClick={() =>
+                      postMessage({
+                        e: behaviorPanelEvents.EditPropertyName,
+                        pi,
+                      })
+                    }
+                  />
+                )}
+                <b>:</b>
+                {!!(!!postMessage || _.templateValue || _.valueDescription) && (
                   <>
                     {" "}
-                    {_.templateValue}
+                    {_.templateValue ||
+                      (!!postMessage && <em>(template value not set)</em>)}
+                    {!!postMessage && (
+                      <EditLink
+                        onClick={() =>
+                          postMessage({
+                            e: behaviorPanelEvents.EditPropertyValue,
+                            pi,
+                          })
+                        }
+                      />
+                    )}
                     <br />
-                    {_.valueDescription}
+                    {_.valueDescription ||
+                      (!!postMessage && <em>(description not set)</em>)}
+                    {!!postMessage && (
+                      <EditLink
+                        onClick={() =>
+                          postMessage({
+                            e: behaviorPanelEvents.EditPropertyDescription,
+                            pi,
+                          })
+                        }
+                      />
+                    )}
                     <br />
                   </>
                 )}
                 {(!!_.propertyInvocationsList.length || !!postMessage) && (
                   <>
-                    <u>Property invocations:</u>{" "}
+                    <u>Invocations:</u>{" "}
                     {!!postMessage && (
                       <AddLink
                         onClick={() => setAddPropertyInvocationMode(true)}
