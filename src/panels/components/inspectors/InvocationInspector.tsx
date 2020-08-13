@@ -2,15 +2,21 @@ import React, { useState } from "react";
 
 import { Invocation } from "../../../ttf/core_pb";
 
+import DeleteLink from "../links/DeleteLink";
 import EditLink from "../links/EditLink";
 import InvocationEditor from "../editors/InvocationEditor";
 
 type Props = {
   invocation: Invocation.AsObject;
   onSave?: (invocation: Invocation.AsObject) => void;
+  onDelete?: () => void;
 };
 
-export default function InvocationInspector({ invocation, onSave }: Props) {
+export default function InvocationInspector({
+  invocation,
+  onSave,
+  onDelete,
+}: Props) {
   const [isEditing, setIsEditing] = useState(false);
   return (
     <>
@@ -23,6 +29,7 @@ export default function InvocationInspector({ invocation, onSave }: Props) {
       )}
       <b>{invocation.name}</b>: {invocation.description}
       {!!onSave && <EditLink onClick={() => setIsEditing(true)} />}
+      {!!onDelete && <DeleteLink onClick={onDelete} />}
       {!!invocation.id && (
         <>
           <br />

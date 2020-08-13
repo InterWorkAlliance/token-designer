@@ -61,7 +61,7 @@ export default function BehaviorInspector({
                 )}
                 {(!!_.propertyInvocationsList.length || !!postMessage) && (
                   <>
-                    <u>Invocations:</u>{" "}
+                    <u>Property invocations:</u>{" "}
                     {!!postMessage && (
                       <AddLink
                         onClick={() => setAddPropertyInvocationMode(true)}
@@ -85,6 +85,18 @@ export default function BehaviorInspector({
                         <li key={_.id}>
                           <InvocationInspector
                             invocation={_}
+                            onDelete={
+                              !!postMessage
+                                ? () => {
+                                    postMessage({
+                                      e:
+                                        behaviorPanelEvents.DeletePropertyInvocation,
+                                      pi,
+                                      i,
+                                    });
+                                  }
+                                : undefined
+                            }
                             onSave={
                               !!postMessage
                                 ? (invocation) => {
@@ -109,7 +121,7 @@ export default function BehaviorInspector({
           </ul>
         </div>
       )}
-      {!!artifact.invocationsList.length && (
+      {(!!postMessage || !!artifact.invocationsList.length) && (
         <div>
           <u>Invocations:</u>{" "}
           {!!postMessage && (
@@ -132,6 +144,16 @@ export default function BehaviorInspector({
               <li key={i}>
                 <InvocationInspector
                   invocation={_}
+                  onDelete={
+                    !!postMessage
+                      ? () => {
+                          postMessage({
+                            e: behaviorPanelEvents.DeleteInvocation,
+                            i,
+                          });
+                        }
+                      : undefined
+                  }
                   onSave={
                     !!postMessage
                       ? (invocation) => {

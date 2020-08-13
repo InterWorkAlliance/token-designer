@@ -105,17 +105,40 @@ export class BehaviorPanel extends ArtifactPanelBase<ttfCore.Behavior> {
         return;
       }
       const pi = message.pi;
-      if (pi >= this.artifact.getPropertiesList().length) {
+      const property = this.artifact.getPropertiesList()[pi];
+      if (!property) {
         return;
       }
       const newInvocation = this.buildInvocation(message.invocation);
       const i = message.i;
-      const property = this.artifact.getPropertiesList()[pi];
       if (i >= property.getPropertyInvocationsList().length) {
         property.addPropertyInvocations(newInvocation);
       } else {
         property.getPropertyInvocationsList()[i] = newInvocation;
       }
+      await this.saveChanges();
+    } else if (message.e === behaviorPanelEvents.DeleteInvocation) {
+      if (!this.artifact) {
+        return;
+      }
+      const i = message.i;
+      this.artifact.setInvocationsList(
+        this.artifact.getInvocationsList().filter((_, j) => j !== i)
+      );
+      await this.saveChanges();
+    } else if (message.e === behaviorPanelEvents.DeletePropertyInvocation) {
+      if (!this.artifact) {
+        return;
+      }
+      const i = message.i;
+      const pi = message.pi;
+      const property = this.artifact.getPropertiesList()[pi];
+      if (!property) {
+        return;
+      }
+      property.setPropertyInvocationsList(
+        property.getPropertyInvocationsList().filter((_, j) => j !== i)
+      );
       await this.saveChanges();
     }
   }
