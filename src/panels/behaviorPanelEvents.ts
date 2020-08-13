@@ -3,6 +3,7 @@
 const behaviorPanelEvents = {
   EditConstructorType: "editConstructorType",
   EditInvocation: "editInvocation",
+  EditPropertyInvocation: "editPropertyInvocation",
 };
 
 export { behaviorPanelEvents };

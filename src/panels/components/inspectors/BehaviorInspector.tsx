@@ -21,6 +21,9 @@ export default function BehaviorInspector({
   postMessage,
 }: Props) {
   const [addInvocationMode, setAddInvocationMode] = useState(false);
+  const [addPropertyInvocationMode, setAddPropertyInvocationMode] = useState(
+    false
+  );
   return (
     <>
       {(!!postMessage || !!artifact.constructorType) && (
@@ -44,7 +47,7 @@ export default function BehaviorInspector({
         <div>
           <u>Properties:</u>
           <ul>
-            {artifact.propertiesList.map((_) => (
+            {artifact.propertiesList.map((_, pi) => (
               <li key={JSON.stringify(_)}>
                 <b>{_.name}:</b>
                 {!!(_.templateValue || _.valueDescription) && (
@@ -54,17 +57,52 @@ export default function BehaviorInspector({
                     <br />
                     {_.valueDescription}
                     <br />
-                    <br />
                   </>
                 )}
-                {!!_.propertyInvocationsList.length && (
-                  <ul>
-                    {_.propertyInvocationsList.map((_) => (
-                      <li key={_.id}>
-                        <InvocationInspector invocation={_} />
-                      </li>
-                    ))}
-                  </ul>
+                {(!!_.propertyInvocationsList.length || !!postMessage) && (
+                  <>
+                    <u>Invocations:</u>{" "}
+                    {!!postMessage && (
+                      <AddLink
+                        onClick={() => setAddPropertyInvocationMode(true)}
+                      />
+                    )}
+                    {!!postMessage && addPropertyInvocationMode && (
+                      <InvocationEditor
+                        hide={() => setAddPropertyInvocationMode(false)}
+                        onSave={(invocation) => {
+                          postMessage({
+                            e: behaviorPanelEvents.EditPropertyInvocation,
+                            pi,
+                            i: _.propertyInvocationsList.length,
+                            invocation,
+                          });
+                        }}
+                      />
+                    )}
+                    <ul>
+                      {_.propertyInvocationsList.map((_, i) => (
+                        <li key={_.id}>
+                          <InvocationInspector
+                            invocation={_}
+                            onSave={
+                              !!postMessage
+                                ? (invocation) => {
+                                    postMessage({
+                                      e:
+                                        behaviorPanelEvents.EditPropertyInvocation,
+                                      pi,
+                                      i,
+                                      invocation,
+                                    });
+                                  }
+                                : undefined
+                            }
+                          />
+                        </li>
+                      ))}
+                    </ul>
+                  </>
                 )}
               </li>
             ))}
