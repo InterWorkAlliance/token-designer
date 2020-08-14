@@ -170,6 +170,16 @@ export class BehaviorPanel extends ArtifactPanelBase<ttfCore.Behavior> {
         this.artifact.getPropertiesList().filter((_, pi) => pi !== message.pi)
       );
       await this.saveChanges();
+    } else if (message.e === behaviorPanelEvents.AddProperty) {
+      const newPropertyName = await vscode.window.showInputBox({
+        prompt: "Enter a name for the new property",
+      });
+      if (newPropertyName) {
+        const newProperty = new ttfCore.Property();
+        newProperty.setName(newPropertyName);
+        this.artifact?.addProperties(newProperty);
+        await this.saveChanges();
+      }
     }
   }
 

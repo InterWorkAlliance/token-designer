@@ -46,7 +46,16 @@ export default function BehaviorInspector({
       )}
       {(!!postMessage || !!artifact.propertiesList.length) && (
         <div>
-          <u>Properties:</u>
+          <u>Properties:</u>{" "}
+          {!!postMessage && (
+            <AddLink
+              onClick={() =>
+                postMessage({
+                  e: behaviorPanelEvents.AddProperty,
+                })
+              }
+            />
+          )}
           <ul>
             {artifact.propertiesList.map((_, pi) => (
               <li key={JSON.stringify(_)}>
