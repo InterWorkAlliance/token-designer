@@ -66,6 +66,7 @@ export default function ArtifactInspector({
         <PropertySetInspector
           taxonomy={taxonomy}
           artifact={artifact as PropertySet.AsObject}
+          postMessage={!!update ? postMessage : undefined}
         />
       );
       break;

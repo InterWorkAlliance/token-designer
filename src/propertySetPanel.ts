@@ -79,6 +79,17 @@ export class PropertySetPanel extends ArtifactPanelBase<ttfCore.PropertySet> {
   }
 
   protected async onUnhandledMessage(message: any) {
+    if (message.e === propertySetPanelEvents.AddProperty) {
+      const newPropertyName = await vscode.window.showInputBox({
+        prompt: "Enter a name for the new property",
+      });
+      if (newPropertyName) {
+        const newProperty = new ttfCore.Property();
+        newProperty.setName(newPropertyName);
+        this.artifact?.addProperties(newProperty);
+        await this.saveChanges();
+      }
+    }
   }
 
   protected async getArtifact(

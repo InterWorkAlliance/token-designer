@@ -8,19 +8,35 @@ import InvocationInspector from "./InvocationInspector";
 type Props = {
   taxonomy: TaxonomyAsObjects;
   artifact: Property.AsObject;
+  postMessage?: (message: any) => void;
 };
 
-export default function PropertyInspector({ taxonomy, artifact }: Props) {
+export default function PropertyInspector({
+  taxonomy,
+  artifact,
+  postMessage,
+}: Props) {
   return (
     <div style={{ marginLeft: 25 }}>
       <p>
-        <b>{artifact.name}</b>{" "}
+        <b>{artifact.name || (!!postMessage && <em>(name not set)</em>)}</b>{" "}
         {!!artifact.templateValue && <> = {artifact.templateValue}</>}
+        {!!postMessage && !artifact.templateValue && (
+          <> = (template value not set)</>
+        )}
         <br />
-        <i>{artifact.valueDescription}</i>
+        <i>
+          {artifact.valueDescription ||
+            (!!postMessage && <>(description not set)</>)}
+        </i>
       </p>
       {artifact.propertiesList.map((_) => (
-        <PropertyInspector key={_.name} taxonomy={taxonomy} artifact={_} />
+        <PropertyInspector
+          key={_.name}
+          taxonomy={taxonomy}
+          artifact={_}
+          postMessage={postMessage}
+        />
       ))}
       {!!artifact.propertyInvocationsList.length && (
         <>

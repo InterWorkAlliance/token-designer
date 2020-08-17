@@ -4,7 +4,6 @@ import { Behavior } from "../../../ttf/core_pb";
 
 import ArtifactInspector from "../inspectors/ArtifactInspector";
 import { artifactPanelBaseEvents } from "../../artifactPanelBaseEvents";
-import { behaviorPanelEvents } from "../../behaviorPanelEvents";
 import { TaxonomyAsObjects } from "../../taxonomyAsObjects";
 import ToolBoxTitle from "../ToolBoxTitle";
 

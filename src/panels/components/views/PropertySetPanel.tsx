@@ -57,6 +57,7 @@ export default function PropertySetPanel({ postMessage }: Props) {
                     postMessage({ e: artifactPanelBaseEvents.Update, update })
                 : undefined
             }
+            postMessage={postMessage}
           />
         </div>
       </>
