@@ -1,6 +1,7 @@
 # Visual Token Designer for Visual Studio Code
 
-This is a Visual Studio Code extension that facilitates manipulation of artifacts in the [Token Taxonomy Framework](https://github.com/interwork-alliance/TokenTaxonomyFramework).
+This is a Visual Studio Code extension that facilitates manipulation of artifacts in the [Token Taxonomy Framework](https://github.com/InterWorkAlliance
+/TokenTaxonomyFramework).
 
 ## Token Taxonomy Framework
 
@@ -14,7 +15,7 @@ The framework's goals include:
 
 ## Visual Token Designer
 
-The extension provides a sandbox environment that allows you to explore the various artifacts in the taxonomy as well as the ability to connect to an instance of the [Taxonomy Service](https://github.com/interwork-alliance/TokenTaxonomyFramework/tree/master/tools) to contribute to the taxonomy.
+The extension provides a sandbox environment that allows you to explore the various artifacts in the taxonomy as well as the ability to connect to an instance of the [Taxonomy Service](https://github.com/InterWorkAlliance/TokenTaxonomyFramework/tree/master/tools) to contribute to the taxonomy.
 
 The Visual Token Designer's features include: 
 
