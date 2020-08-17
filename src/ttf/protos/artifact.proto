@@ -3,8 +3,8 @@ syntax = "proto3";
 package taxonomy.model.artifact;
 import "google/protobuf/any.proto";
 
-option csharp_namespace = "TTI.TTF.Taxonomy.Model.Artifact";
-option java_package = "org.tti.ttf.taxonomy.model.artifact";
+option csharp_namespace = "IWA.TTF.Taxonomy.Model.Artifact";
+option java_package = "org.iwa.ttf.taxonomy.model.artifact";
 option java_multiple_files = true;
 
 //Token Templates can contain a single token definition or a hybrid, where they are nested tokens within the template.
@@ -19,7 +19,7 @@ enum TokenType {
     NON_FUNGIBLE = 1;
 }
 
-//Tokens can have either a common representation, sometimes called account or balance tokens, or unique representation, or UTXO (unspent transaction output). This distinction might seem subtle but is important when considering how tokens can be traced and if they can have isolated and unique properties.
+//Tokens and Property Sets can have either a common representation, sometimes called account or balance tokens, or unique representation, or UTXO (unspent transaction output). This distinction might seem subtle but is important when considering how tokens can be traced and if they can have isolated and unique properties. A property set with a common representation type will share the property values for all tokens in the class, where a unique representation will allow for each instance to have its own value.
 enum RepresentationType {
     COMMON = 0; //account or balance, non-fungible are always common
     UNIQUE = 1; //UTXO

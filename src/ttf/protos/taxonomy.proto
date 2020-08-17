@@ -3,8 +3,8 @@ syntax = "proto3";
 package taxonomy.model;
 import "core.proto";
 import "artifact.proto";
-option csharp_namespace = "TTI.TTF.Taxonomy.Model";
-option java_package = "org.tti.ttf.taxonomy.model";
+option csharp_namespace = "IWA.TTF.Taxonomy.Model";
+option java_package = "org.iwa.ttf.taxonomy.model";
 option java_multiple_files = true;
 
 //The Taxonomy contains collections of artifacts where each collection is defined in a map with the index being the symbol of the artifact for the collection.

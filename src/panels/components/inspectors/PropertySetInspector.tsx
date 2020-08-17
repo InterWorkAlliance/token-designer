@@ -20,10 +20,18 @@ export default function PropertySetInspector({
 }: Props) {
   return (
     <>
+      <p>
+        <u>Representation Type:</u>
+        <ul>
+          <li>
+            {["Common", "Unique"][artifact.representationType] || "Unknown"}
+          </li>
+        </ul>
+      </p>
       {!!artifact.propertiesList.length && (
         <>
           <p>
-            <u>Properties</u>{" "}
+            <u>Properties:</u>{" "}
             {!!postMessage && (
               <AddLink
                 onClick={() =>

@@ -3,8 +3,8 @@ syntax = "proto3";
 package taxonomy.ttfprinter;
 import "artifact.proto";
 
-option csharp_namespace = "TTI.TTF.Taxonomy";
-option java_package = "org.tti.ttf.taxonomy";
+option csharp_namespace = "IWA.TTF.Taxonomy";
+option java_package = "org.iwa.ttf.taxonomy";
 option java_multiple_files = true;
 
 //Service to Print Artifacts to OpenXML format.

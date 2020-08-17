@@ -5,8 +5,8 @@ package taxonomy.model.core;
 import "google/protobuf/any.proto";
 import "artifact.proto";
 
-option csharp_namespace = "TTI.TTF.Taxonomy.Model.Core";
-option java_package = "org.tti.ttf.taxonomy.model.core";
+option csharp_namespace = "IWA.TTF.Taxonomy.Model.Core";
+option java_package = "org.iwa.ttf.taxonomy.model.core";
 option java_multiple_files = true;
 
 //Influence types for behaviors that can influence other behaviors or properties.
@@ -101,7 +101,8 @@ message BehaviorGroupReference{
 //PropertySet type
 message PropertySet{
     taxonomy.model.artifact.Artifact artifact = 1;
-    repeated Property properties = 2; //Definitions only will not have values, null for string or composite types and 0 for numbers, false for bools.
+    taxonomy.model.artifact.RepresentationType representation_type = 2; //A property set can be either unique to the token instance or shared with the class, this is set in the PropertySetDefinition.
+    repeated Property properties = 3; //Definitions only will not have values, null for string or composite types and 0 for numbers, false for bools.
 }
 
 //Collection of PropertySet type
@@ -112,7 +113,8 @@ message PropertySets{
 //Providing overriding values for a PropertSet in a TemplateDefinition.
 message PropertySetReference{
     taxonomy.model.artifact.ArtifactReference reference = 1;
-    repeated Property properties = 2; //Values
+    taxonomy.model.artifact.RepresentationType representation_type = 2; //A property set can be either unique to the token instance or shared with the class, this is set in the PropertySetDefinition.
+    repeated Property properties = 3; //Definitions only will not have values, null for string or composite types and 0 for numbers, false for bools.
 }
 
 //Generic property used in the framework.
@@ -252,7 +254,8 @@ message BehaviorSpecification{
 //Dynamically generated from the Behavior and PropertySetReference from a TemplateDefinition. Values that are set in the PropertySetReference are merged with the Behavior artifact to provide specification property values.
 message PropertySetSpecification{
     taxonomy.model.artifact.Artifact artifact = 1; //Full artifact for the property set.
-    repeated PropertySpecification properties = 6; //For any properties that should be added to the token if the behavior is implemented, values not set, should consider a dependent property-set.
+    taxonomy.model.artifact.RepresentationType representation_type = 2; //Will the property-set be unique to the token instance or shared with the class?
+    repeated PropertySpecification properties = 3; //For any properties that should be added to the token if the behavior is implemented, values not set, should consider a dependent property-set.
 }
 
 message PropertySpecification{

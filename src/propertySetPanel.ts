@@ -24,11 +24,13 @@ export class PropertySetPanel extends ArtifactPanelBase<ttfCore.PropertySet> {
       disposables,
       panelReloadEvent
     );
+    const newObject = new ttfCore.PropertySet();
+    newObject.setRepresentationType(ttfArtifact.RepresentationType.COMMON);
     return await ArtifactPanelBase.createNew(
       ttfConnection,
       ttfTaxonomy,
       panel,
-      new ttfCore.PropertySet(),
+      newObject,
       "taxonomy.model.core.PropertySet",
       ttfArtifact.ArtifactType.PROPERTY_SET
     );

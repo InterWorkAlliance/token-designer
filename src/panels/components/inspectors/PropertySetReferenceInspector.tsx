@@ -33,6 +33,7 @@ export default function PropertySetReferenceInspector({
   let mergedBehavior: PropertySet.AsObject | undefined = {
     artifact: thisOrThat("artifact", artifact, poachFrom),
     propertiesList: thisOrThat("propertiesList", artifact, poachFrom),
+    representationType: thisOrThat("representationType", artifact, poachFrom),
   };
 
   return (

@@ -5,8 +5,8 @@ import "taxonomy.proto";
 import "core.proto";
 import "artifact.proto";
 
-option csharp_namespace = "TTI.TTF.Taxonomy";
-option java_package = "org.tti.ttf.taxonomy";
+option csharp_namespace = "IWA.TTF.Taxonomy";
+option java_package = "org.iwa.ttf.taxonomy";
 option java_multiple_files = true;
 
 //Taxonomy Service - Create, Read, Update, Delete for the Taxonomy Object Model
