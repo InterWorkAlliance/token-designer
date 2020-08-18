@@ -13,12 +13,12 @@ will not have contiguous patch numbers. Initial major and minor releases will be
 in this file without a patch number. Patch version will be included for bug fix releases, but
 may not exactly match a publicly released version.
 
-## Unreleased
+## [0.6] - 2020-08-18
 
 ### Added
 
 - Ability to view all types of token artifacts (token bases, behaviors, behavior groups and property sets)
-- Support for creating new behviors, behavior groups and property sets (populated with default values)
+- Support for creating new behaviors, behavior groups and property sets (populated with default values)
 - Support for editing behaviors and behavior groups
 - Preliminary support for editing token bases and property sets
 
