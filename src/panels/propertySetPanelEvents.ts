@@ -2,6 +2,8 @@
 
 const propertySetPanelEvents = {
   AddProperty: "addProperty",
+  DeleteProperty: "deleteProperty",
+  EditPropertyName: "editPropertyName",
 };
 
 export { propertySetPanelEvents };

@@ -28,7 +28,7 @@ export default function PropertySetInspector({
           </li>
         </ul>
       </p>
-      {!!artifact.propertiesList.length && (
+      {(!!postMessage || !!artifact.propertiesList.length) && (
         <>
           <p>
             <u>Properties:</u>{" "}
@@ -47,6 +47,7 @@ export default function PropertySetInspector({
               key={_.name}
               taxonomy={taxonomy}
               artifact={_}
+              path={[_.name]}
               postMessage={postMessage}
             />
           ))}

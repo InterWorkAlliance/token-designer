@@ -91,6 +91,24 @@ export class PropertySetPanel extends ArtifactPanelBase<ttfCore.PropertySet> {
         this.artifact?.addProperties(newProperty);
         await this.saveChanges();
       }
+    } else if (message.e === propertySetPanelEvents.EditPropertyName) {
+      await PropertySetPanel.DoOnProperty(
+        this.artifact?.getPropertiesList(),
+        message.path,
+        async (property) => {
+          const newName = await vscode.window.showInputBox({
+            prompt: "Enter the property name",
+            value: property.getName(),
+          });
+          if (newName) {
+            property.setName(newName);
+            await this.saveChanges();
+          }
+        }
+      );
+    } else if (message.e === propertySetPanelEvents.DeleteProperty) {
+      await PropertySetPanel.DeleteProperty(this.artifact, message.path);
+      await this.saveChanges();
     }
   }
 
@@ -103,5 +121,55 @@ export class PropertySetPanel extends ArtifactPanelBase<ttfCore.PropertySet> {
         (error, response) => (error && reject(error)) || resolve(response)
       )
     );
+  }
+
+  private static async DoOnProperty(
+    properties: ttfCore.Property[] | undefined,
+    path: string[],
+    action: (property: ttfCore.Property) => Promise<void>
+  ) {
+    if (!properties || !properties.length || !path || !path.length) {
+      return;
+    }
+    const property = properties.filter((_) => _.getName() === path[0])[0];
+    if (!property) {
+      return;
+    }
+    if (path.length === 1) {
+      await action(property);
+    } else {
+      await PropertySetPanel.DoOnProperty(
+        property.getPropertiesList(),
+        path.slice(1),
+        action
+      );
+    }
+  }
+
+  private static async DeleteProperty(
+    parent:
+      | {
+          getPropertiesList: () => ttfCore.Property[] | undefined;
+          setPropertiesList: (newList: ttfCore.Property[]) => void;
+        }
+      | undefined
+      | null,
+    path: string[]
+  ) {
+    if (!parent || !path || !path.length) {
+      return;
+    }
+    const properties = parent.getPropertiesList();
+    if (!properties) {
+      return;
+    }
+    if (path.length === 1) {
+      parent.setPropertiesList(
+        properties.filter((_) => _.getName() !== path[0])
+      );
+    } else {
+      const property = properties.filter((_) => _.getName() === path[0])[0];
+      await PropertySetPanel.DeleteProperty(property, path.slice(1));
+    }
   }
 }
