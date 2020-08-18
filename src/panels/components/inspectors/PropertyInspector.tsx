@@ -1,9 +1,11 @@
-import React from "react";
+import React, { useState } from "react";
 
 import { Property } from "../../../ttf/core_pb";
 
+import AddLink from "../links/AddLink";
 import DeleteLink from "../links/DeleteLink";
 import EditLink from "../links/EditLink";
+import InvocationEditor from "../editors/InvocationEditor";
 import InvocationInspector from "./InvocationInspector";
 import { propertySetPanelEvents } from "../../propertySetPanelEvents";
 import { TaxonomyAsObjects } from "../../taxonomyAsObjects";
@@ -21,6 +23,7 @@ export default function PropertyInspector({
   path,
   postMessage,
 }: Props) {
+  const [addInvocationMode, setAddInvocationMode] = useState(false);
   return (
     <div style={{ marginLeft: 25 }}>
       <p>
@@ -55,23 +58,74 @@ export default function PropertyInspector({
             (!!postMessage && <>(description not set)</>)}
         </i>
       </p>
-      {artifact.propertiesList.map((_) => (
-        <PropertyInspector
-          key={_.name}
-          taxonomy={taxonomy}
-          artifact={_}
-          path={[...path, _.name]}
-          postMessage={postMessage}
-        />
-      ))}
-      {!!artifact.propertyInvocationsList.length && (
+      {(!!postMessage || !!artifact.propertiesList.length) && (
         <>
-          <p>
-            <u>{artifact.name} invocations:</u>
+          <p style={{ marginLeft: 25 }}>
+            <u>{path.join(".")} sub-properties:</u>{" "}
           </p>
-          {artifact.propertyInvocationsList.map((_) => (
-            <InvocationInspector key={_.name + "-" + _.id} invocation={_} />
+          {artifact.propertiesList.map((_) => (
+            <PropertyInspector
+              key={_.name}
+              taxonomy={taxonomy}
+              artifact={_}
+              path={[...path, _.name]}
+              postMessage={postMessage}
+            />
           ))}
+        </>
+      )}
+      {(!!postMessage || !!artifact.propertyInvocationsList.length) && (
+        <>
+          <p style={{ marginLeft: 25 }}>
+            <u>{path.join(".")} invocations:</u>{" "}
+            {!!postMessage && (
+              <AddLink onClick={() => setAddInvocationMode(true)} />
+            )}
+            {!!postMessage && addInvocationMode && (
+              <InvocationEditor
+                hide={() => setAddInvocationMode(false)}
+                onSave={(invocation) => {
+                  postMessage({
+                    e: propertySetPanelEvents.EditInvocation,
+                    path,
+                    i: artifact.propertyInvocationsList.length,
+                    invocation,
+                  });
+                }}
+              />
+            )}
+          </p>
+          <p style={{ marginLeft: 25 }}>
+            {artifact.propertyInvocationsList.map((_, i) => (
+              <InvocationInspector
+                key={_.name + "-" + _.id}
+                invocation={_}
+                onDelete={
+                  !!postMessage
+                    ? () => {
+                        postMessage({
+                          e: propertySetPanelEvents.DeleteInvocation,
+                          path,
+                          i,
+                        });
+                      }
+                    : undefined
+                }
+                onSave={
+                  !!postMessage
+                    ? (invocation) => {
+                        postMessage({
+                          e: propertySetPanelEvents.EditInvocation,
+                          path,
+                          i,
+                          invocation,
+                        });
+                      }
+                    : undefined
+                }
+              />
+            ))}
+          </p>
         </>
       )}
     </div>

@@ -3,6 +3,7 @@ import * as ttfCore from "./ttf/core_pb";
 import * as vscode from "vscode";
 
 import { ArtifactPanelBase } from "./artifactPanelBase";
+import { BehaviorPanel } from "./behaviorPanel";
 import { ITtfInterface } from "./ttfInterface";
 import { propertySetPanelEvents } from "./panels/propertySetPanelEvents";
 import { TokenTaxonomy } from "./tokenTaxonomy";
@@ -109,6 +110,33 @@ export class PropertySetPanel extends ArtifactPanelBase<ttfCore.PropertySet> {
     } else if (message.e === propertySetPanelEvents.DeleteProperty) {
       await PropertySetPanel.DeleteProperty(this.artifact, message.path);
       await this.saveChanges();
+    } else if (message.e === propertySetPanelEvents.EditInvocation) {
+      const newInvocation = BehaviorPanel.buildInvocation(message.invocation);
+      const i = message.i;
+      await PropertySetPanel.DoOnProperty(
+        this.artifact?.getPropertiesList(),
+        message.path,
+        async (property) => {
+          if (i >= property.getPropertyInvocationsList().length) {
+            property.addPropertyInvocations(newInvocation);
+          } else {
+            property.getPropertyInvocationsList()[i] = newInvocation;
+          }
+          await this.saveChanges();
+        }
+      );
+    } else if (message.e === propertySetPanelEvents.DeleteInvocation) {
+      const i = message.i;
+      await PropertySetPanel.DoOnProperty(
+        this.artifact?.getPropertiesList(),
+        message.path,
+        async (property) => {
+          property.setPropertyInvocationsList(
+            property.getPropertyInvocationsList().filter((_, j) => j !== i)
+          );
+          await this.saveChanges();
+        }
+      );
     }
   }
 
