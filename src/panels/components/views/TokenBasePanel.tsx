@@ -15,7 +15,6 @@ type Props = {
 export default function TokenBasePanel({ postMessage }: Props) {
   const [taxonomy, setTaxonomy] = useState<TaxonomyAsObjects | null>(null);
   const [artifact, setArtifact] = useState<Base.AsObject | null>(null);
-  const [editMode, setEditMode] = useState(false);
 
   const handleMessage = (message: any) => {
     if (message.taxonomy) {
@@ -36,27 +35,12 @@ export default function TokenBasePanel({ postMessage }: Props) {
   if (artifact && taxonomy) {
     return (
       <>
-        <ToolBoxTitle
-          title={artifact.artifact?.name || ""}
-          editMode={editMode}
-          setEditMode={setEditMode}
-          onRename={
-            editMode
-              ? () => postMessage({ e: artifactPanelBaseEvents.Rename })
-              : undefined
-          }
-        />
+        <ToolBoxTitle title={artifact.artifact?.name || ""} />
         <div style={{ margin: "var(--padding)", padding: "var(--padding)" }}>
           <ArtifactInspector
             taxonomy={taxonomy}
             artifact={artifact}
             artifactType="token-base"
-            update={
-              editMode
-                ? (update) =>
-                    postMessage({ e: artifactPanelBaseEvents.Update, update })
-                : undefined
-            }
           />
         </div>
       </>
