@@ -13,6 +13,20 @@ will not have contiguous patch numbers. Initial major and minor releases will be
 in this file without a patch number. Patch version will be included for bug fix releases, but
 may not exactly match a publicly released version.
 
+## Unreleased
+
+### Added
+
+- Ability to view all types of token artifacts (token bases, behaviors, behavior groups and property sets)
+- Support for creating new behviors, behavior groups and property sets (populated with default values)
+- Support for editing behaviors and behavior groups
+- Preliminary support for editing token bases and property sets
+
+### Changed
+
+- Updated schema based on TTF changes (adds representationType for property sets)
+- Updated TTF snapshot that is used in sandbox mode to incorporate latest TTF changes
+
 ## [0.5.17] - 2020-07-20
 
 ### Added
