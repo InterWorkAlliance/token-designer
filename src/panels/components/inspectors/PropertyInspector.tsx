@@ -52,11 +52,31 @@ export default function PropertyInspector({
         {!!postMessage && !artifact.templateValue && (
           <> = (template value not set)</>
         )}
+        {!!postMessage && (
+          <EditLink
+            onClick={() =>
+              postMessage({
+                e: propertySetPanelEvents.EditPropertyValue,
+                path,
+              })
+            }
+          />
+        )}
         <br />
         <i>
           {artifact.valueDescription ||
             (!!postMessage && <>(description not set)</>)}
         </i>
+        {!!postMessage && (
+          <EditLink
+            onClick={() =>
+              postMessage({
+                e: propertySetPanelEvents.EditPropertyDescription,
+                path,
+              })
+            }
+          />
+        )}
       </p>
       {(!!postMessage || !!artifact.propertiesList.length) && (
         <>

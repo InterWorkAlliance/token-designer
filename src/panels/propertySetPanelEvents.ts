@@ -5,7 +5,9 @@ const propertySetPanelEvents = {
   DeleteInvocation: "deleteInvocation",
   DeleteProperty: "deleteProperty",
   EditInvocation: "editInvocation",
+  EditPropertyDescription: "editPropertyDescription",
   EditPropertyName: "editPropertyName",
+  EditPropertyValue: "editPropertyValue",
 };
 
 export { propertySetPanelEvents };

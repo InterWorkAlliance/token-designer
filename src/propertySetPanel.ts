@@ -92,6 +92,21 @@ export class PropertySetPanel extends ArtifactPanelBase<ttfCore.PropertySet> {
         this.artifact?.addProperties(newProperty);
         await this.saveChanges();
       }
+    } else if (message.e === propertySetPanelEvents.EditPropertyDescription) {
+      await PropertySetPanel.DoOnProperty(
+        this.artifact?.getPropertiesList(),
+        message.path,
+        async (property) => {
+          const newDescription = await vscode.window.showInputBox({
+            prompt: "Enter the property description",
+            value: property.getValueDescription(),
+          });
+          if (newDescription) {
+            property.setValueDescription(newDescription);
+            await this.saveChanges();
+          }
+        }
+      );
     } else if (message.e === propertySetPanelEvents.EditPropertyName) {
       await PropertySetPanel.DoOnProperty(
         this.artifact?.getPropertiesList(),
@@ -103,6 +118,21 @@ export class PropertySetPanel extends ArtifactPanelBase<ttfCore.PropertySet> {
           });
           if (newName) {
             property.setName(newName);
+            await this.saveChanges();
+          }
+        }
+      );
+    } else if (message.e === propertySetPanelEvents.EditPropertyValue) {
+      await PropertySetPanel.DoOnProperty(
+        this.artifact?.getPropertiesList(),
+        message.path,
+        async (property) => {
+          const newValue = await vscode.window.showInputBox({
+            prompt: "Enter the property value",
+            value: property.getTemplateValue(),
+          });
+          if (newValue) {
+            property.setTemplateValue(newValue);
             await this.saveChanges();
           }
         }
