@@ -82,6 +82,16 @@ export default function PropertyInspector({
         <>
           <p style={{ marginLeft: 25 }}>
             <u>{path.join(".")} sub-properties:</u>{" "}
+            {!!postMessage && (
+              <AddLink
+                onClick={() =>
+                  postMessage({
+                    e: propertySetPanelEvents.AddProperty,
+                    path,
+                  })
+                }
+              />
+            )}
           </p>
           {artifact.propertiesList.map((_) => (
             <PropertyInspector

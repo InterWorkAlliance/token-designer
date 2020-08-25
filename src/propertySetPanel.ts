@@ -89,7 +89,17 @@ export class PropertySetPanel extends ArtifactPanelBase<ttfCore.PropertySet> {
       if (newPropertyName) {
         const newProperty = new ttfCore.Property();
         newProperty.setName(newPropertyName);
-        this.artifact?.addProperties(newProperty);
+        if (message.path) {
+          await PropertySetPanel.DoOnProperty(
+            this.artifact?.getPropertiesList(),
+            message.path,
+            async (property) => {
+              property.addProperties(newProperty);
+            }
+          );
+        } else {
+          this.artifact?.addProperties(newProperty);
+        }
         await this.saveChanges();
       }
     } else if (message.e === propertySetPanelEvents.EditPropertyDescription) {
