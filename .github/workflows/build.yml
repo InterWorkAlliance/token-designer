@@ -15,8 +15,8 @@ jobs:
   buildgrpc:
     strategy:
       matrix:
-        # As of 6/27/20, VS Code Insiders uses Electron 8.3 and regular VS Code uses Electron 7.3
-        electron-version: [ '7.3.0', '8.3.0' ]
+        # As of v1.49, both VS Code and VS Code Insiders use Electron 9.2.1
+        electron-version: [ '9.2.1' ]
         runs-on: [ 'windows-2019', 'ubuntu-18.04', 'macos-10.15' ]
     runs-on: ${{ matrix.runs-on }}
     steps:
