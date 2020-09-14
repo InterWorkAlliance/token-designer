@@ -1,7 +1,7 @@
 {
   "name": "visual-token-designer",
   "publisher": "ngd-seattle",
-  "displayName": "Visual Token Designer",
+  "displayName": "Neo Visual Token Designer",
   "description": "VS Code extension that facilitates manipulation of artifacts in the Token Taxonomy Framework",
   "version": "0.0.0",
   "icon": "resources/icon.png",
