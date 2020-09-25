@@ -277,12 +277,18 @@ export class FormulaPanel extends PanelBase {
         updateReqest.setArtifactTypeObject(
           this.packTemplateFormula(this.formula)
         );
-        await new Promise((resolve, reject) =>
-          this.ttfConnection.updateArtifact(
-            updateReqest,
-            (error, response) => (error && reject(error)) || resolve(response)
-          )
-        );
+        try {
+          await new Promise((resolve, reject) =>
+            this.ttfConnection.updateArtifact(
+              updateReqest,
+              (error, response) => (error && reject(error)) || resolve(response)
+            )
+          );
+        } catch (e) {
+          console.error("updateArtifact failed, trying delete+recreate...");
+          await this.saveFormula(true);
+          return;
+        }
       }
       this.refreshFormula();
     }
