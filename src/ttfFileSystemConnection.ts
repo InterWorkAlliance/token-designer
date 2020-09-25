@@ -506,99 +506,105 @@ export class TtfFileSystemConnection implements ITtfInterface {
     request: ttfArtifact.UpdateArtifactRequest,
     callback: (error: ITtfError | null, response: any) => void
   ) {
-    let done = false;
-    const type = request.getType();
-    const packed = request.getArtifactTypeObject();
-    if (packed) {
-      switch (type) {
-        case ttfArtifact.ArtifactType.TEMPLATE_DEFINITION:
-          const definition = ttfCore.TemplateDefinition.deserializeBinary(
-            packed.serializeBinary()
-          );
-          const id = definition.getArtifact()?.getArtifactSymbol()?.getId();
-          if (id) {
-            this.taxonomy.getTemplateDefinitionsMap().set(id, definition);
+    try {
+      let done = false;
+      const type = request.getType();
+      const packed = request.getArtifactTypeObject();
+      if (packed) {
+        switch (type) {
+          case ttfArtifact.ArtifactType.TEMPLATE_DEFINITION:
+            const definition = ttfCore.TemplateDefinition.deserializeBinary(
+              packed.serializeBinary()
+            );
+            const id = definition.getArtifact()?.getArtifactSymbol()?.getId();
+            if (id) {
+              this.taxonomy.getTemplateDefinitionsMap().set(id, definition);
+              done = true;
+            }
+            break;
+          case ttfArtifact.ArtifactType.TEMPLATE_FORMULA:
+            const formula = ttfCore.TemplateFormula.deserializeBinary(
+              packed.serializeBinary()
+            );
+            const tooling = formula
+              .getArtifact()
+              ?.getArtifactSymbol()
+              ?.getTooling();
+            if (tooling) {
+              this.taxonomy.getTemplateFormulasMap().set(tooling, formula);
+              done = true;
+            }
+            break;
+          case ttfArtifact.ArtifactType.BEHAVIOR:
+            const behavior = packed.unpack(
+              ttfCore.Behavior.deserializeBinary,
+              packed.getTypeName()
+            );
+            const behaviorId = behavior
+              ?.getArtifact()
+              ?.getArtifactSymbol()
+              ?.getId();
+            if (behavior && behaviorId) {
+              this.taxonomy.getBehaviorsMap().set(behaviorId, behavior);
+              done = true;
+            }
+            break;
+          case ttfArtifact.ArtifactType.BEHAVIOR_GROUP:
+            const behaviorGroup = packed.unpack(
+              ttfCore.BehaviorGroup.deserializeBinary,
+              packed.getTypeName()
+            );
+            const behaviorGroupId = behaviorGroup
+              ?.getArtifact()
+              ?.getArtifactSymbol()
+              ?.getId();
+            if (behaviorGroup && behaviorGroupId) {
+              this.taxonomy
+                .getBehaviorGroupsMap()
+                .set(behaviorGroupId, behaviorGroup);
+              done = true;
+            }
+            break;
+          case ttfArtifact.ArtifactType.BASE:
+            const base = packed.unpack(
+              ttfCore.Base.deserializeBinary,
+              packed.getTypeName()
+            );
+            const baseId = base?.getArtifact()?.getArtifactSymbol()?.getId();
+            if (base && baseId) {
+              this.taxonomy.getBaseTokenTypesMap().set(baseId, base);
+              done = true;
+            }
+            break;
+          case ttfArtifact.ArtifactType.PROPERTY_SET:
+            const propertySet = packed.unpack(
+              ttfCore.PropertySet.deserializeBinary,
+              packed.getTypeName()
+            );
+            const propertySetId = propertySet
+              ?.getArtifact()
+              ?.getArtifactSymbol()
+              ?.getId();
+            if (propertySet && propertySetId) {
+              this.taxonomy
+                .getPropertySetsMap()
+                .set(propertySetId, propertySet);
+              done = true;
+            }
+            break;
+          default:
             done = true;
-          }
-          break;
-        case ttfArtifact.ArtifactType.TEMPLATE_FORMULA:
-          const formula = ttfCore.TemplateFormula.deserializeBinary(
-            packed.serializeBinary()
-          );
-          const tooling = formula
-            .getArtifact()
-            ?.getArtifactSymbol()
-            ?.getTooling();
-          if (tooling) {
-            this.taxonomy.getTemplateFormulasMap().set(tooling, formula);
-            done = true;
-          }
-          break;
-        case ttfArtifact.ArtifactType.BEHAVIOR:
-          const behavior = packed.unpack(
-            ttfCore.Behavior.deserializeBinary,
-            packed.getTypeName()
-          );
-          const behaviorId = behavior
-            ?.getArtifact()
-            ?.getArtifactSymbol()
-            ?.getId();
-          if (behavior && behaviorId) {
-            this.taxonomy.getBehaviorsMap().set(behaviorId, behavior);
-            done = true;
-          }
-          break;
-        case ttfArtifact.ArtifactType.BEHAVIOR_GROUP:
-          const behaviorGroup = packed.unpack(
-            ttfCore.BehaviorGroup.deserializeBinary,
-            packed.getTypeName()
-          );
-          const behaviorGroupId = behaviorGroup
-            ?.getArtifact()
-            ?.getArtifactSymbol()
-            ?.getId();
-          if (behaviorGroup && behaviorGroupId) {
-            this.taxonomy
-              .getBehaviorGroupsMap()
-              .set(behaviorGroupId, behaviorGroup);
-            done = true;
-          }
-          break;
-        case ttfArtifact.ArtifactType.BASE:
-          const base = packed.unpack(
-            ttfCore.Base.deserializeBinary,
-            packed.getTypeName()
-          );
-          const baseId = base?.getArtifact()?.getArtifactSymbol()?.getId();
-          if (base && baseId) {
-            this.taxonomy.getBaseTokenTypesMap().set(baseId, base);
-            done = true;
-          }
-          break;
-        case ttfArtifact.ArtifactType.PROPERTY_SET:
-          const propertySet = packed.unpack(
-            ttfCore.PropertySet.deserializeBinary,
-            packed.getTypeName()
-          );
-          const propertySetId = propertySet
-            ?.getArtifact()
-            ?.getArtifactSymbol()
-            ?.getId();
-          if (propertySet && propertySetId) {
-            this.taxonomy.getPropertySetsMap().set(propertySetId, propertySet);
-            done = true;
-          }
-          break;
-        default:
-          done = true;
-          callback(`Artifact type not supported: ${type}`, {});
-          break;
+            callback(`Artifact type not supported: ${type}`, {});
+            break;
+        }
       }
-    }
-    if (done) {
-      callback(null, {});
-    } else {
-      callback("Artifact could not be updated", {});
+      if (done) {
+        callback(null, {});
+      } else {
+        callback("Artifact could not be updated", {});
+      }
+    } catch (e) {
+      callback(e.message || "Exception", {});
     }
   }
 
