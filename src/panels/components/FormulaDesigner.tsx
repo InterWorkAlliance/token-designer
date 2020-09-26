@@ -38,7 +38,7 @@ export default function FormulaDesigner({
   >(undefined);
 
   const [artifactBeingDraggedOff, setArtifactBeingDraggedOff] = useState<
-  [AnyArtifact, ArtifactType] | undefined
+    [AnyArtifact, ArtifactType] | undefined
   >(undefined);
 
   const toolPaneWidth = "25vw";
@@ -75,16 +75,20 @@ export default function FormulaDesigner({
       <ToolPane
         position="left"
         width={toolPaneWidth}
-        artifactBeingDragged={artifactBeingDraggedOff ? artifactBeingDraggedOff[0] : undefined}
+        artifactBeingDragged={
+          artifactBeingDraggedOff ? artifactBeingDraggedOff[0] : undefined
+        }
         onDropArtifact={removeArtifact}
       >
         <ToolBox
+          taxonomy={taxonomy}
           title="Token Bases"
           type="token-base"
           tools={taxonomy?.baseTokenTypes || []}
           artifactOnDragStart={setArtifactBeingDraggedOn}
         />
         <ToolBox
+          taxonomy={taxonomy}
           title="Property Sets"
           type="property-set"
           tools={taxonomy?.propertySets || []}
@@ -102,6 +106,7 @@ export default function FormulaDesigner({
         setFormulaDescription={setFormulaDescription}
       >
         <Canvas
+          taxonomy={taxonomy}
           tokenBase={tokenBase}
           propertySets={propertySets}
           behaviorGroups={behaviorGroups}
@@ -116,16 +121,20 @@ export default function FormulaDesigner({
       <ToolPane
         position="right"
         width={toolPaneWidth}
-        artifactBeingDragged={artifactBeingDraggedOff ? artifactBeingDraggedOff[0] : undefined}
+        artifactBeingDragged={
+          artifactBeingDraggedOff ? artifactBeingDraggedOff[0] : undefined
+        }
         onDropArtifact={removeArtifact}
       >
         <ToolBox
+          taxonomy={taxonomy}
           title="Behaviors"
           type="behavior"
           tools={taxonomy?.behaviors || []}
           artifactOnDragStart={setArtifactBeingDraggedOn}
         />
         <ToolBox
+          taxonomy={taxonomy}
           title="Behavior Groups"
           type="behavior-group"
           tools={taxonomy?.behaviorGroups || []}

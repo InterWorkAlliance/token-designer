@@ -5,8 +5,10 @@ import { Base, PropertySet, BehaviorGroup, Behavior } from "../../ttf/core_pb";
 import AnyArtifact from "./AnyArtifact";
 import ArtifactIcon from "./ArtifactIcon";
 import ArtifactType from "./ArtifactType";
+import { TaxonomyAsObjects } from "../taxonomyAsObjects";
 
 type Props = {
+  taxonomy: TaxonomyAsObjects | null;
   tokenBase?: Base.AsObject;
   propertySets?: PropertySet.AsObject[];
   behaviorGroups?: BehaviorGroup.AsObject[];
@@ -20,6 +22,7 @@ type Props = {
 };
 
 export default function Canvas({
+  taxonomy,
   tokenBase,
   propertySets,
   behaviorGroups,
@@ -90,8 +93,9 @@ export default function Canvas({
         <span style={{ display: "inline-block" }}>
           <div style={{ whiteSpace: "nowrap" }}>
             <ArtifactIcon
+              taxonomy={taxonomy}
               artifact={tokenBase}
-              type={tokenBase ? "token-base" : undefined}
+              artifactType={tokenBase ? "token-base" : undefined}
               selected={
                 selectedArtifact &&
                 selectedArtifact[0].artifact?.artifactSymbol?.id ===
@@ -103,9 +107,10 @@ export default function Canvas({
             />
             {(propertySets || []).map((_) => (
               <ArtifactIcon
+                taxonomy={taxonomy}
                 key={_.artifact?.artifactSymbol?.id}
                 artifact={_}
-                type="property-set"
+                artifactType="property-set"
                 selected={
                   selectedArtifact &&
                   selectedArtifact[0].artifact?.artifactSymbol?.id ===
@@ -120,9 +125,10 @@ export default function Canvas({
           <div style={{ width: "var(--iconWidth)" }}>
             {(behaviorGroups || []).map((_) => (
               <ArtifactIcon
+                taxonomy={taxonomy}
                 key={_.artifact?.artifactSymbol?.id}
                 artifact={_}
-                type="behavior-group"
+                artifactType="behavior-group"
                 selected={
                   selectedArtifact &&
                   selectedArtifact[0].artifact?.artifactSymbol?.id ===
@@ -135,9 +141,10 @@ export default function Canvas({
             ))}
             {(behaviors || []).map((_) => (
               <ArtifactIcon
+                taxonomy={taxonomy}
                 key={_.artifact?.artifactSymbol?.id}
                 artifact={_}
-                type="behavior"
+                artifactType="behavior"
                 selected={
                   selectedArtifact &&
                   selectedArtifact[0].artifact?.artifactSymbol?.id ===

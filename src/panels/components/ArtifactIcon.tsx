@@ -2,10 +2,12 @@ import React from "react";
 
 import AnyArtifact from "./AnyArtifact";
 import ArtifactType from "./ArtifactType";
+import { TaxonomyAsObjects } from "../taxonomyAsObjects";
 
 type Props = {
+  taxonomy: TaxonomyAsObjects | null;
   artifact?: AnyArtifact;
-  type?: ArtifactType;
+  artifactType?: ArtifactType;
   error?: string;
   selected?: boolean;
   onClick?: (artifact?: [AnyArtifact, ArtifactType]) => void;
@@ -13,8 +15,9 @@ type Props = {
 };
 
 export default function ArtifactIcon({
+  taxonomy,
   artifact,
-  type,
+  artifactType,
   error,
   selected,
   onClick,
@@ -58,7 +61,7 @@ export default function ArtifactIcon({
     fontWeight: error || selected ? "bold" : undefined,
   };
   let imgSrc = "token-designer/unknown.svg";
-  switch (type) {
+  switch (artifactType) {
     case "token-base":
       imgSrc = "token-designer/token-base.svg";
       break;
@@ -78,11 +81,11 @@ export default function ArtifactIcon({
     tooltip += ` - ${error}`;
   }
   const dispatchOnDragStart = onDragStart
-    ? () => onDragStart(artifact && type ? [artifact, type] : undefined)
+    ? () => onDragStart(artifact && artifactType ? [artifact, artifactType] : undefined)
     : undefined;
   const dispatchOnClick = onClick
     ? (ev: React.MouseEvent) => {
-        onClick(artifact && type ? [artifact, type] : undefined);
+        onClick(artifact && artifactType ? [artifact, artifactType] : undefined);
         ev.stopPropagation();
       }
     : undefined;
