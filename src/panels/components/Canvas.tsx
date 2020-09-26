@@ -5,10 +5,8 @@ import { Base, PropertySet, BehaviorGroup, Behavior } from "../../ttf/core_pb";
 import AnyArtifact from "./AnyArtifact";
 import ArtifactIcon from "./ArtifactIcon";
 import ArtifactType from "./ArtifactType";
-import { TaxonomyAsObjects } from "../taxonomyAsObjects";
 
 type Props = {
-  taxonomy: TaxonomyAsObjects | null;
   tokenBase?: Base.AsObject;
   propertySets?: PropertySet.AsObject[];
   behaviorGroups?: BehaviorGroup.AsObject[];
@@ -22,7 +20,6 @@ type Props = {
 };
 
 export default function Canvas({
-  taxonomy,
   tokenBase,
   propertySets,
   behaviorGroups,
@@ -93,7 +90,6 @@ export default function Canvas({
         <span style={{ display: "inline-block" }}>
           <div style={{ whiteSpace: "nowrap" }}>
             <ArtifactIcon
-              taxonomy={taxonomy}
               artifact={tokenBase}
               artifactType={tokenBase ? "token-base" : undefined}
               selected={
@@ -107,7 +103,6 @@ export default function Canvas({
             />
             {(propertySets || []).map((_) => (
               <ArtifactIcon
-                taxonomy={taxonomy}
                 key={_.artifact?.artifactSymbol?.id}
                 artifact={_}
                 artifactType="property-set"
@@ -125,7 +120,6 @@ export default function Canvas({
           <div style={{ width: "var(--iconWidth)" }}>
             {(behaviorGroups || []).map((_) => (
               <ArtifactIcon
-                taxonomy={taxonomy}
                 key={_.artifact?.artifactSymbol?.id}
                 artifact={_}
                 artifactType="behavior-group"
@@ -141,7 +135,6 @@ export default function Canvas({
             ))}
             {(behaviors || []).map((_) => (
               <ArtifactIcon
-                taxonomy={taxonomy}
                 key={_.artifact?.artifactSymbol?.id}
                 artifact={_}
                 artifactType="behavior"
