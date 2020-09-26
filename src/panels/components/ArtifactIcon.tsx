@@ -2,10 +2,8 @@ import React from "react";
 
 import AnyArtifact from "./AnyArtifact";
 import ArtifactType from "./ArtifactType";
-import { TaxonomyAsObjects } from "../taxonomyAsObjects";
 
 type Props = {
-  taxonomy: TaxonomyAsObjects | null;
   artifact?: AnyArtifact;
   artifactType?: ArtifactType;
   error?: string;
@@ -15,7 +13,6 @@ type Props = {
 };
 
 export default function ArtifactIcon({
-  taxonomy,
   artifact,
   artifactType,
   error,

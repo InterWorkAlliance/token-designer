@@ -7,7 +7,6 @@ import ToolBoxTitle from "./ToolBoxTitle";
 import { TaxonomyAsObjects } from "../taxonomyAsObjects";
 
 type Props = {
-  taxonomy: TaxonomyAsObjects | null;
   title: string;
   tools: (AnyArtifact | undefined)[];
   type: ArtifactType;
@@ -34,7 +33,6 @@ export default function ToolBox({
           (artifact) =>
             artifact && (
               <ArtifactIcon
-                taxonomy={taxonomy}
                 key={artifact.artifact?.name}
                 artifact={artifact}
                 artifactType={type}
