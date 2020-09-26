@@ -28,6 +28,8 @@ export default function DefinitionDesigner({
   setDefinitionName,
   setDefinitionProperty,
 }: Props) {
+  const [toolTip, setToolTip] = useState<AnyArtifact | null>(null);
+
   const [selectedArtifact, setSelectedArtifact] = useState<
     [AnyArtifact, ArtifactType] | undefined
   >(undefined);
@@ -77,6 +79,7 @@ export default function DefinitionDesigner({
           behaviors={behaviors}
           selectedArtifact={selectedArtifact}
           setSelectedArtifact={setSelectedArtifact}
+          setToolTip={setToolTip}
         />
       </CanvasPane>
       <ToolPane position="right" width={rightPaneWidth}>
