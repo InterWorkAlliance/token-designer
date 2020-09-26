@@ -10,6 +10,7 @@ type Props = {
   selected?: boolean;
   onClick?: (artifact?: [AnyArtifact, ArtifactType]) => void;
   onDragStart?: (artifact?: [AnyArtifact, ArtifactType]) => void;
+  setToolTip: (tooltip: AnyArtifact | null) => void;
 };
 
 export default function ArtifactIcon({
@@ -19,6 +20,7 @@ export default function ArtifactIcon({
   selected,
   onClick,
   onDragStart,
+  setToolTip,
 }: Props) {
   const style: React.CSSProperties = {
     cursor: "pointer",
@@ -78,11 +80,16 @@ export default function ArtifactIcon({
     tooltip += ` - ${error}`;
   }
   const dispatchOnDragStart = onDragStart
-    ? () => onDragStart(artifact && artifactType ? [artifact, artifactType] : undefined)
+    ? () =>
+        onDragStart(
+          artifact && artifactType ? [artifact, artifactType] : undefined
+        )
     : undefined;
   const dispatchOnClick = onClick
     ? (ev: React.MouseEvent) => {
-        onClick(artifact && artifactType ? [artifact, artifactType] : undefined);
+        onClick(
+          artifact && artifactType ? [artifact, artifactType] : undefined
+        );
         ev.stopPropagation();
       }
     : undefined;
@@ -93,6 +100,8 @@ export default function ArtifactIcon({
       draggable={!!onDragStart}
       onClick={dispatchOnClick}
       onDragStart={dispatchOnDragStart}
+      onMouseEnter={() => setToolTip(artifact || null)}
+      onMouseLeave={() => setToolTip(null)}
     >
       <span style={{ position: "relative" }}>
         <img src={imgSrc} style={imgStyle} draggable={false} />

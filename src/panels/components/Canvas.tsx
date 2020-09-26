@@ -17,6 +17,7 @@ type Props = {
   artifactOnDragStart?: (artifact?: [AnyArtifact, ArtifactType]) => void;
   setSelectedArtifact?: (artifact?: [AnyArtifact, ArtifactType]) => void;
   addArtifact?: (id: string) => void;
+  setToolTip: (tooltip: AnyArtifact | null) => void;
 };
 
 export default function Canvas({
@@ -30,6 +31,7 @@ export default function Canvas({
   artifactOnDragStart,
   setSelectedArtifact,
   addArtifact,
+  setToolTip,
 }: Props) {
   const [dropTargetActive, setDropTargetActive] = useState(false);
   const style: React.CSSProperties = {
@@ -99,6 +101,7 @@ export default function Canvas({
               }
               onClick={setSelectedArtifact}
               onDragStart={artifactOnDragStart}
+              setToolTip={setToolTip}
               error={errorText(tokenBase?.artifact?.artifactSymbol?.id)}
             />
             {(propertySets || []).map((_) => (
@@ -113,6 +116,7 @@ export default function Canvas({
                 }
                 onClick={setSelectedArtifact}
                 onDragStart={artifactOnDragStart}
+                setToolTip={setToolTip}
                 error={errorText(_.artifact?.artifactSymbol?.id)}
               />
             ))}
@@ -130,6 +134,7 @@ export default function Canvas({
                 }
                 onClick={setSelectedArtifact}
                 onDragStart={artifactOnDragStart}
+                setToolTip={setToolTip}
                 error={errorText(_.artifact?.artifactSymbol?.id)}
               />
             ))}
@@ -145,6 +150,7 @@ export default function Canvas({
                 }
                 onClick={setSelectedArtifact}
                 onDragStart={artifactOnDragStart}
+                setToolTip={setToolTip}
                 error={errorText(_.artifact?.artifactSymbol?.id)}
               />
             ))}

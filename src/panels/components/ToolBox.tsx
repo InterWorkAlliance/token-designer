@@ -4,13 +4,13 @@ import AnyArtifact from "./AnyArtifact";
 import ArtifactIcon from "./ArtifactIcon";
 import ArtifactType from "./ArtifactType";
 import ToolBoxTitle from "./ToolBoxTitle";
-import { TaxonomyAsObjects } from "../taxonomyAsObjects";
 
 type Props = {
   title: string;
   tools: (AnyArtifact | undefined)[];
   type: ArtifactType;
   artifactOnDragStart: (artifact?: [AnyArtifact, ArtifactType]) => void;
+  setToolTip: (tooltip: AnyArtifact | null) => void;
 };
 
 export default function ToolBox({
@@ -18,6 +18,7 @@ export default function ToolBox({
   tools,
   type,
   artifactOnDragStart,
+  setToolTip,
 }: Props) {
   const itemsAreaStyle: React.CSSProperties = {
     maxHeight: "45vh",
@@ -37,6 +38,7 @@ export default function ToolBox({
                 artifact={artifact}
                 artifactType={type}
                 onDragStart={artifactOnDragStart}
+                setToolTip={setToolTip}
               />
             )
         )}
