@@ -74,7 +74,7 @@ jobs:
       shell: bash
       run: |
         npm run package
-        cp visual-token-designer-*.vsix visual-token-designer.vsix
+        cp token-designer-*.vsix token-designer.vsix
         echo "##[set-output name=branch;]$(echo ${GITHUB_REF#refs/heads/})"
         ls -l *.vsix
     - name: 🗑 Artifact cleanup
@@ -86,12 +86,12 @@ jobs:
       uses: actions/upload-artifact@v2
       with:
         name: vsix
-        path: visual-token-designer-*.vsix
+        path: token-designer-*.vsix
     - name: 🌎 Release
       uses: djnicholson/release-action@v2.8
       with:
         token: ${{ secrets.GITHUB_TOKEN }}
         tag-name: vNext
         release-name: 'vNext'
-        asset-name: 'visual-token-designer.vsix'
-        file: 'visual-token-designer.vsix'
+        asset-name: 'token-designer.vsix'
+        file: 'token-designer.vsix'

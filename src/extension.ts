@@ -59,7 +59,7 @@ export async function activate(context: vscode.ExtensionContext) {
   );
 
   const changeEnvironmentCommand = vscode.commands.registerCommand(
-    "iwa-visual-token-designer.changeEnvironment",
+    "iwa-token-designer.changeEnvironment",
     async (commandContext) => {
       const newServer = await vscode.window.showInputBox({
         prompt:
@@ -93,7 +93,7 @@ export async function activate(context: vscode.ExtensionContext) {
   );
 
   const createTokenFormulaCommand = vscode.commands.registerCommand(
-    "iwa-visual-token-designer.createTokenFormula",
+    "iwa-token-designer.createTokenFormula",
     async (commandContext) => {
       const panel = await FormulaPanel.openNewFormula(
         ttfConnection,
@@ -107,7 +107,7 @@ export async function activate(context: vscode.ExtensionContext) {
   );
 
   const openTokenFormulaCommand = vscode.commands.registerCommand(
-    "iwa-visual-token-designer.openTokenFormula",
+    "iwa-token-designer.openTokenFormula",
     async (commandContext) => {
       const panel = await FormulaPanel.openExistingFormula(
         commandContext,
@@ -122,7 +122,7 @@ export async function activate(context: vscode.ExtensionContext) {
   );
 
   const createTokenDefinitionCommand = vscode.commands.registerCommand(
-    "iwa-visual-token-designer.createTokenDefinition",
+    "iwa-token-designer.createTokenDefinition",
     async (commandContext) => {
       const panel = await DefinitionPanel.openNewDefinition(
         commandContext?.id || "",
@@ -137,7 +137,7 @@ export async function activate(context: vscode.ExtensionContext) {
   );
 
   const createBehaviorCommand = vscode.commands.registerCommand(
-    "iwa-visual-token-designer.createBehavior",
+    "iwa-token-designer.createBehavior",
     async () => {
       const panel = await BehaviorPanel.createNewBehavior(
         ttfConnection,
@@ -151,7 +151,7 @@ export async function activate(context: vscode.ExtensionContext) {
   );
 
   const createBehaviorGroupCommand = vscode.commands.registerCommand(
-    "iwa-visual-token-designer.createBehaviorGroup",
+    "iwa-token-designer.createBehaviorGroup",
     async () => {
       const panel = await BehaviorGroupPanel.createNewBehaviorGroup(
         ttfConnection,
@@ -165,7 +165,7 @@ export async function activate(context: vscode.ExtensionContext) {
   );
 
   const createPropertySetCommand = vscode.commands.registerCommand(
-    "iwa-visual-token-designer.createPropertySet",
+    "iwa-token-designer.createPropertySet",
     async () => {
       const panel = await PropertySetPanel.createNewPropertySet(
         ttfConnection,
@@ -179,7 +179,7 @@ export async function activate(context: vscode.ExtensionContext) {
   );
 
   const deleteArtifactCommand = vscode.commands.registerCommand(
-    "iwa-visual-token-designer.deleteArtifact",
+    "iwa-token-designer.deleteArtifact",
     async (commandContext) => {
       let typeAsString = "artifact";
       if (commandContext?.type === ttfArtifact.ArtifactType.BASE) {
@@ -233,7 +233,7 @@ export async function activate(context: vscode.ExtensionContext) {
   );
 
   const openTokenDefinitionCommand = vscode.commands.registerCommand(
-    "iwa-visual-token-designer.openTokenDefinition",
+    "iwa-token-designer.openTokenDefinition",
     async (commandContext) => {
       const panel = await DefinitionPanel.openExistingDefinition(
         commandContext,
@@ -248,7 +248,7 @@ export async function activate(context: vscode.ExtensionContext) {
   );
 
   const openBehaviorCommand = vscode.commands.registerCommand(
-    "iwa-visual-token-designer.openBehavior",
+    "iwa-token-designer.openBehavior",
     async (commandContext) => {
       const panel = await BehaviorPanel.openExistingBehavior(
         commandContext,
@@ -263,7 +263,7 @@ export async function activate(context: vscode.ExtensionContext) {
   );
 
   const openBehaviorGroupCommand = vscode.commands.registerCommand(
-    "iwa-visual-token-designer.openBehaviorGroup",
+    "iwa-token-designer.openBehaviorGroup",
     async (commandContext) => {
       const panel = await BehaviorGroupPanel.openExistingBehaviorGroup(
         commandContext,
@@ -278,7 +278,7 @@ export async function activate(context: vscode.ExtensionContext) {
   );
 
   const openPropertySetCommand = vscode.commands.registerCommand(
-    "iwa-visual-token-designer.openPropertySet",
+    "iwa-token-designer.openPropertySet",
     async (commandContext) => {
       const panel = await PropertySetPanel.openExistingPropertySet(
         commandContext,
@@ -293,7 +293,7 @@ export async function activate(context: vscode.ExtensionContext) {
   );
 
   const openTokenBaseCommand = vscode.commands.registerCommand(
-    "iwa-visual-token-designer.openTokenBase",
+    "iwa-token-designer.openTokenBase",
     async (commandContext) => {
       const panel = await TokenBasePanel.openExistingTokenBase(
         commandContext,
@@ -308,31 +308,31 @@ export async function activate(context: vscode.ExtensionContext) {
   );
 
   const refreshTokenTaxonomyCommand = vscode.commands.registerCommand(
-    "iwa-visual-token-designer.refreshTokenTaxonomy",
+    "iwa-token-designer.refreshTokenTaxonomy",
     async (commandContext) => {
       await ttfTaxonomy.refresh();
     }
   );
 
   const tokenArtifactExplorerProvider = vscode.window.registerTreeDataProvider(
-    "iwa-visual-token-designer.tokenArtifactExplorer",
+    "iwa-token-designer.tokenArtifactExplorer",
     tokenArtifactExplorer
   );
 
   const tokenFormulaExplorerProvider = vscode.window.registerTreeDataProvider(
-    "iwa-visual-token-designer.tokenFormulaExplorer",
+    "iwa-token-designer.tokenFormulaExplorer",
     tokenFormulaExplorer
   );
 
   const tokenDefinitionExplorerProvider = vscode.window.registerTreeDataProvider(
-    "iwa-visual-token-designer.tokenDefinitionExplorer",
+    "iwa-token-designer.tokenDefinitionExplorer",
     tokenDefinitionExplorer
   );
 
   const statusBarItem = vscode.window.createStatusBarItem(
     vscode.StatusBarAlignment.Left
   );
-  statusBarItem.command = "iwa-visual-token-designer.changeEnvironment";
+  statusBarItem.command = "iwa-token-designer.changeEnvironment";
   statusBarItem.text = StatusBarPrefix + currentEnvironment;
   statusBarItem.show();
 

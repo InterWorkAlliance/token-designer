@@ -28,7 +28,7 @@ export class TokenFormulaIdentifier {
     result.tooltip = this.description;
     result.command = {
       title: "Open formula",
-      command: "iwa-visual-token-designer.openTokenFormula",
+      command: "iwa-token-designer.openTokenFormula",
       arguments: [this.toolingSymbol],
     };
     return result;

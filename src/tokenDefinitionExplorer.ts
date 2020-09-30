@@ -165,7 +165,7 @@ export class TokenDefinitionIdentifier {
     if (this.artifact) {
       result.command = {
         title: "Open definition",
-        command: "iwa-visual-token-designer.openTokenDefinition",
+        command: "iwa-token-designer.openTokenDefinition",
         arguments: [this.artifact?.artifactSymbol?.id],
       };
     }

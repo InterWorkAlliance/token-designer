@@ -1,5 +1,5 @@
 {
-  "name": "visual-token-designer",
+  "name": "token-designer",
   "publisher": "InterWorkAlliance",
   "displayName": "Visual Token Designer",
   "description": "VS Code extension that facilitates manipulation of artifacts in the Token Taxonomy Framework",
@@ -17,11 +17,11 @@
     "Other"
   ],
   "bugs": {
-    "url": "https://github.com/InterWorkAlliance/visual-token-designer/issues"
+    "url": "https://github.com/InterWorkAlliance/token-designer/issues"
   },
   "repository": {
     "type": "git",
-    "url": "https://github.com/InterWorkAlliance/visual-token-designer.git"
+    "url": "https://github.com/InterWorkAlliance/token-designer.git"
   },
   "keywords": [
     "IWA",
@@ -29,45 +29,45 @@
     "Token"
   ],
   "activationEvents": [
-    "onCommand:iwa-visual-token-designer.changeEnvironment",
-    "onCommand:iwa-visual-token-designer.createTokenFormula",
-    "onCommand:iwa-visual-token-designer.createBehavior",
-    "onCommand:iwa-visual-token-designer.createBehaviorGroup",
-    "onCommand:iwa-visual-token-designer.createPropertySet",
-    "onView:iwa-visual-token-designer.tokenArtifactExplorer",
-    "onView:iwa-visual-token-designer.tokenFormulaExplorer",
-    "onView:iwa-visual-token-designer.tokenDefinitionExplorer"
+    "onCommand:iwa-token-designer.changeEnvironment",
+    "onCommand:iwa-token-designer.createTokenFormula",
+    "onCommand:iwa-token-designer.createBehavior",
+    "onCommand:iwa-token-designer.createBehaviorGroup",
+    "onCommand:iwa-token-designer.createPropertySet",
+    "onView:iwa-token-designer.tokenArtifactExplorer",
+    "onView:iwa-token-designer.tokenFormulaExplorer",
+    "onView:iwa-token-designer.tokenDefinitionExplorer"
   ],
   "main": "./out/extension.js",
   "contributes": {
     "viewsContainers": {
       "activitybar": [
         {
-          "id": "iwa-visual-token-designer-mainView",
+          "id": "iwa-token-designer-mainView",
           "title": "Token Designer",
           "icon": "resources/iwa-icon.png"
         }
       ]
     },
     "views": {
-      "iwa-visual-token-designer-mainView": [
+      "iwa-token-designer-mainView": [
         {
-          "id": "iwa-visual-token-designer.tokenArtifactExplorer",
+          "id": "iwa-token-designer.tokenArtifactExplorer",
           "name": "Token Artifacts"
         },
         {
-          "id": "iwa-visual-token-designer.tokenFormulaExplorer",
+          "id": "iwa-token-designer.tokenFormulaExplorer",
           "name": "Token Formulae"
         },
         {
-          "id": "iwa-visual-token-designer.tokenDefinitionExplorer",
+          "id": "iwa-token-designer.tokenDefinitionExplorer",
           "name": "Token Definitions"
         }
       ]
     },
     "commands": [
       {
-        "command": "iwa-visual-token-designer.createTokenFormula",
+        "command": "iwa-token-designer.createTokenFormula",
         "title": "Create token formula",
         "category": "Token Taxonomy Framework",
         "icon": {
@@ -76,62 +76,62 @@
         }
       },
       {
-        "command": "iwa-visual-token-designer.openTokenFormula",
+        "command": "iwa-token-designer.openTokenFormula",
         "title": "Open token formula",
         "category": "Token Taxonomy Framework"
       },
       {
-        "command": "iwa-visual-token-designer.createTokenDefinition",
+        "command": "iwa-token-designer.createTokenDefinition",
         "title": "Create token definition",
         "category": "Token Taxonomy Framework"
       },
       {
-        "command": "iwa-visual-token-designer.createBehavior",
+        "command": "iwa-token-designer.createBehavior",
         "title": "Create Behavior",
         "category": "Token Taxonomy Framework"
       },
       {
-        "command": "iwa-visual-token-designer.createBehaviorGroup",
+        "command": "iwa-token-designer.createBehaviorGroup",
         "title": "Create Behavior Group",
         "category": "Token Taxonomy Framework"
       },
       {
-        "command": "iwa-visual-token-designer.createPropertySet",
+        "command": "iwa-token-designer.createPropertySet",
         "title": "Create Property Set",
         "category": "Token Taxonomy Framework"
       },
       {
-        "command": "iwa-visual-token-designer.deleteArtifact",
+        "command": "iwa-token-designer.deleteArtifact",
         "title": "Delete artifact",
         "category": "Token Taxonomy Framework"
       },
       {
-        "command": "iwa-visual-token-designer.openTokenDefinition",
+        "command": "iwa-token-designer.openTokenDefinition",
         "title": "Open token definition",
         "category": "Token Taxonomy Framework"
       },
       {
-        "command": "iwa-visual-token-designer.openBehavior",
+        "command": "iwa-token-designer.openBehavior",
         "title": "Open behavior",
         "category": "Token Taxonomy Framework"
       },
       {
-        "command": "iwa-visual-token-designer.openBehaviorGroup",
+        "command": "iwa-token-designer.openBehaviorGroup",
         "title": "Open behavior group",
         "category": "Token Taxonomy Framework"
       },
       {
-        "command": "iwa-visual-token-designer.openPropertySet",
+        "command": "iwa-token-designer.openPropertySet",
         "title": "Open property set",
         "category": "Token Taxonomy Framework"
       },
       {
-        "command": "iwa-visual-token-designer.openTokenBase",
+        "command": "iwa-token-designer.openTokenBase",
         "title": "Open token base",
         "category": "Token Taxonomy Framework"
       },
       {
-        "command": "iwa-visual-token-designer.refreshTokenTaxonomy",
+        "command": "iwa-token-designer.refreshTokenTaxonomy",
         "title": "Refresh Token Taxonomy",
         "category": "Token Taxonomy Framework",
         "icon": {
@@ -140,7 +140,7 @@
         }
       },
       {
-        "command": "iwa-visual-token-designer.changeEnvironment",
+        "command": "iwa-token-designer.changeEnvironment",
         "title": "Change environment",
         "category": "Token Taxonomy Framework"
       }
@@ -148,87 +148,87 @@
     "menus": {
       "view/title": [
         {
-          "command": "iwa-visual-token-designer.refreshTokenTaxonomy",
-          "when": "view == iwa-visual-token-designer.tokenArtifactExplorer",
+          "command": "iwa-token-designer.refreshTokenTaxonomy",
+          "when": "view == iwa-token-designer.tokenArtifactExplorer",
           "group": "navigation"
         },
         {
-          "command": "iwa-visual-token-designer.refreshTokenTaxonomy",
-          "when": "view == iwa-visual-token-designer.tokenFormulaExplorer",
+          "command": "iwa-token-designer.refreshTokenTaxonomy",
+          "when": "view == iwa-token-designer.tokenFormulaExplorer",
           "group": "navigation"
         },
         {
-          "command": "iwa-visual-token-designer.refreshTokenTaxonomy",
-          "when": "view == iwa-visual-token-designer.tokenDefinitionExplorer",
+          "command": "iwa-token-designer.refreshTokenTaxonomy",
+          "when": "view == iwa-token-designer.tokenDefinitionExplorer",
           "group": "navigation"
         },
         {
-          "command": "iwa-visual-token-designer.createTokenFormula",
-          "when": "view == iwa-visual-token-designer.tokenFormulaExplorer",
+          "command": "iwa-token-designer.createTokenFormula",
+          "when": "view == iwa-token-designer.tokenFormulaExplorer",
           "group": "navigation"
         },
         {
-          "command": "iwa-visual-token-designer.createBehavior",
-          "when": "view == iwa-visual-token-designer.tokenArtifactExplorer"
+          "command": "iwa-token-designer.createBehavior",
+          "when": "view == iwa-token-designer.tokenArtifactExplorer"
         },
         {
-          "command": "iwa-visual-token-designer.createBehaviorGroup",
-          "when": "view == iwa-visual-token-designer.tokenArtifactExplorer"
+          "command": "iwa-token-designer.createBehaviorGroup",
+          "when": "view == iwa-token-designer.tokenArtifactExplorer"
         },
         {
-          "command": "iwa-visual-token-designer.createPropertySet",
-          "when": "view == iwa-visual-token-designer.tokenArtifactExplorer"
+          "command": "iwa-token-designer.createPropertySet",
+          "when": "view == iwa-token-designer.tokenArtifactExplorer"
         }
       ],
       "view/item/context": [
         {
-          "command": "iwa-visual-token-designer.createTokenDefinition",
-          "when": "view == iwa-visual-token-designer.tokenFormulaExplorer"
+          "command": "iwa-token-designer.createTokenDefinition",
+          "when": "view == iwa-token-designer.tokenFormulaExplorer"
         },
         {
-          "command": "iwa-visual-token-designer.deleteArtifact",
-          "when": "view == iwa-visual-token-designer.tokenArtifactExplorer"
+          "command": "iwa-token-designer.deleteArtifact",
+          "when": "view == iwa-token-designer.tokenArtifactExplorer"
         },
         {
-          "command": "iwa-visual-token-designer.deleteArtifact",
-          "when": "view == iwa-visual-token-designer.tokenFormulaExplorer"
+          "command": "iwa-token-designer.deleteArtifact",
+          "when": "view == iwa-token-designer.tokenFormulaExplorer"
         },
         {
-          "command": "iwa-visual-token-designer.deleteArtifact",
-          "when": "view == iwa-visual-token-designer.tokenDefinitionExplorer"
+          "command": "iwa-token-designer.deleteArtifact",
+          "when": "view == iwa-token-designer.tokenDefinitionExplorer"
         }
       ],
       "commandPalette": [
         {
-          "command": "iwa-visual-token-designer.openTokenFormula",
+          "command": "iwa-token-designer.openTokenFormula",
           "when": "false"
         },
         {
-          "command": "iwa-visual-token-designer.createTokenDefinition",
+          "command": "iwa-token-designer.createTokenDefinition",
           "when": "false"
         },
         {
-          "command": "iwa-visual-token-designer.deleteArtifact",
+          "command": "iwa-token-designer.deleteArtifact",
           "when": "false"
         },
         {
-          "command": "iwa-visual-token-designer.openTokenDefinition",
+          "command": "iwa-token-designer.openTokenDefinition",
           "when": "false"
         },
         {
-          "command": "iwa-visual-token-designer.openBehavior",
+          "command": "iwa-token-designer.openBehavior",
           "when": "false"
         },
         {
-          "command": "iwa-visual-token-designer.openBehaviorGroup",
+          "command": "iwa-token-designer.openBehaviorGroup",
           "when": "false"
         },
         {
-          "command": "iwa-visual-token-designer.openPropertySet",
+          "command": "iwa-token-designer.openPropertySet",
           "when": "false"
         },
         {
-          "command": "iwa-visual-token-designer.openTokenBase",
+          "command": "iwa-token-designer.openTokenBase",
           "when": "false"
         }
       ]
