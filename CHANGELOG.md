@@ -17,7 +17,7 @@ may not exactly match a publicly released version.
 
 ...
 
-## [1.0.9] - 2020-09-29
+## [1.0.18] - 2020-09-30
 
 ### Fixed
 
