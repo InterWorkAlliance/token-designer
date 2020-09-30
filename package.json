@@ -45,7 +45,7 @@
         {
           "id": "visual-token-designer-mainView",
           "title": "Token Designer",
-          "icon": "resources/iwa-icon.png"
+          "icon": "resources/token-designer/property-set.svg"
         }
       ]
     },

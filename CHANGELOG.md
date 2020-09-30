@@ -20,6 +20,10 @@ may not exactly match a publicly released version.
 - Fixed an issue where the design canvas was sometimes not updated when the formula being 
   constructed is currently invalid.
 
+### Updated 
+
+- Changed activity bar icon to NEO-themed logo
+
 ## [1.0.8] - 2020-09-11
 
 ### Fixed
