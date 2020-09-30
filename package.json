@@ -1,7 +1,7 @@
 {
   "name": "token-designer",
   "publisher": "InterWorkAlliance",
-  "displayName": "Visual Token Designer",
+  "displayName": "IWA Token Designer",
   "description": "VS Code extension that facilitates manipulation of artifacts in the Token Taxonomy Framework",
   "version": "0.0.0",
   "icon": "resources/iwa-icon.png",
