@@ -38,25 +38,25 @@ export class LeafIdentifier {
     if (this.type === ttfArtifact.ArtifactType.BEHAVIOR) {
       result.command = {
         title: "Open behavior",
-        command: "visual-token-designer.openBehavior",
+        command: "iwa-visual-token-designer.openBehavior",
         arguments: [this.id],
       };
     } else if (this.type === ttfArtifact.ArtifactType.BEHAVIOR_GROUP) {
       result.command = {
         title: "Open behavior group",
-        command: "visual-token-designer.openBehaviorGroup",
+        command: "iwa-visual-token-designer.openBehaviorGroup",
         arguments: [this.id],
       };
     } else if (this.type === ttfArtifact.ArtifactType.PROPERTY_SET) {
       result.command = {
         title: "Open property set",
-        command: "visual-token-designer.openPropertySet",
+        command: "iwa-visual-token-designer.openPropertySet",
         arguments: [this.id],
       };
     } else if (this.type === ttfArtifact.ArtifactType.BASE) {
       result.command = {
         title: "Open token base",
-        command: "visual-token-designer.openTokenBase",
+        command: "iwa-visual-token-designer.openTokenBase",
         arguments: [this.id],
       };
     }
