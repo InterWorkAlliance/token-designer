@@ -15,6 +15,10 @@ may not exactly match a publicly released version.
 
 ## Unreleased
 
+...
+
+## [1.0.9] - 2020-09-29
+
 ### Fixed
 
 - Fixed an issue where the design canvas was sometimes not updated when the formula being 
