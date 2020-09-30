@@ -88,10 +88,10 @@ jobs:
         name: vsix
         path: visual-token-designer-*.vsix
     - name: 🌎 Release
-      uses: djnicholson/release-action@v2.4
+      uses: djnicholson/release-action@v2.8
       with:
         token: ${{ secrets.GITHUB_TOKEN }}
-        tag-name: v0.0-${{ steps.package.outputs.branch }}
-        release-name: 'Rolling build'
+        tag-name: release-v1.0.9-${{ steps.package.outputs.branch }}
+        release-name: 'Pending release'
         asset-name: 'visual-token-designer.vsix'
         file: 'visual-token-designer.vsix'
