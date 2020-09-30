@@ -13,6 +13,13 @@ will not have contiguous patch numbers. Initial major and minor releases will be
 in this file without a patch number. Patch version will be included for bug fix releases, but
 may not exactly match a publicly released version.
 
+## Unreleased
+
+### Fixed
+
+- Fixed an issue where the design canvas was sometimes not updated when the formula being 
+  constructed is currently invalid.
+
 ## [1.0.8] - 2020-09-11
 
 ### Fixed
