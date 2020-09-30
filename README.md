@@ -28,7 +28,7 @@ The Token Designer's features include:
 
 After installing the extension, you will see a new icon in the Visual Studio Code Activity Bar.  Click on this icon to access the Token Designer.
 
-![Activity bar icon](https://github.com/InterWorkAlliance/token-designer/blob/master/screenshots/activity-bar-icon.png?raw=true)
+![Activity bar icon](https://github.com/InterWorkAlliance/token-designer/blob/master/screenshots/activity-bar-icon-1.png?raw=true)
 
 On the left of the window you will see various tree views that allow you to navigate the taxonomy.  Clicking on one of the items will launch a panel that allows you to inspect/edit it.
 
