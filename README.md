@@ -16,7 +16,7 @@ The framework's goals include:
 
 The extension provides a sandbox environment that allows you to explore the various artifacts in the taxonomy as well as the ability to connect to an instance of the [Taxonomy Service](https://github.com/InterWorkAlliance/TokenTaxonomyFramework/tree/master/tools) to contribute to the taxonomy.
 
-The Visual Token Designer's features include: 
+The Token Designer's features include: 
 
 * Deliver tooling meta-data using the TTF syntax that enables the generation of visual representations of classifications, and modelling tools to view and create token definitions mapped to the taxonomy.
 * Produce standard artifacts and control message descriptions mapped to the taxonomy that are implementation neutral and provide base components and controls that consortia, startups, platforms or regulators can use to work together.
@@ -26,7 +26,7 @@ The Visual Token Designer's features include:
 
 ## Usage
 
-After installing the extension, you will see a new icon in the Visual Studio Code Activity Bar.  Click on this icon to access the Visual Token Designer.
+After installing the extension, you will see a new icon in the Visual Studio Code Activity Bar.  Click on this icon to access the Token Designer.
 
 ![Activity bar icon](https://github.com/InterWorkAlliance/visual-token-designer/blob/master/screenshots/activity-bar-icon.png?raw=true)
 
