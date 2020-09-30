@@ -1,10 +1,10 @@
 {
   "name": "visual-token-designer",
-  "publisher": "ngd-seattle",
-  "displayName": "Neo Visual Token Designer",
+  "publisher": "InterWorkAlliance",
+  "displayName": "Visual Token Designer",
   "description": "VS Code extension that facilitates manipulation of artifacts in the Token Taxonomy Framework",
   "version": "0.0.0",
-  "icon": "resources/icon.png",
+  "icon": "resources/iwa-icon.png",
   "galleryBanner": {
     "color": "#242424",
     "theme": "dark"
@@ -17,14 +17,14 @@
     "Other"
   ],
   "bugs": {
-    "url": "https://github.com/ngdseattle/visual-token-designer/issues"
+    "url": "https://github.com/InterWorkAlliance/visual-token-designer/issues"
   },
   "repository": {
     "type": "git",
-    "url": "https://github.com/ngdseattle/visual-token-designer.git"
+    "url": "https://github.com/InterWorkAlliance/visual-token-designer.git"
   },
   "keywords": [
-    "Neo",
+    "IWA",
     "Blockchain",
     "Token"
   ],
