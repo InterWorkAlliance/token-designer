@@ -7,7 +7,7 @@ import {
   Behavior,
 } from "../../ttf/core_pb";
 
-import ArtifactInspector from "./inspectors/ArtifactInspector";
+import ArtifactTooltip from "./ArtifactTooltip";
 import ArtifactType from "./ArtifactType";
 import AnyArtifact from "./AnyArtifact";
 import Canvas from "./Canvas";
@@ -33,7 +33,8 @@ export default function FormulaDesigner({
   removeArtifact,
   setFormulaDescription,
 }: Props) {
-  const [toolTip, setToolTip] = useState<AnyArtifact | null>(null);
+  const [iconHover, setIconHover] = useState<AnyArtifact | null>(null);
+  const [tipHover, setTipHover] = useState<AnyArtifact | null>(null);
 
   const [artifactBeingDraggedOn, setArtifactBeingDraggedOn] = useState<
     [AnyArtifact, ArtifactType] | undefined
@@ -72,6 +73,8 @@ export default function FormulaDesigner({
     )
     .filter((_) => !!_) as Behavior.AsObject[];
 
+  const tooltipContents = iconHover || tipHover;
+
   return (
     <>
       <ToolPane
@@ -87,14 +90,14 @@ export default function FormulaDesigner({
           type="token-base"
           tools={taxonomy?.baseTokenTypes || []}
           artifactOnDragStart={setArtifactBeingDraggedOn}
-          setToolTip={setToolTip}
+          setToolTip={setIconHover}
         />
         <ToolBox
           title="Property Sets"
           type="property-set"
           tools={taxonomy?.propertySets || []}
           artifactOnDragStart={setArtifactBeingDraggedOn}
-          setToolTip={setToolTip}
+          setToolTip={setIconHover}
         />
       </ToolPane>
 
@@ -116,7 +119,7 @@ export default function FormulaDesigner({
           artifactBeingDraggedOn={artifactBeingDraggedOn}
           artifactOnDragStart={setArtifactBeingDraggedOff}
           addArtifact={addArtifact}
-          setToolTip={setToolTip}
+          setToolTip={setIconHover}
         />
       </CanvasPane>
 
@@ -133,42 +136,24 @@ export default function FormulaDesigner({
           type="behavior"
           tools={taxonomy?.behaviors || []}
           artifactOnDragStart={setArtifactBeingDraggedOn}
-          setToolTip={setToolTip}
+          setToolTip={setIconHover}
         />
         <ToolBox
           title="Behavior Groups"
           type="behavior-group"
           tools={taxonomy?.behaviorGroups || []}
           artifactOnDragStart={setArtifactBeingDraggedOn}
-          setToolTip={setToolTip}
+          setToolTip={setIconHover}
         />
       </ToolPane>
 
-      {!!taxonomy && !!toolTip && (
-        <div
-          style={{
-            position: "fixed",
-            right: 15,
-            bottom: 15,
-            width: 400,
-            maxWidth: "90vw",
-            height: 300,
-            maxHeight: "40vh",
-            backgroundColor: "var(--vscode-editorHoverWidget-background)",
-            color: "var(--vscode-editorHoverWidget-foreground)",
-            border: "1px solid var(--vscode-editorHoverWidget-border)",
-            padding: 10,
-            zIndex: 100,
-            boxShadow: "3px 3px var(--vscode-widget-shadow)",
-          }}
-        >
-          <ArtifactInspector
-            taxonomy={taxonomy}
-            artifact={toolTip}
-            summaryOnly={true}
-          />
-        </div>
-        )}
+      {!!taxonomy && !!tooltipContents && (
+        <ArtifactTooltip
+          taxonomy={taxonomy}
+          artifact={tooltipContents}
+          setTipHover={setTipHover}
+        />
+      )}
     </>
   );
 }

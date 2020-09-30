@@ -27,7 +27,6 @@ type Props = {
   taxonomy: TaxonomyAsObjects;
   artifact?: AnyArtifact;
   artifactType?: ArtifactType;
-  summaryOnly?: boolean;
   update?: (update: ArtifactUpdate) => void;
   postMessage?: (message: any) => void;
 };
@@ -36,7 +35,6 @@ export default function ArtifactInspector({
   taxonomy,
   artifact,
   artifactType,
-  summaryOnly, // TODO: Show less details wehn true
   update,
   postMessage,
 }: Props) {
