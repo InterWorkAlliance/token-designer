@@ -28,7 +28,7 @@ The Visual Token Designer's features include:
 
 After installing the extension, you will see a new icon in the Visual Studio Code Activity Bar.  Click on this icon to access the Visual Token Designer.
 
-![Activity bar icon](https://github.com/ngdseattle/visual-token-designer/blob/master/screenshots/activity-bar-icon.png?raw=true)
+![Activity bar icon](https://github.com/InterWorkAlliance/visual-token-designer/blob/master/screenshots/activity-bar-icon.png?raw=true)
 
 On the left of the window you will see various tree views that allow you to navigate the taxonomy.  Clicking on one of the items will launch a panel that allows you to inspect/edit it.
 
@@ -36,7 +36,7 @@ On the left of the window you will see various tree views that allow you to navi
 
 _Note: The user interface for this functionality is under development. Currently you will see the JSON representation of the artifact._
 
-![Editing an artifact](https://github.com/ngdseattle/visual-token-designer/blob/master/screenshots/edit-artifact.png?raw=true)
+![Editing an artifact](https://github.com/InterWorkAlliance/visual-token-designer/blob/master/screenshots/edit-artifact.png?raw=true)
 
 ### Editing a Formula
 
@@ -51,7 +51,7 @@ If you add an incompatible combination of artifacts, the error will be highlight
 
 You can edit the formula description by typing in the region at the lower-left corner of the canvas.
 
-![Editing a formula](https://github.com/ngdseattle/visual-token-designer/blob/master/screenshots/edit-formula.png?raw=true)
+![Editing a formula](https://github.com/InterWorkAlliance/visual-token-designer/blob/master/screenshots/edit-formula.png?raw=true)
 
 ### Editing a Definition
 
@@ -59,14 +59,14 @@ In this view you can view and edit an existing token defintion. Click on any ind
 
 _Note: The user interface for this functionality is under development. Currently the view is read-only and property values cannot yet be set._
 
-![Editing a definition](https://github.com/ngdseattle/visual-token-designer/blob/master/screenshots/view-definition.png?raw=true)
+![Editing a definition](https://github.com/InterWorkAlliance/visual-token-designer/blob/master/screenshots/view-definition.png?raw=true)
 
 ### Creating new artifacts
 
 The **Token formulae** tree view provides an option to create a new formula:
 
-![Creating a new formula](https://github.com/ngdseattle/visual-token-designer/blob/master/screenshots/create-formula-menu.png?raw=true)
+![Creating a new formula](https://github.com/InterWorkAlliance/visual-token-designer/blob/master/screenshots/create-formula-menu.png?raw=true)
 
 To create a new **Token definitions** right click on any existing formula and choose to create a new Token Definition from that formula:
 
-![Creating a new definition](https://github.com/ngdseattle/visual-token-designer/blob/master/screenshots/create-definition-menu.png?raw=true)
+![Creating a new definition](https://github.com/InterWorkAlliance/visual-token-designer/blob/master/screenshots/create-definition-menu.png?raw=true)
