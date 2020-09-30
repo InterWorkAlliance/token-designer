@@ -144,7 +144,7 @@ export default function FormulaDesigner({
         />
       </ToolPane>
 
-      {/*!!taxonomy && !!toolTip && (
+      {!!taxonomy && !!toolTip && (
         <div
           style={{
             position: "fixed",
@@ -168,7 +168,7 @@ export default function FormulaDesigner({
             summaryOnly={true}
           />
         </div>
-        )*/}
+        )}
     </>
   );
 }
