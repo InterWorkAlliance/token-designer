@@ -91,7 +91,7 @@ jobs:
       uses: djnicholson/release-action@v2.8
       with:
         token: ${{ secrets.GITHUB_TOKEN }}
-        tag-name: v1.0.9
-        release-name: 'v1.0.9'
+        tag-name: vNext
+        release-name: 'vNext'
         asset-name: 'visual-token-designer.vsix'
         file: 'visual-token-designer.vsix'
