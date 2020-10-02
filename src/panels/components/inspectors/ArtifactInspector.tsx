@@ -27,18 +27,18 @@ type Props = {
   taxonomy: TaxonomyAsObjects;
   artifact?: AnyArtifact;
   artifactType?: ArtifactType;
-  summaryOnly?: boolean;
   update?: (update: ArtifactUpdate) => void;
   postMessage?: (message: any) => void;
+  loadFormula?: (tooling: string) => void;
 };
 
 export default function ArtifactInspector({
   taxonomy,
   artifact,
   artifactType,
-  summaryOnly, // TODO: Show less details wehn true
   update,
   postMessage,
+  loadFormula,
 }: Props) {
   if (!artifact || !artifact.artifact) {
     return <></>;
@@ -85,6 +85,7 @@ export default function ArtifactInspector({
         <TemplateDefinitionInspector
           taxonomy={taxonomy}
           artifact={artifact as TemplateDefinition.AsObject}
+          loadFormula={loadFormula}
         />
       );
       break;
@@ -144,6 +145,7 @@ export default function ArtifactInspector({
                   })
               : undefined
           }
+          loadFormula={loadFormula}
         />
       )}
       {core.artifactDefinition?.businessDescription && (

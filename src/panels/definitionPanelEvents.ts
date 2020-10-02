@@ -2,6 +2,7 @@
 
 const definitionPanelEvents = {
   Init: "init",
+  LoadFormula: "loadFormula",
   SetDefinitionName: "setName",
   SetProperty: "setProperty",
 };

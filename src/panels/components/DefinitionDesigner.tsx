@@ -20,6 +20,7 @@ type Props = {
   definition: TemplateDefinition.AsObject;
   setDefinitionName: (name: string) => void;
   setDefinitionProperty: (path: string, name: string) => void;
+  loadFormula?: (tooling: string) => void;
 };
 
 export default function DefinitionDesigner({
@@ -27,6 +28,7 @@ export default function DefinitionDesigner({
   definition,
   setDefinitionName,
   setDefinitionProperty,
+  loadFormula,
 }: Props) {
   const [toolTip, setToolTip] = useState<AnyArtifact | null>(null);
 
@@ -91,6 +93,7 @@ export default function DefinitionDesigner({
             selectedArtifact ? selectedArtifact[1] : "template-definition"
           }
           setDefinitionProperty={setDefinitionProperty}
+          loadFormula={loadFormula}
         />
       </ToolPane>
     </>

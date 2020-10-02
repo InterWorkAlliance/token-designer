@@ -42,6 +42,10 @@ export default function DefinitionPanel({ postMessage }: Props) {
     postMessage({ e: definitionPanelEvents.SetProperty, path, name });
   };
 
+  const loadFormula = (tooling: string) => {
+    postMessage({ e: definitionPanelEvents.LoadFormula, t: tooling });
+  };
+
   if (taxonomy && definition) {
     return (
       <DefinitionDesigner
@@ -49,6 +53,7 @@ export default function DefinitionPanel({ postMessage }: Props) {
         definition={definition}
         setDefinitionName={setDefinitionName}
         setDefinitionProperty={setDefinitionProperty}
+        loadFormula={loadFormula}
       />
     );
   } else {

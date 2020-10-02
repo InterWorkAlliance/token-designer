@@ -22,7 +22,7 @@ export abstract class PanelBase {
   protected constructor(
     private readonly panelId: string,
     private readonly clientScript: string,
-    private readonly extensionPath: string,
+    protected readonly extensionPath: string,
     disposables: vscode.Disposable[],
     panelReloadEvent: vscode.Event<void>
   ) {

@@ -12,11 +12,13 @@ import { TaxonomyAsObjects } from "../../taxonomyAsObjects";
 type Props = {
   taxonomy: TaxonomyAsObjects;
   artifact: TemplateDefinition.AsObject;
+  loadFormula?: (tooling: string) => void;
 };
 
 export default function TemplateDefinitionInspector({
   taxonomy,
   artifact,
+  loadFormula,
 }: Props) {
   return (
     <>
@@ -40,7 +42,11 @@ export default function TemplateDefinitionInspector({
             <b>Child token #{i + 1}:</b>
           </div>
           <div style={{ marginLeft: 25 }}>
-            <TemplateDefinitionInspector taxonomy={taxonomy} artifact={_} />
+            <TemplateDefinitionInspector
+              taxonomy={taxonomy}
+              artifact={_}
+              loadFormula={loadFormula}
+            />
           </div>
         </div>
       ))}
