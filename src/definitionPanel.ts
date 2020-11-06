@@ -4,6 +4,7 @@ import * as vscode from "vscode";
 import * as protobufAny from "google-protobuf/google/protobuf/any_pb";
 
 import { definitionPanelEvents } from "./panels/definitionPanelEvents";
+import { FormulaPanel } from "./formulaPanel";
 import { ITtfInterface } from "./ttfInterface";
 import { PanelBase } from "./panelBase";
 import { TaxonomyAsObjects } from "./panels/taxonomyAsObjects";
@@ -68,8 +69,8 @@ export class DefinitionPanel extends PanelBase {
     private readonly environment: string,
     private readonly ttfTaxonomy: TokenTaxonomy,
     extensionPath: string,
-    disposables: vscode.Disposable[],
-    panelReloadEvent: vscode.Event<void>
+    private readonly disposables: vscode.Disposable[],
+    private readonly panelReloadEvent: vscode.Event<void>
   ) {
     super(
       "definitionPanel",
@@ -93,6 +94,16 @@ export class DefinitionPanel extends PanelBase {
       await this.setDefinitionName(message.name);
     } else if (message.e === definitionPanelEvents.SetProperty) {
       await this.setDefinitionProperty(message.path, message.name);
+    } else if (message.e === definitionPanelEvents.LoadFormula) {
+      await FormulaPanel.openExistingFormula(
+        message.t,
+        this.ttfConnection,
+        this.environment,
+        this.ttfTaxonomy,
+        this.extensionPath,
+        this.disposables,
+        this.panelReloadEvent
+      );
     }
   }
 

@@ -1,3 +1,4 @@
+import { load } from "grpc";
 import React from "react";
 
 import { ArtifactSymbol } from "../../ttf/artifact_pb";
@@ -6,9 +7,14 @@ import EditLink from "./links/EditLink";
 type Props = {
   symbol: ArtifactSymbol.AsObject;
   edit?: () => void;
+  loadFormula?: (tooling: string) => void;
 };
 
-export default function ArtifactSymbolBox({ symbol, edit }: Props) {
+export default function ArtifactSymbolBox({
+  symbol,
+  edit,
+  loadFormula,
+}: Props) {
   const badgeStyle: React.CSSProperties = {
     backgroundColor: "var(--vscode-editor-background)",
     color: "var(--vscode-editor-foreground)",
@@ -22,10 +28,15 @@ export default function ArtifactSymbolBox({ symbol, edit }: Props) {
     textAlign: "center",
     fontWeight: "bold",
     float: "left",
+    cursor: !!loadFormula ? "pointer" : undefined,
   };
 
   return (
-    <span style={badgeStyle}>
+    <span
+      style={badgeStyle}
+      onClick={loadFormula ? () => loadFormula(symbol.tooling) : undefined}
+      title={loadFormula ? "Click to view or edit this formula" : undefined}
+    >
       {symbol.tooling || "?"}
       {!!edit && <EditLink onClick={edit} />}
     </span>

@@ -45,7 +45,7 @@ async function forAllFiles(folder, extension, f) {
 async function compileProtos() {
   await run("npm", [
     "rebuild",
-    "--target=9.2.1",
+    "--target=9.3.3",
     "--runtime=electron",
     "--dist-url=https://atom.io/download/electron",
   ]);

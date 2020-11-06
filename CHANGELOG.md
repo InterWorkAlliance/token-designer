@@ -15,7 +15,13 @@ may not exactly match a publicly released version.
 
 ## Unreleased
 
-...
+### Added
+
+- Users can click on the tolling symbol for any Token Definition to be taken to the corresponding Formula.
+
+### Fixed
+
+- Updated GRPC for Electron v9.3.3.
 
 ## [1.0.18] - 2020-09-30
 

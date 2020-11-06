@@ -15,6 +15,7 @@ type Props = {
   artifactType?: ArtifactType;
   definition: TemplateDefinition.AsObject;
   setDefinitionProperty: (path: string, name: string) => void;
+  loadFormula?: (tooling: string) => void;
 };
 
 export default function DefinitionInspector({
@@ -22,6 +23,7 @@ export default function DefinitionInspector({
   artifact,
   artifactType,
   definition,
+  loadFormula,
   setDefinitionProperty,
 }: Props) {
   const descriptionAreaStyle: React.CSSProperties = {
@@ -44,6 +46,7 @@ export default function DefinitionInspector({
           taxonomy={taxonomy}
           artifact={artifact}
           artifactType={artifactType}
+          loadFormula={loadFormula}
         />
       </div>
       <ToolBoxTitle
