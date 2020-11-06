@@ -15,6 +15,10 @@ may not exactly match a publicly released version.
 
 ## Unreleased
 
+- ...
+
+## [1.0.2] - 2020-09-30
+
 ### Added
 
 - Users can click on the tolling symbol for any Token Definition to be taken to the corresponding Formula.
@@ -23,7 +27,7 @@ may not exactly match a publicly released version.
 
 - Updated GRPC for Electron v9.3.3.
 
-## [1.0.18] - 2020-09-30
+## [1.0.1] - 2020-09-30
 
 ### Fixed
 
@@ -33,12 +37,6 @@ may not exactly match a publicly released version.
 ### Updated 
 
 - Changed activity bar icon to NEO-themed logo
-
-## [1.0.8] - 2020-09-11
-
-### Fixed
-
-- Updated GRPC for Electron v9.2.1, matching the version shipping in VS Code (and VS Code Insiders) v1.49.
 
 ## [1.0] - 2020-08-26
 
