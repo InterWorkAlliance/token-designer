@@ -28,6 +28,8 @@ export default function InvocationInspector({
         />
       )}
       <b>{invocation.name}</b>: {invocation.description}
+      {invocation.forRepetitionOnly && <strong>For repetition only.</strong>}
+      {invocation.notForRepetition && <strong>Not for repetition.</strong>}
       {!!onSave && <EditLink onClick={() => setIsEditing(true)} />}
       {!!onDelete && <DeleteLink onClick={onDelete} />}
       {!!invocation.id && (

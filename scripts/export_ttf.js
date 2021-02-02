@@ -10,7 +10,7 @@ const ttfConnection = new ttfClient.ServiceClient(
 );
 
 const version = new ttfTaxonomy.TaxonomyVersion();
-version.setVersion("1.0");
+version.setVersion("1.1");
 
 ttfConnection.getFullTaxonomy(version, (err, taxonomy) => {
   if (err) {

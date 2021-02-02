@@ -84,6 +84,7 @@ export default function InvocationEditor({
   };
   return (
     <Dialog hide={hide} onSubmit={onSubmit}>
+      {/* TODO: Allow editing of not_for_repetition/for_repetition_only fields */}
       <input
         type="text"
         value={formData.name || ""}

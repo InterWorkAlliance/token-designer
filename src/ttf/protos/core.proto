@@ -102,7 +102,9 @@ message BehaviorGroupReference{
 message PropertySet{
     taxonomy.model.artifact.Artifact artifact = 1;
     taxonomy.model.artifact.RepresentationType representation_type = 2; //A property set can be either unique to the token instance or shared with the class, this is set in the PropertySetDefinition.
-    repeated Property properties = 3; //Definitions only will not have values, null for string or composite types and 0 for numbers, false for bools.
+    repeated Property properties = 3; //Only definitions will have values, null for string or composite types and 0 for numbers, false for bools.
+    repeated PropertySetReference property_sets = 4; //Allowing a property set to have nested property sets.
+    bool repeated = 5; //indicates if the property set should be implemented as a list, collection or array of the property set. A formula representation will contain a sub r indicator and the property set that is repeated should use the plural name for the property set.
 }
 
 //Collection of PropertySet type
@@ -114,7 +116,9 @@ message PropertySets{
 message PropertySetReference{
     taxonomy.model.artifact.ArtifactReference reference = 1;
     taxonomy.model.artifact.RepresentationType representation_type = 2; //A property set can be either unique to the token instance or shared with the class, this is set in the PropertySetDefinition.
-    repeated Property properties = 3; //Definitions only will not have values, null for string or composite types and 0 for numbers, false for bools.
+    repeated Property properties = 3; //Only definitions will have values, null for string or composite types and 0 for numbers, false for bools.
+    repeated PropertySetReference property_sets = 4; //Allowing a property set to have nested property sets.
+    bool repeated = 5; //indicates if the property set should be implemented as a list, collection or array of the property set. A formula representation will contain a sub r indicator and the property set that is repeated should use the plural name for the property set.
 }
 
 //Generic property used in the framework.
@@ -123,7 +127,9 @@ message Property{
     string value_description = 2; //Description of the value that can be contained for the property, not the actual value, but string, int, bool, etc.
     string template_value = 3; //Value, if needed, when applied in a template context or composed.
     repeated Invocation property_invocations = 4; //Needed for non-behavioral properties.
-    repeated Property properties = 5; //Support for nested properties.
+    repeated InfluenceBinding influence_bindings = 5; //Influence invocation definitions, only defined in the influencing behavior, but applied during specification generation.
+    repeated Property properties = 6; //Support for nested properties.
+    bool repeated = 7; //Supports for repeated properties, if a property is repeated, it should use the plural name for the property implementation.
 }
 
 //Certification Target- Descibes how to invoke a behavior or property-set.
@@ -133,6 +139,8 @@ message Invocation{
     string description = 3; //Include the data type for the value.
     InvocationRequest request = 4; //Certification Target
     InvocationResponse response = 5; //Certification Target
+    bool not_for_repetition = 6; //this invocation is not viable for properties that are repeated. If a property is marked as repeated and this is true, the invocation should not be included in the use in a definition. For example, for repeated properties there should not be a SetValue, as there can be multiple values and it should be excluded. 
+    bool for_repetition_only = 7; //this invocation is not viable for properties that are not repeated. If a property is marked as not repeated and this is false, the invocation should not be included in the use in a definition. For example, for a non repeated property there should not be a AddValue and RemoveValue, as there can be only be one value and it should be excluded. 
 }
 
 //Certification Target - message description can be implemented in a messaging or rpc style interface.
@@ -201,6 +209,7 @@ message TemplateBehaviorGroup{
 //Used to wrap the PropertySet for a formula, currently on holds a reference to the symbol of the type being used.
 message TemplatePropertySet{
     taxonomy.model.artifact.ArtifactSymbol property_set = 1; //Referenced PropertySet
+    bool repeated = 2; //adding a repeated property to allow for formulas to indicate that a root level property set is repeatable, with a lower case r in the tooling formula.
 }
 
 //TemplateDefinition, the Artifact.ArtifactSymbol.Id is the primary identifier for a TokenTemplate.
@@ -256,6 +265,8 @@ message PropertySetSpecification{
     taxonomy.model.artifact.Artifact artifact = 1; //Full artifact for the property set.
     taxonomy.model.artifact.RepresentationType representation_type = 2; //Will the property-set be unique to the token instance or shared with the class?
     repeated PropertySpecification properties = 3; //For any properties that should be added to the token if the behavior is implemented, values not set, should consider a dependent property-set.
+    repeated PropertySetSpecification property_sets = 4; //nested property sets.
+    bool repeated = 5; // For property sets that should be implemented like a list, collection or array of the property set.
 }
 
 message PropertySpecification{
@@ -264,6 +275,7 @@ message PropertySpecification{
     string template_value = 3; //Value, if needed, when applied to template
     repeated InvocationBinding property_invocations = 4; //Needed for non-behavioral properties
     repeated PropertySpecification properties = 5; //Nested Properties.
+    bool repeated = 6; //A property that should be implemented as a list, collection or array of the property set.
 }
 
 message BehaviorGroupSpecification{
@@ -277,8 +289,9 @@ message InvocationBinding{
         InfluenceType influence_type = 1; //Intercept of overwrite
         string influencing_id = 2; //The influencing artifactId
         string influencing_invocation_id = 3; //The InvocationId in the Influencing Behavior.
-        string influenced_id = 4; //The Behavior or PropertySet that is being influenced.
-        string influenced_invocation_id = 5; //The invocation on the PropertySet or Behavior being influenced.
+        taxonomy.model.artifact.ArtifactType influenced_type = 4; //should be either a behavior or property-set, key to finding the artifact id
+        string influenced_id = 5; //The Behavior or PropertySet that is being influenced.
+        string influenced_invocation_id = 6; //The invocation on the PropertySet or Behavior being influenced.
     }
     Influence influence = 1;
     //Used to created the dependency tree of influencing and influenced as defined in the TemplateDefinition.
