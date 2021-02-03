@@ -67,6 +67,7 @@ export default function PropertyInspector({
           {artifact.valueDescription ||
             (!!postMessage && <>(description not set)</>)}
         </i>
+        {artifact.repeated && <strong>Repeated.</strong>}
         {!!postMessage && (
           <EditLink
             onClick={() =>
@@ -78,6 +79,17 @@ export default function PropertyInspector({
           />
         )}
       </p>
+      {!!artifact.influenceBindingsList.length && (
+        <p>
+          <u>Influence bindings:</u>
+          <ul>
+            {/* TODO: Improve display of influence bindings */}
+            {artifact.influenceBindingsList.map((_) => (
+              <li key={_.influencedId}>{JSON.stringify(_)}</li>
+            ))}
+          </ul>
+        </p>
+      )}
       {(!!postMessage || !!artifact.propertiesList.length) && (
         <>
           <p style={{ marginLeft: 25 }}>

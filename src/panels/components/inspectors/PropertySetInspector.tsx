@@ -28,6 +28,14 @@ export default function PropertySetInspector({
           </li>
         </ul>
       </p>
+      <p>
+        <u>Repeated:</u>
+        <ul>
+          <li>
+            {artifact.repeated ? "Yes" : "No"}
+          </li>
+        </ul>
+      </p>
       {(!!postMessage || !!artifact.propertiesList.length) && (
         <>
           <p>
@@ -49,6 +57,21 @@ export default function PropertySetInspector({
               artifact={_}
               path={[_.name]}
               postMessage={postMessage}
+            />
+          ))}
+        </>
+      )}
+      {(!!postMessage || !!artifact.propertySetsList.length) && (
+        <>
+          <p>
+            <u>Property sets:</u>
+            {/* TODO: "Add" link to add nested property sets  */}
+          </p>
+          {artifact.propertySetsList.map((_, i) => (
+            <PropertySetInspector
+              key={i}
+              taxonomy={taxonomy}
+              artifact={_}
             />
           ))}
         </>

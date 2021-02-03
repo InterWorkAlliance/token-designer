@@ -5,6 +5,7 @@ import { PropertySetReference, PropertySet } from "../../../ttf/core_pb";
 import ArtifactInspector from "./ArtifactInspector";
 import { getArtifactById } from "../../getArtifactById";
 import { TaxonomyAsObjects } from "../../taxonomyAsObjects";
+import PropertySetInspector from "./PropertySetInspector";
 
 function thisOrThat<T>(p: string, primary: any, secondary: any): T {
   if (primary[p] === undefined || primary[p] === null) {
@@ -34,6 +35,8 @@ export default function PropertySetReferenceInspector({
     artifact: thisOrThat("artifact", artifact, poachFrom),
     propertiesList: thisOrThat("propertiesList", artifact, poachFrom),
     representationType: thisOrThat("representationType", artifact, poachFrom),
+    propertySetsList: thisOrThat("propertySetsList", artifact, poachFrom),
+    repeated: thisOrThat("repeated", artifact, poachFrom),
   };
 
   return (
@@ -41,6 +44,12 @@ export default function PropertySetReferenceInspector({
       <h2 style={{ marginTop: 0 }}>
         {mergedBehavior?.artifact?.name || "Unknown"}
       </h2>
+      <p>
+        <u>Repeated:</u>
+        <ul>
+          <li>{artifact.repeated ? "Yes" : "No"}</li>
+        </ul>
+      </p>
       {!!artifact.reference?.referenceNotes && (
         <p>
           <i>Note:</i> {artifact.reference.referenceNotes}
@@ -64,6 +73,16 @@ export default function PropertySetReferenceInspector({
           The referenced behavior ({artifact.reference?.id || "ID unknown"})
           could not be loaded.
         </p>
+      )}
+      {!!artifact.propertySetsList.length && (
+        <>
+          <p>
+            <u>Property sets:</u>
+          </p>
+          {artifact.propertySetsList.map((_, i) => (
+            <PropertySetInspector key={i} taxonomy={taxonomy} artifact={_} />
+          ))}
+        </>
       )}
     </>
   );
