@@ -50,7 +50,7 @@ jobs:
       with:
         node-version: 12.x
     - name: 💿 Setup .NET Core SDK
-      uses: actions/setup-dotnet@v1.5.0
+      uses: actions/setup-dotnet@v1.7.2
       with:
         dotnet-version: 2.1.x
     - name: 💾 Get GRPC binaries
