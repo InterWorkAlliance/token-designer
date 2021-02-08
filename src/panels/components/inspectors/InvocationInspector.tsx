@@ -28,15 +28,24 @@ export default function InvocationInspector({
         />
       )}
       <b>{invocation.name}</b>: {invocation.description}
-      {invocation.forRepetitionOnly && <strong>For repetition only.</strong>}
-      {invocation.notForRepetition && <strong>Not for repetition.</strong>}
+      {invocation.forRepetitionOnly && (
+        <em>
+          <br />
+          For repetition only.
+        </em>
+      )}
+      {invocation.notForRepetition && (
+        <em>
+          <br />
+          Not for repetition.
+        </em>
+      )}
       {!!onSave && <EditLink onClick={() => setIsEditing(true)} />}
       {!!onDelete && <DeleteLink onClick={onDelete} />}
       {!!invocation.id && (
-        <>
-          <br />
-          <em>({invocation.id})</em>
-        </>
+        <em>
+          <br />({invocation.id})
+        </em>
       )}
       {!!(invocation.request || invocation.response) && (
         <table cellPadding={5} cellSpacing={5} style={{ width: "100%" }}>

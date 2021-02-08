@@ -1,10 +1,14 @@
-name: Build
+name: BuildAndRelease
 
 on:
   push:
+    branches: 
+    - master
+    - release/v*
+  pull_request:
     branches:
-    - "**"
-    - "!master"
+    - master
+    - release/v*
 
 jobs:
 
@@ -82,3 +86,11 @@ jobs:
       with:
         name: vsix
         path: token-designer-*.vsix
+    - name: 🌎 Release
+      uses: djnicholson/release-action@v2.8
+      with:
+        token: ${{ secrets.GITHUB_TOKEN }}
+        tag-name: vNext
+        release-name: 'vNext'
+        asset-name: 'token-designer.vsix'
+        file: 'token-designer.vsix'
