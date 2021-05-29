@@ -1,4 +1,4 @@
-# Token Designer for Visual Studio Code
+# InterWork Alliance TTF Token Designer 
 
 This is a Visual Studio Code extension that facilitates manipulation of artifacts in the [Token Taxonomy Framework](https://github.com/InterWorkAlliance/TokenTaxonomyFramework).
 
