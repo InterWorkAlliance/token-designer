@@ -1,4 +1,4 @@
-import * as grpc from "grpc";
+import * as grpc from "@grpc/grpc-js";
 import * as path from "path";
 import * as ttfArtifact from "./ttf/artifact_pb";
 import * as ttfClient from "./ttf/service_grpc_pb";
