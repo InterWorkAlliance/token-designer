@@ -64,7 +64,7 @@ jobs:
     - name: 🚀 Build
       run: |
         npm install
-        for d in grpc_artifacts/* ; do mv ${d}/* node_modules/grpc/src/node/extension_binary/ ; done
+        # for d in grpc_artifacts/* ; do mv ${d}/* node_modules/grpc/src/node/extension_binary/ ; done
         npm run compile
     - name: 🔢 Set version
       run: npm run setversion
