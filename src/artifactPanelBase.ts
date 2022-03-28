@@ -42,7 +42,7 @@ export abstract class ArtifactPanelBase<
     const newArtifactRequest = new ttfArtifact.NewArtifactRequest();
     newArtifactRequest.setArtifact(any);
     newArtifactRequest.setType(artifactType);
-    await new Promise((resolve, reject) =>
+    await new Promise<void>((resolve, reject) =>
       ttfConnection.createArtifact(newArtifactRequest, (err) =>
         err ? reject(err) : resolve()
       )
@@ -88,9 +88,9 @@ export abstract class ArtifactPanelBase<
     this.ttfTaxonomy.onRefresh(this.refreshTaxonomy, this);
   }
 
-  protected abstract async onUnhandledMessage(message: any): Promise<void>;
+  protected abstract onUnhandledMessage(message: any): Promise<void>;
 
-  protected abstract async getArtifact(
+  protected abstract getArtifact(
     symbol: ttfArtifact.ArtifactSymbol
   ): Promise<T>;
 
