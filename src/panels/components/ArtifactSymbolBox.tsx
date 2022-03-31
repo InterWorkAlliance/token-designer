@@ -1,4 +1,4 @@
-import { load } from "grpc";
+import { load } from "@grpc/grpc-js";
 import React from "react";
 
 import { ArtifactSymbol } from "../../ttf/artifact_pb";
