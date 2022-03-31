@@ -41,14 +41,14 @@ async function forAllFiles(folder, extension, f) {
     await f(path.join(folder, filenames[i]), filenames[i]);
   }
 }
-
+// "--target=11.2.1",
 async function compileProtos() {
-  await run("npm", [
-    "rebuild",
-    "--target=11.3.0",
-    "--runtime=electron",
-    "--dist-url=https://atom.io/download/electron",
-  ]);
+  // await run("npm", [
+  //   "rebuild",
+  //   "--target=11.2.1",
+  //   "--runtime=electron",
+  //   "--dist-url=https://atom.io/download/electron",
+  // ]);
   const allProtos = [];
   await forAllFiles("src/ttf/protos", ".proto", (f) => allProtos.push(f));
   await runNodeBin("grpc_tools_node_protoc", [
@@ -64,16 +64,16 @@ async function compileProtos() {
     `--proto_path=./src/ttf/protos`,
     ...allProtos,
   ]);
-  await runNodeBin("grpc_tools_node_protoc", [
-    `--ts_out=./src/ttf`,
-    `--plugin=protoc-gen-ts=${path.join(
-      __dirname,
-      "..",
-      "node_modules/.bin/protoc-gen-ts" + (isWin ? ".cmd" : "")
-    )}`,
-    `--proto_path=./src/ttf/protos`,
-    ...allProtos,
-  ]);
+  // await runNodeBin("grpc_tools_node_protoc", [
+  //   `--ts_out=./src/ttf`,
+  //   `--plugin=protoc-gen-ts=${path.join(
+  //     __dirname,
+  //     "..",
+  //     "node_modules/.bin/protoc-gen-ts" + (isWin ? ".cmd" : "")
+  //   )}`,
+  //   `--proto_path=./src/ttf/protos`,
+  //   ...allProtos,
+  // ]);
 }
 
 function createIfNotExists(folder) {
@@ -90,7 +90,7 @@ function createIfNotExists(folder) {
   createIfNotExists("out/ttf");
   createIfNotExists("out/panels");
   createIfNotExists("out/panels/bundles");
-  await compileProtos();
+  //await compileProtos();
   await runNodeBin("tsc", ["-v"]);
   await runNodeBin("tsc", ["-p", "./"]);
   await runNodeBin("tsc", ["-p", "./src/panels"]);
