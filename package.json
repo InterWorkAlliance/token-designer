@@ -3,7 +3,7 @@
   "publisher": "InterWorkAlliance",
   "displayName": "IWA Token Designer",
   "description": "VS Code extension that facilitates manipulation of artifacts in the Token Taxonomy Framework",
-  "version": "1.0.20",
+  "version": "1.0.22",
   "icon": "resources/iwa-icon.png",
   "galleryBanner": {
     "color": "#242424",
