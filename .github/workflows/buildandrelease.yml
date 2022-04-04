@@ -65,7 +65,6 @@ jobs:
       run: |
         npm install
         npm install grpc_tools_node_protoc_tsb
-      # for d in grpc_artifacts/* ; do mv ${d}/* node_modules/grpc/src/node/extension_binary/ ; done
         npm run compile
     - name: 🔢 Set version
       run: npm run setversion
