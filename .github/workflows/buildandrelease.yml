@@ -64,7 +64,7 @@ jobs:
     - name: 🚀 Build
       run: |
         npm install
-        npm install grpc_tools_node_protoc_tsb
+        npm install grpc_tools_node_protoc_ts
         npm run compile
     - name: 🔢 Set version
       run: npm run setversion
@@ -87,7 +87,7 @@ jobs:
         name: vsix
         path: token-designer-*.vsix
     - name: 🌎 Release
-      uses: djnicholson/release-action@v2.8
+      uses: 0xDevelopment/release-action@v2.8
       with:
         token: ${{ secrets.GITHUB_TOKEN }}
         tag-name: vNext
