@@ -53,27 +53,25 @@ async function compileProtos() {
   await forAllFiles("src/ttf/protos", ".proto", (f) => allProtos.push(f));
   await runNodeBin("grpc_tools_node_protoc", [
     `--js_out=import_style=commonjs,binary:./out/ttf`,
-    `--grpc_out=./out/ttf`,
+    `--grpc_out=grpc_js:./out/ttf`,    
     `--plugin=protoc-gen-grpc=${path.join(
-      __dirname,
-      "..",
-      "node_modules",
-      ".bin",
-      "grpc_tools_node_protoc_plugin" + (isWin ? ".cmd" : "")
+        __dirname,
+        "..",
+        "node_modules/.bin/grpc_tools_node_protoc_plugin" + (isWin ? ".cmd" : "")
     )}`,
     `--proto_path=./src/ttf/protos`,
     ...allProtos,
   ]);
-  // await runNodeBin("grpc_tools_node_protoc", [
-  //   `--ts_out=./src/ttf`,
-  //   `--plugin=protoc-gen-ts=${path.join(
-  //     __dirname,
-  //     "..",
-  //     "node_modules/.bin/protoc-gen-ts" + (isWin ? ".cmd" : "")
-  //   )}`,
-  //   `--proto_path=./src/ttf/protos`,
-  //   ...allProtos,
-  // ]);
+  await runNodeBin("grpc_tools_node_protoc", [
+    `--ts_out=generate_package_definition:./src/ttf`,
+    `--plugin=protoc-gen-ts=${path.join(
+      __dirname,
+      "..",
+      "node_modules/.bin/protoc-gen-ts" + (isWin ? ".cmd" : "")
+    )}`,
+    `--proto_path=./src/ttf/protos`,
+    ...allProtos,
+  ]);
 }
 
 function createIfNotExists(folder) {
@@ -90,7 +88,7 @@ function createIfNotExists(folder) {
   createIfNotExists("out/ttf");
   createIfNotExists("out/panels");
   createIfNotExists("out/panels/bundles");
-  //await compileProtos();
+  await compileProtos();
   await runNodeBin("tsc", ["-v"]);
   await runNodeBin("tsc", ["-p", "./"]);
   await runNodeBin("tsc", ["-p", "./src/panels"]);

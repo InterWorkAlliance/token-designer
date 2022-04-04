@@ -62,35 +62,36 @@ jobs:
       with:
         path: grpc_artifacts
     - name: 🚀 Build
-      #run: |
-        #npm install
-       # for d in grpc_artifacts/* ; do mv ${d}/* node_modules/grpc/src/node/extension_binary/ ; done
-        #npm run compile
-    - #name: 🔢 Set version
-      #run: npm run setversion
-    - #name: 🎁 Package
-      #id: package
-      #shell: bash
-      #run: |
-        #npm run package
-      #  cp token-designer-*.vsix token-designer.vsix
-      #   echo "##[set-output name=branch;]$(echo ${GITHUB_REF#refs/heads/})"
-      #   ls -l *.vsix
-    - #name: 🗑 Artifact cleanup
-      #uses: kolpav/purge-artifacts-action@v1
-      #with:
-        #token: ${{ secrets.GITHUB_TOKEN }}
-        #expire-in: 24 hours
-    - #name: 🌎 Publish Artifact
-      #uses: actions/upload-artifact@v2
-      #with:
-        #name: vsix
-        #path: token-designer-*.vsix
-    - #name: 🌎 Release
-      #uses: djnicholson/release-action@v2.8
-      #with:
-        #token: ${{ secrets.GITHUB_TOKEN }}
-        #tag-name: vNext
-        #release-name: 'vNext'
-        #asset-name: 'token-designer.vsix'
-        #file: 'token-designer.vsix'
+      run: |
+        npm install
+        npm install grpc_tools_node_protoc_tsb
+      # for d in grpc_artifacts/* ; do mv ${d}/* node_modules/grpc/src/node/extension_binary/ ; done
+        npm run compile
+    - name: 🔢 Set version
+      run: npm run setversion
+    - name: 🎁 Package
+      id: package
+      shell: bash
+      run: |
+        npm run package
+        cp token-designer-*.vsix token-designer.vsix
+        echo "##[set-output name=branch;]$(echo ${GITHUB_REF#refs/heads/})"
+        ls -l *.vsix
+    - name: 🗑 Artifact cleanup
+      uses: kolpav/purge-artifacts-action@v1
+      with:
+        token: ${{ secrets.GITHUB_TOKEN }}
+        expire-in: 24 hours
+    - name: 🌎 Publish Artifact
+      uses: actions/upload-artifact@v2
+      with:
+        name: vsix
+        path: token-designer-*.vsix
+    - name: 🌎 Release
+      uses: djnicholson/release-action@v2.8
+      with:
+        token: ${{ secrets.GITHUB_TOKEN }}
+        tag-name: vNext
+        release-name: 'vNext'
+        asset-name: 'token-designer.vsix'
+        file: 'token-designer.vsix'
