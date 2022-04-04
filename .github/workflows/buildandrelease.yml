@@ -87,7 +87,7 @@ jobs:
         name: vsix
         path: token-designer-*.vsix
     - name: 🌎 Release
-      uses: 0xDevelopment/release-action@v2.8
+      uses: djnicholson/release-action@v2.10
       with:
         token: ${{ secrets.GITHUB_TOKEN }}
         tag-name: vNext
